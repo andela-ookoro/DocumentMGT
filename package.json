@@ -1,7 +1,7 @@
 {
-  "name": "documentMGT",
+  "name": "documentmgt",
   "version": "1.0.0",
-  "description": "",
+  "description": "document management system ",
   "main": ".eslintrc.js",
   "repository": {
     "url": "https://github.com/andela-ookoro/DocumentMGT",
@@ -9,16 +9,27 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "dotenv-webpack": "^1.5.0",
     "eslint": "^4.0.0",
     "eslint-config-airbnb": "^15.0.1",
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-jsx-a11y": "^5.0.3",
-    "eslint-plugin-react": "^7.0.1"
+    "eslint-plugin-react": "^7.0.1",
+    "react-hot-loader": "^1.3.1",
+    "webpack": "^2.6.1",
+    "webpack-dev-middleware": "^1.10.2",
+    "webpack-hot-middleware": "^2.18.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["document", "management"],
+  "keywords": [
+    "document",
+    "management"
+  ],
   "author": "",
   "license": "ISC"
 }
