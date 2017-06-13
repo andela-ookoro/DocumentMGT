@@ -1,0 +1,15 @@
+const path = require('path');
+
+/* 
+* object is used to auto generate sequelize file blueprint
+* config - points to the config file
+* model-paths - points to the model folder 
+* seeder-path - points to the folder that store test data
+* migrations-path - points to the folder were the migrate db would be stored
+**/
+module.exports = {
+  "config": path.resolve('./server/config', 'config.json'),
+  "models-path": path.resolve('./server/models'),
+  "seeders-path": path.resolve('./server/seeders'),
+  "migrations-path": path.resolve('./server/migrations')
+};
