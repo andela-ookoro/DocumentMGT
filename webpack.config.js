@@ -22,6 +22,13 @@ module.exports = {
         loader: ['react-hot-loader', 'babel-loader'],
         exclude: /node_modules/,
         include: /client/
+      },
+      {
+        test: /\.(scss|sass)$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'sass-loader'],
+        }),
       }
     ]
   },
