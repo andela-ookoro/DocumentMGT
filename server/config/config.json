@@ -2,7 +2,7 @@
   "development": {
     "username": "cele",
     "password": "smilesh2o",
-    "database": "docMGT",
+    "database": "docmgt",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
