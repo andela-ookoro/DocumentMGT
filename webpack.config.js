@@ -1,10 +1,11 @@
 import  path from 'path';
 import webpack from 'webpack';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 module.exports = {
   entry: [
     'webpack-hot-middleware/client',
-    path.join(__dirname, 'client/index.js')
+    // path.join(__dirname, 'client/index.js')
   ],
   output: {
     path: '/',
@@ -21,7 +22,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         loader: ['react-hot-loader', 'babel-loader'],
         exclude: /node_modules/,
-        include: /client/
+        include: '/client/'
       },
       {
         test: /\.(scss|sass)$/,
