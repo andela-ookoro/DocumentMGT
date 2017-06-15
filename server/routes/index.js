@@ -1,29 +1,37 @@
-const usersController = require('../controllers').users;
-const documentsController = require('../controllers/').documents;
-const accessRightController = require('../controllers/').accessRight;
-const rolesController = require('../controllers/').roles;
+const usersController = require('../controllers').User;
+const documentsController = require('../controllers/').Document;
+const accessRightController = require('../controllers/').AccessRight;
+const rolesController = require('../controllers/').Role;
 
 module.exports = (app) => {
-  app.get('/api', (req, res) => res.status(200).send({
-    message: 'Welcome to the Todos API!',
-  }));
+  app.get('/users/:id/documents', documentsController.getUserDocument);
+  app.get('/search/users', usersController.lookupUser);
+  app.get('/search/documents', documentsController.searchByTitle);
 
-  app.post('/api/todos', todosController.create);
-  app.get('/api/todos', todosController.list);
-  app.get('/api/todos/:todoId', todosController.retrieve);
-  app.put('/api/todos/:todoId', todosController.update);
-  app.delete('/api/todos/:todoId', todosController.destroy);
+  app.get('/users/login', usersController.login)
+  app.post('/users/logout', usersController.logout);
 
-  app.post('/api/todos/:todoId/items', todoItemsController.create);
-  app.put('/api/todos/:todoId/items/:todoItemId', todoItemsController.update);
-  app.delete(
-    '/api/todos/:todoId/items/:todoItemId', todoItemsController.destroy
-  );
+  app.route('/users/:id')
+  .get(usersController.getUser)
+  .delete(usersController.deleteUser)
+  .put(usersController.updateUser);
 
-  // For any other request method on todo items, we're going to return "Method Not Allowed"
-  app.all('/api/todos/:todoId/items', (req, res) =>
-    res.status(405).send({
-      message: 'Method Not Allowed',
-  }));
+  app.route('/users')
+  .get(usersController.getUsers)
+  .post(usersController.createUser);
+
+  app.route('/documents/:id')
+  .get(documentsController.getDocument)
+  .delete(documentsController.deleteDocument)
+  .put(documentsController.updateDocument);
+
+  app.route('/documents')
+  .get(documentsController.getDocuments)
+  .post(documentsController.createDocument);
+
+
+app.all('*', (req, res) => res.status(200).send({
+  message: 'Welcome to the beginning of nothingness.',
+}));
   
 };  
