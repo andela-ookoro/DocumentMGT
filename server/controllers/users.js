@@ -203,5 +203,23 @@ module.exports = {
     })
     .catch(error => sendError(res, error.message, 400));
   }, 
-  lookupUser(req, res) { }
+  lookupUser(req, res) { 
+    // get new user info
+    const changes = req.query;
+    // get user with this id
+    User.findAll({
+      where: { ...changes },
+      attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
+    })
+    .then(users => {
+      if (!users) {
+        return sendError(res, 'No user was found.', 200);
+      }
+      return res.status(200).send({
+        status: 'success',
+        users
+      });
+    })
+    .catch(error => sendError(res, error.message, 400));
+  }
 };
