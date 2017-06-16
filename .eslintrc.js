@@ -2,10 +2,15 @@ module.exports = {
   "root": true,
   "extends": "airbnb",
   "env": {
+    "browser": true,
     "node": true,
     "es6": true,
-    "mocha": true
+    "jest": true,
+    "jquery": true
   },
+  "plugins": [
+    "react"
+  ],
   "rules": {
     "one-var": 0,
     "one-var-declaration-per-line": 0,
@@ -23,10 +28,10 @@ module.exports = {
     }],
     "require-jsdoc": ["error", {
         "require": {
-            "FunctionDeclaration": true,
-            "MethodDefinition": true,
-            "ClassDeclaration": true
+          "FunctionDeclaration": true,
+          "MethodDefinition": true,
+          "ClassDeclaration": true
         }
     }]
   }
-};
+}

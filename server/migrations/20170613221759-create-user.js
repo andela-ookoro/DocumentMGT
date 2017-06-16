@@ -52,7 +52,7 @@ module.exports = {
       },
       roleId: {
         type: Sequelize.INTEGER,
-        defaultValue: 2,
+        defaultValue: 1,
         references: {
           model: 'roles',
           key: 'id',
