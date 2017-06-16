@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+//initiate dotenv
+dotenv.config();
 import express from 'express';
 import path from 'path';
 
@@ -19,6 +22,8 @@ import webpackHotMiddleware from 'webpack-hot-middleware'
 // import the webpack config ftile
 import webpackConfig from './webpack.config';
 
+//import passport
+import passport from 'passport';
 // create new express app
 let app = express();
 
@@ -44,4 +49,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Require our routes into the application.
 require('./server/routes')(app);
 
-app.listen(1142, () => opn('http://localhost:1142'));
+// require passport
+require('./server/config/passport')(passport);
+
+app.listen(1142, () => console.log("opn('http://localhost:1142')"));
+export default app;

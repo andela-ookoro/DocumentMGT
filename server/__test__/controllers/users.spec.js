@@ -4,50 +4,49 @@
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let should = chai.should();
-const http = require('http');
 
-const app = require('../../app');
-const port = parseInt(process.env.PORT, 10) || 8000;
-app.set('port', port);
+import app from '../../../server';
 
-const server = http.createServer(app);
-server.listen(port);
-var request = require("supertest").agent(server);
+import supertest from 'supertest';
+const request = supertest.agent(app);
 chai.use(chaiHttp);
+
+
+//import mockdata
+import mockdata from '../mockData';
+let user =  mockdata.user;
+
 
 /*
   * Test the /GET route
   */
-describe('/GET book', () => {
-  after(function (done) {
-        server.close();
-        done();
-    });
+describe('POST /users ', () => {
 
-  it('it should GET all the books', (done) => {
+  it('should create a users ', (done) => {
     request
-      .get('/api')
+      .post('/users')
+      .send(user)
       .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('object');
-        res.body.message.should.be.eql('Welcome to the Todos API!');
+        if(!err) {
+          res.should.have.status(201);
+          res.body.should.be.a('object');
+          res.body.status.should.be.eql('success');
+        }
         done();
       });
   });
 
-  it('it should not POST a book without pages field', (done) => {
-    let title = {"title" :"lovely God"};
+  it('it should not POST a user without fname, lname or email field', (done) => {
+    user = mockdata.UserWithoutFirstname; 
     request
-      .post('/api/todos')
-      .send(title)
+      .post('/users')
+      .send(user)
       .end((err, res) => {
-        if(err){
-          res.body.errors.should.have.property('updatedAt');
-          res.body.errors.pages.should.have.property('title').eql('lovely God');
-        } else {
-          res.should.have.status(201);
-          res.body.should.be.a('object');
-          res.body.should.have.property('title');
+        if(res) {
+          res.should.have.status(500);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('First name, last name, ' +
+          'email and password are compulsory.');
         }
         done();
       });

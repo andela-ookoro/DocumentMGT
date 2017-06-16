@@ -1,6 +1,7 @@
 import  path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import Dotenv from 'dotenv-webpack';
 
 module.exports = {
   entry: [
@@ -14,7 +15,11 @@ module.exports = {
   plugins: [
     new webpack.NoEmitOnErrorsPlugin,
     new webpack.optimize.OccurrenceOrderPlugin,
-    new webpack.HotModuleReplacementPlugin
+    new webpack.HotModuleReplacementPlugin,
+    new Dotenv({
+      path: '.env',
+      safe: true,
+   })
   ],
   module: {
     loaders: [

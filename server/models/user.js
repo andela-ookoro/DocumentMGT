@@ -62,7 +62,7 @@ module.exports = function(sequelize, DataTypes) {
     },
     roleId: {
       type: DataTypes.INTEGER,
-      defaultValue: 2,
+      defaultValue: 1,
       references: {
         model: 'role',
         key: 'id',
@@ -86,61 +86,7 @@ module.exports = function(sequelize, DataTypes) {
         });
       }
     },
-    instanceMethods: {
-      /**
-       * verify plain password against user's hashed password
-       * @method
-       * @param {String} password
-       * @returns {Boolean} Validity of password
-       */
-      verifyPassword(password){
-        const userPassword =  this.password;
-
-        //create hashpassword and compare 
-        bcrypt.hash(password, 10).then((hash) => {
-          hashPassword = hash + userPassword;
-          // verify hashpassword
-          if (user.hashPassword === hashPassword) {
-            return user;
-          }
-          return false
-        });
-      },
-      /**
-         * get user fullname
-         * @method
-         * @returns {String} user fullname
-      */
-      getFullname() {
-        return `${this.fname} ${this.mname} ${this.lname}`;
-      },
-      /**
-         * generate user password and hashpassword
-         * @method
-         * @returns {String} user fullname
-      */
-      generatePassword() {
-        /**
-         * create random string
-         * with base 36, and collected the last 10 characters
-         */
-          const randomWord = Math.random().toString(36).substring(2);
-          let password, hashPassword;
-
-          // hash the random string
-          bcrypt.hash(randomWord, 10).then((hash) => {
-            console.log('came here', randomWord);
-            password = hash;
-            //create hashpassword = hash(password)+ password
-            bcrypt.hash(this.password, 10).then((hash) => {
-              hashPassword = hash + password;
-              console.log(hashPassword);
-              this.password = password;
-              this.hashPassword = hashPassword;
-            });
-          });
-       }
-     },
+    instanceMethods: {},
     hooks: {
       beforeCreate(newuser){
         /**
@@ -151,19 +97,75 @@ module.exports = function(sequelize, DataTypes) {
           let password, hashPassword;
 
           // hash the random string
-          bcrypt.hash(randomWord, 10).then((randomWordHash) => {
+          return bcrypt.hash(randomWord, 10).then((randomWordHash) => {
             password = randomWordHash;
-             console.log('passwordHash',password);
-          });
-          //create hashpassword = hash(password)+ password
-           return  bcrypt.hash(newuser.password, 10).then((passwordHash) => {
+
+            //create hashpassword = hash(password)+ password
+            bcrypt.hash(newuser.password, 10).then((passwordHash) => {
               hashPassword = passwordHash + password;
               newuser.password = password;
               newuser.hashPassword = hashPassword;
             });
+          });
+         
       }
     }
-    
   });
+
+  /**
+     * get user fullname
+     * @method
+     * @returns {String} user fullname
+  */
+   user.prototype.getFullname = function () {
+    return `${this.fname} ${this.mname} ${this.lname}`;
+  };
+
+   /**
+   * verify plain password against user's hashed password
+   * @method
+   * @param {String} password
+   * @returns {Boolean} Validity of password
+   */
+  user.prototype.verifyPassword = function(password) {
+    const userPassword =  this.password;
+
+    //create hashpassword and compare 
+    bcrypt.hash(password, 10).then((hash) => {
+      hashPassword = hash + userPassword;
+      // verify hashpassword
+      if (user.hashPassword === hashPassword) {
+        return user;
+      }
+      return false
+    });
+  };
+
+
+  /**
+     * generate user password and hashpassword
+     * @method
+     * @returns {String} user fullname
+  */
+   user.prototype.generatePassword = function () {
+     /**
+      * create random string
+      * with base 36, and collected the last 10 characters
+      */
+      const randomWord = Math.random().toString(36).substring(2);
+      let password, hashPassword;
+
+      // hash the random string
+        return bcrypt.hash(randomWord, 10).then((randomWordHash) => {
+          password = randomWordHash;
+
+          //create hashpassword = hash(password)+ password
+          bcrypt.hash(newuser.password, 10).then((passwordHash) => {
+            hashPassword = passwordHash + password;
+            newuser.password = password;
+            newuser.hashPassword = hashPassword;
+          });
+        });
+    }
   return user;
 };

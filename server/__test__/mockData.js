@@ -16,8 +16,7 @@ const mockData = {
     lname: faker.name.lastName(),
     mname: faker.name.firstName(),
     password: faker.name.lastName(),
-    email: faker.internet.email(),
-    roleId: 3
+    email: faker.internet.email()
   },
   UserWithoutFirstname: {
     fname: null,
