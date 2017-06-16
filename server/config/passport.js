@@ -28,7 +28,6 @@ module.exports = (passport) => {
   const jwtOptions = {};
   jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
   jwtOptions.secretOrKey = process.env.TOKENSECRET;
- console.log('process.env.TOKENSECRET', process.env.TOKENSECRET);
   passport.use(new JwtStrategy(jwtOptions, 
     (jwt_payload, next) => {
       console.log('payload received', jwt_payload);
