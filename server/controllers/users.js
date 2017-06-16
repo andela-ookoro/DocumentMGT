@@ -152,7 +152,28 @@ module.exports = {
     })
     .catch(error => sendError(res, error.message, 400));
   },
-  deleteUser(req, res) { },
+  /**
+   * detele user by id
+   * @param {*} req - client request
+   * @param {*} res - server response 
+   */
+  deleteUser(req, res) { 
+    const userId = req.params.id;
+    // get user with this id
+    User.findOne({
+      where: {id: req.params.id}
+    })
+    .then(user => {
+      if (!user) {
+        return sendError(res, 'User not found.', 200);
+      }
+      return user
+      .destroy()
+      .then(() => res.status(200).send({status: 'success'}))  
+      .catch((error) => sendError(res, error.message, 400));
+    })
+    .catch(error => sendError(res, error.message, 400));
+  },
   updateUser(req, res) { 
     const userId = req.params.id;
     // get new user info
@@ -178,7 +199,7 @@ module.exports = {
           id: user.id
         }
       }))  
-      .catch((error) => sendError(res, 'here' + error.message, 400));
+      .catch((error) => sendError(res,error.message, 400));
     })
     .catch(error => sendError(res, error.message, 400));
   }, 
