@@ -97,15 +97,16 @@ module.exports = function(sequelize, DataTypes) {
           let password, hashPassword;
 
           // hash the random string
-          return bcrypt.hash(randomWord, 10).then((randomWordHash) => {
-            password = randomWordHash;
+          return bcrypt.hash(newuser.password, 10).then((randomWordHash) => {
+                newuser.password = randomWordHash;
+          //   password = randomWordHash;
 
-            //create hashpassword = hash(password)+ password
-            bcrypt.hash(newuser.password, 10).then((passwordHash) => {
-              hashPassword = passwordHash + password;
-              newuser.password = password;
-              newuser.hashPassword = hashPassword;
-            });
+          //    //create hashpassword = hash(password)+ password
+          //  return bcrypt.hash(newuser.password, 10).then((passwordHash) => {
+          //     hashPassword = passwordHash + password;
+          //     newuser.password = password;
+          //     newuser.hashPassword = hashPassword;
+          //   });
           });
          
       }
@@ -127,17 +128,21 @@ module.exports = function(sequelize, DataTypes) {
    * @param {String} password
    * @returns {Boolean} Validity of password
    */
-  user.prototype.verifyPassword = function(password) {
+  user.prototype.verifyPassword = function(inputPassword) {
     const userPassword =  this.password;
 
     //create hashpassword and compare 
-    bcrypt.hash(password, 10).then((hash) => {
-      hashPassword = hash + userPassword;
-      // verify hashpassword
-      if (user.hashPassword === hashPassword) {
-        return user;
-      }
-      return false
+
+     return bcrypt.hash(inputPassword, 10).then(hash => {
+      return hashPassword = hash + userPassword;
+        // verify hashpassword
+        if (user.hashPassword === hash + userPassword) {
+          return user;
+        }
+        return false;
+    }).catch(err => {
+      console.log('errn jbjjnbhvkjjhbbn jghbnkjhgbhyjjgyj', err);
+      return false;
     });
   };
 
@@ -156,16 +161,17 @@ module.exports = function(sequelize, DataTypes) {
       let password, hashPassword;
 
       // hash the random string
-        return bcrypt.hash(randomWord, 10).then((randomWordHash) => {
-          password = randomWordHash;
-
-          //create hashpassword = hash(password)+ password
-          bcrypt.hash(newuser.password, 10).then((passwordHash) => {
-            hashPassword = passwordHash + password;
-            newuser.password = password;
-            newuser.hashPassword = hashPassword;
-          });
+      bcrypt.hash(randomWord, 10).then((hash) => {
+        console.log('came here', randomWord);
+        password = hash;
+        //create hashpassword = hash(password)+ password
+        bcrypt.hash(this.password, 10).then((hash) => {
+          hashPassword = hash + password;
+          console.log(hashPassword);
+          this.password = password;
+          this.hashPassword = hashPassword;
         });
+      });
     }
   return user;
 };

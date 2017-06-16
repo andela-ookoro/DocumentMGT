@@ -21,16 +21,17 @@ describe('Document Model', () => {
     it('should create new dcument', (done) => {
       Document.create(mockDocument)
         .then((newDocument) => {
+          console.log('newDocument', newDocument);
           document = newDocument;
           expect(document).toExist('title');
           done();
         })
         .catch((err) => {
-          console.log('error',err);
+          console.log('error newDocument',err);
         });
     });
 
-    it('created role should exist', () => {
+    it('created document should exist', () => {
       expect(document).toExist();
       expect(document).toExist('title');
     });
