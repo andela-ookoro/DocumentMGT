@@ -74,7 +74,7 @@ describe('/users ', () => {
         });
     });
 
-    it('A user should recieve a message \'\'after unsuccessful login',
+    it('A user should recieve a message after unsuccessful login',
     (done) => {
       registeredUser.password += 'wrong';
       request
@@ -104,6 +104,68 @@ describe('/users ', () => {
           }
           done();
         });
+    });
+  });
+
+  describe('GET /users ', () => {
+    it('A user should recieve a list of all users when no query is passed',
+    (done) => {
+      request
+        .get('/users')
+        .end((err, res) => {
+          if(!err) {
+            // test response
+            res.should.have.status(200);
+            res.body.status.should.be.eql('success');
+          }
+          done();
+        });
+    });
+
+   it('A user should recieve a list of all users', (done) => {
+      request
+        .get('/users?offset=2&limit=5')
+        .end((err, res) => {
+          if(!err) {
+            // test response
+            res.should.have.status(200);
+            res.body.status.should.be.eql('success');
+          }
+          done();
+        });
+    });
+  });
+
+  describe('GET /users/:id ', () => {
+    it('A user should get a user by id \'when id exist\'',(done) => {
+      request
+        .get('/users/1')
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            res.body.status.should.be.eql('success');
+          } else {
+            console.log('err', err);
+          }
+          done();
+        });
+    });
+
+    it('A user should recieve \'User not found\' for unknown userid ',
+    (done) => {
+      request
+      .get('/users/-2')
+      .end((err, res) => {
+        if(!err) {
+          // test response
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('User not found.');
+        } else {
+          console.log('err', err);
+        }
+        done();
+      });
     });
   });
   

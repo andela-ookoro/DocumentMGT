@@ -74,15 +74,43 @@ module.exports = {
     }
     
   },
-  logout(req, res) {},
-  getUsers(req, res) {},
+  logout(req, res) {
+      req.logout();
+      res.redirect('/');
+  },
+  /**
+   * - get a list of registered users
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
+  getUsers(req, res) {
+
+    let hint;
+    // check it limit and offset where passed
+    if (req.query.offset && req.query.limit ) {
+      hint = { offset: req.query.offset , limit: req.query.limit };
+    }
+
+    // get all users
+    User.findAll({
+       order: [['fname', 'ASC']],
+      attributes: [
+        'fname', 'lname', 'mname', 'email', 'roleId'
+      ], ...hint
+    })
+    .then(users => res.status(200).send({
+      status: 'success',
+      users
+    })
+    )
+    .catch(error => sendError(res, error.message, 500));
+  },
   /**
    * create a user and return jwt and user name and email
    * @param {*} req - client request
    * @param {*} res - server response
    */
   createUser(req, res) { 
-    // create user
     // create object from request
     const user = req.body;
 
@@ -101,7 +129,29 @@ module.exports = {
        500);
     }
   },
-  getUser(req, res) { },
+  /**
+   * get a user by id
+   * @param {*} req - client request
+   * @param {*} res - server response 
+   */
+  getUser(req, res) { 
+    const userId = req.params.id;
+    // get user with this id
+    User.findOne({
+      where: {id: req.params.id},
+      attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
+    })
+    .then(user => {
+      if (!user) {
+        return sendError(res, 'User not found.', 200);
+      }
+      return res.status(200).send({
+        status: 'success',
+        user
+      });
+    })
+    .catch(error => sendError(res, error.message, 400));
+  },
   deleteUser(req, res) { },
   updateUser(req, res) { }, 
   lookupUser(req, res) { }
