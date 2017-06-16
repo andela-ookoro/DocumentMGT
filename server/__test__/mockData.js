@@ -18,6 +18,13 @@ const mockData = {
     password: faker.name.lastName(),
     email: faker.internet.email()
   },
+  updateuser: {
+    fname: faker.name.firstName(),
+    lname: faker.name.lastName(),
+    mname: faker.name.firstName(),
+    password: faker.name.lastName(),
+    email: faker.internet.email()
+  },
   UserWithoutFirstname: {
     fname: null,
     lname: faker.name.lastName(),

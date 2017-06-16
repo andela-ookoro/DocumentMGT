@@ -153,6 +153,34 @@ module.exports = {
     .catch(error => sendError(res, error.message, 400));
   },
   deleteUser(req, res) { },
-  updateUser(req, res) { }, 
+  updateUser(req, res) { 
+    const userId = req.params.id;
+    // get new user info
+    const changes = req.body;
+    // get user with this id
+    User.findOne({
+      where: {id: req.params.id}
+    })
+    .then(user => {
+      if (!user) {
+        return sendError(res, 'User not found.', 200);
+      }
+      return user
+      .update({ ...changes })
+      .then(() => res.status(200).send({
+        status: 'success',
+        user : {
+          fname: user.fname,
+          lname: user.lname,
+          mname: user.mname,
+          email: user.email,
+          roleId: user.roleId,
+          id: user.id
+        }
+      }))  
+      .catch((error) => sendError(res, 'here' + error.message, 400));
+    })
+    .catch(error => sendError(res, error.message, 400));
+  }, 
   lookupUser(req, res) { }
 };

@@ -144,9 +144,7 @@ describe('/users ', () => {
           if(!err) {
             res.should.have.status(200);
             res.body.status.should.be.eql('success');
-          } else {
-            console.log('err', err);
-          }
+          } 
           done();
         });
     });
@@ -161,13 +159,40 @@ describe('/users ', () => {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
           res.body.message.should.be.eql('User not found.');
-        } else {
-          console.log('err', err);
-        }
+        } 
         done();
       });
     });
   });
   
-})
+  describe('PUT /users/:id ', () => {
+    it('A user should update a user by id \'when id exist\'',(done) => {
+      request
+        .put('/users/1')
+        .send(mockdata.updateuser)
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            res.body.status.should.be.eql('success');
+          } 
+          done();
+        });
+    });
+
+    it('A user should recieve \'User not found\' for unknown userid ',
+    (done) => {
+      request
+      .put('/users/-2')
+      .send(mockdata.user)
+      .end((err, res) => {
+        if(!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('User not found.');
+        }
+        done();
+      });
+    });
+  })
+});
 
