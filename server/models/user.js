@@ -93,8 +93,8 @@ module.exports = function(sequelize, DataTypes) {
          * create random string
          * with base 36, and collected the last 10 characters
          */
-          const randomWord = Math.random().toString(36).substring(2);
-          let password, hashPassword;
+          //const randomWord = Math.random().toString(36).substring(2);
+          // let password, hashPassword;
 
           // hash the random string
           return bcrypt.hash(newuser.password, 10).then((randomWordHash) => {
@@ -109,6 +109,19 @@ module.exports = function(sequelize, DataTypes) {
           //   });
           });
          
+      },
+      beforeUpdate(user){
+        /**
+         * create random string
+         * with base 36, and collected the last 10 characters
+         */
+          const randomWord = Math.random().toString(36).substring(2);
+          let password, hashPassword;
+          // hash the random string
+          return bcrypt.hash(user.password, 10).then((randomWordHash) => {
+                user.password = randomWordHash;
+          });
+
       }
     }
   });
