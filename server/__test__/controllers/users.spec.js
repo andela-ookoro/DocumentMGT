@@ -143,7 +143,12 @@ describe('/users ', () => {
         .end((err, res) => {
           if(!err) {
             res.should.have.status(200);
-            res.body.status.should.be.eql('success');
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('User not found.');
+            }
           } 
           done();
         });
@@ -173,7 +178,12 @@ describe('/users ', () => {
         .end((err, res) => {
           if(!err) {
             res.should.have.status(200);
-            res.body.status.should.be.eql('success');
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('User not found.');
+            }
           } 
           done();
         });
@@ -194,5 +204,38 @@ describe('/users ', () => {
       });
     });
   })
+
+  describe('DETELE /users/:id ', () => {
+    it('A user should get a user by id \'when id exist\'',(done) => {
+      request
+        .delete('/users/1')
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('User not found.');
+            }
+          } 
+          done();
+        });
+    });
+
+    it('A user should recieve \'User not found\' for unknown userid ',
+    (done) => {
+      request
+      .delete('/users/-2')
+      .end((err, res) => {
+        if(!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('User not found.');
+        } 
+        done();
+      });
+    });
+  });
 });
 
