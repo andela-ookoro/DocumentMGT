@@ -1,8 +1,12 @@
 
-  const LocalStrategy = require('passport-local').Strategy,
-  passportJWT = require('passport-jwt'),
-  ExtractJwt = passportJWT.ExtractJwt,
-  JwtStrategy = passportJWT.Strategy;
+import Strategy from 'passport-local'
+import passportJWT from 'passport-jwt';
+import model from '../models/index';
+  
+const ExtractJwt = passportJWT.ExtractJwt;
+const JwtStrategy = passportJWT.Strategy;
+const LocalStrategy = Strategy.Strategy;
+const User = model.user;
 
 
 module.exports = (passport) => {
@@ -11,13 +15,11 @@ module.exports = (passport) => {
     done(null, user.id);
   });
 
-  passport.deserializeUser((id, done) => {
-    User.findOne({
-      _id: id
-    }, (err, user) => {
-      user.email = null;
-      user.facebook = null;
-      user.hashed_password = null;
+  passport.deserializeUser((email, done) => {
+     User.find({
+        where: { email: user.email},
+      })
+    .then(foundUser => { 
       done(err, user);
     });
   });
