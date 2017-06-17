@@ -65,6 +65,20 @@ describe('/document ', () => {
           done();
         });
     });
+
+    it('A user should recieve a limited list of documents starting from an index',
+   (done) => {
+      request
+        .get('/documents?offset=2&limit=2')
+        .end((err, res) => {
+          if(!err) {
+            console.log(res.body);
+            res.should.have.status(200);
+            res.body.status.should.be.eql('success');
+          }
+          done();
+        });
+    });
   });
 });
 

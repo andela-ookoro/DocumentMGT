@@ -122,7 +122,7 @@ describe('/users ', () => {
         });
     });
 
-   it('A user should recieve a limited list of all users begin from an index',
+   it('A user should recieve a limited list of users starting from an index',
    (done) => {
       request
         .get('/users?offset=2&limit=5')
