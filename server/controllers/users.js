@@ -8,6 +8,7 @@ const User = model.user;
  * return user metadata and jwt to the user
  * @param {*} res server response object
  * @param {*} user user object
+ * @param {*} statusCode status Code
  */
 const returnJWt = (res, user, statusCode) => {
   // create jwt payload

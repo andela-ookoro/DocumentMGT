@@ -77,7 +77,7 @@ const mockData = {
     title: faker.lorem.words(2), 
     synopsis: faker.lorem.sentences(),
     body: faker.lorem.sentences(),
-    owner: 1,
+    owner: 4,
     accessRight: 1
   },
   DocumentWithoutTitle:{
