@@ -27,9 +27,26 @@ const sendData = (res, data ,statusCode) => {
 
 module.exports = {
   //
-  getDocuments(req, res) {},
+  getDocuments(req, res) {
+    let hint;
+    // check it limit and offset where passed
+    if (req.query.offset && req.query.limit ) {
+      hint = { offset: req.query.offset , limit: req.query.limit };
+    }
+
+    // get all documents
+    Document.findAll({
+       order: [['title', 'ASC']],
+       ...hint
+    })
+    .then(documents => res.status(200).send({
+      status: 'success',
+      documents
+    })
+    )
+    .catch(error => sendError(res, error.message, 500));
+  },
   createDocument(req, res) {
-    console.log("came here ..............");
     // create object from request
     const document = req.body;
 

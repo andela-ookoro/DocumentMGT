@@ -25,7 +25,6 @@ describe('/document ', () => {
         .send(document)
         .end((err, res) => {
           if(!err) {
-            console.log(res.body);
             // store new document for futher testing
             registeredDocument.title = document.title;
             res.should.have.status(201);
@@ -53,5 +52,19 @@ describe('/document ', () => {
     });
   });
 
+  describe('GET /documents ', () => {
+    it('A user should recieve a list of all documents when no query is passed',
+    (done) => {
+      request
+        .get('/documents')
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            res.body.status.should.be.eql('success');
+          }
+          done();
+        });
+    });
+  });
 });
 

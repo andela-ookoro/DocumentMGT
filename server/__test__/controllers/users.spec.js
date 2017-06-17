@@ -122,7 +122,8 @@ describe('/users ', () => {
         });
     });
 
-   it('A user should recieve a list of all users', (done) => {
+   it('A user should recieve a limited list of all users begin from an index',
+   (done) => {
       request
         .get('/users?offset=2&limit=5')
         .end((err, res) => {
