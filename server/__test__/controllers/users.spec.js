@@ -207,7 +207,7 @@ describe('/users ', () => {
   })
 
   describe('DETELE /users/:id ', () => {
-    it('A user should get a user by id \'when id exist\'',(done) => {
+    it('A user can delete a user by id \'when id exist\'',(done) => {
       request
         .delete('/users/1')
         .end((err, res) => {

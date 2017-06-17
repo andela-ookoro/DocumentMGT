@@ -26,7 +26,8 @@ describe('/document ', () => {
         .end((err, res) => {
           if(!err) {
             // store new document for futher testing
-            registeredDocument.title = document.title;
+            registeredDocument.title = res.body.data.title;
+            registeredDocument.id = res.body.data.id;
             res.should.have.status(201);
             res.body.data.title.should.be.eql(document.title);
             res.body.status.should.be.eql('success');
@@ -149,5 +150,38 @@ describe('/document ', () => {
       });
     });
   })
+
+    describe('DETELE /documents/:id ', () => {
+    it('A user can delete a document by id \'when id exist\'',(done) => {
+      request
+        .delete(`/documents/${registeredDocument.id}`)
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('Document not found.');
+            }
+          } 
+          done();
+        });
+    });
+
+    it('A user should recieve \'Document not found\' for unknown documentid',
+    (done) => {
+      request
+      .delete('/documents/-2')
+      .end((err, res) => {
+        if(!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('Document not found.');
+        } 
+        done();
+      });
+    });
+  });
 });
 
