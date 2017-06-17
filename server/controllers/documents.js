@@ -63,7 +63,22 @@ module.exports = {
       sendError(res, 'Document\'s title and body are compulsory.', 500);
     }
   },
-  getDocument(req, res) {},
+  getDocument(req, res) {
+    // get user with this id
+    Document.findOne({
+      where: {id: req.params.id},
+    })
+    .then(document => {
+      if (!document) {
+        return sendError(res, 'Document not found.', 200);
+      }
+      return res.status(200).send({
+        status: 'success',
+        document
+      });
+    })
+    .catch(error => sendError(res, error.message, 400));
+  },
   deleteDocument(req, res) { },
   updateDocument(req, res) { },
   getUserDocument(req, res) { },

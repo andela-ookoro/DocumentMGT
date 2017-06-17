@@ -72,12 +72,45 @@ describe('/document ', () => {
         .get('/documents?offset=2&limit=2')
         .end((err, res) => {
           if(!err) {
-            console.log(res.body);
             res.should.have.status(200);
             res.body.status.should.be.eql('success');
           }
           done();
         });
+    });
+  });
+
+  describe('GET /documents/:id ', () => {
+    it('A user should get a user by id \'when id exist\'',(done) => {
+      request
+        .get('/documents/10')
+        .end((err, res) => {
+          if(!err) {
+            console.log(res.body);
+            res.should.have.status(200);
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('Document not found.');
+            }
+          } 
+          done();
+        });
+    });
+
+    it('A user should recieve \'Document not found\' for unknown documentid ',
+    (done) => {
+      request
+      .get('/documents/-2')
+      .end((err, res) => {
+        if(!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('Document not found.');
+        } 
+        done();
+      });
     });
   });
 });
