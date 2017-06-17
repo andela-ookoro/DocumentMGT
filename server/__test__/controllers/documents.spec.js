@@ -183,5 +183,25 @@ describe('/document ', () => {
       });
     });
   });
+
+  describe('GET /search/documents/?q={} ', () => {
+    it('A user should get list of  user with a list of attributes',(done) => {
+      request
+        .get('/search/documents?title=officia ut&owner=4')
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+              res.body.data.should.be.an('array');
+            } else {
+              res.body.message.should.be.eql('No document found.');
+            }
+          } 
+          done();
+        });
+    });
+  });
 });
 
