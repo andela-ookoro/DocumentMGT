@@ -72,14 +72,27 @@ module.exports = {
       if (!document) {
         return sendError(res, 'Document not found.', 200);
       }
-      return res.status(200).send({
-        status: 'success',
-        document
-      });
+      return sendData(res, document, 200);
     })
     .catch(error => sendError(res, error.message, 400));
   },
-  deleteDocument(req, res) { },
+  deleteDocument(req, res) { 
+    // get document with this id
+    Document.findOne({
+      where: {id: req.params.id}
+    })
+    .then(document => {
+      if (!document) {
+        return sendError(res, 'Document not found.', 200);
+      }
+
+      return document
+      .destroy()
+      .then(() =>  sendData(res, document, 200))  
+      .catch((error) => sendError(res, error.message, 400));
+    })
+    .catch(error => sendError(res, error.message, 400));
+  },
   updateDocument(req, res) {
     // get new user info
     const changes = req.body;
