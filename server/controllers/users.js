@@ -3,7 +3,7 @@ import  bcrypt from 'bcrypt';
 import model from '../models/index';
 
 const User = model.user;
-
+const Document = require('../models').document;
 /**
  * return user metadata and jwt to the user
  * @param {*} res server response object
@@ -17,6 +17,7 @@ const returnJWt = (res, user, statusCode) => {
     name: user.getFullname()
   }
   const jwtToken = jwt.sign(tokenData, process.env.TOKENSECRET);
+
   // send response to client
   res.status(statusCode).send({
     status: 'success',
@@ -34,6 +35,19 @@ const sendError = (res, message ,statusCode) => {
    res.status(statusCode).send({
     status: 'fail',
     message
+  });
+}
+
+/**
+ * 
+ * @param {*} res - server response object
+ * @param {*} data - data to be sent 
+ * @param {*} statusCode - status Code
+ */
+const sendData = (res, data ,statusCode) => {
+   res.status(statusCode).send({
+    status: 'success',
+    data
   });
 }
 
@@ -204,7 +218,7 @@ module.exports = {
     })
     .catch(error => sendError(res, error.message, 400));
   }, 
-  lookupUser(req, res) { 
+  lookupUser(req, res) {
     // get new user info
     const changes = req.query;
     // get user with this id
@@ -221,6 +235,29 @@ module.exports = {
         users
       });
     })
+    .catch(error => sendError(res, error.message, 400));
+  },
+  getUserDocument(req, res) {
+    // get user with this id
+    User.findOne({
+      where: {id: req.params.id}
+    })
+    .then(user => {
+      if (!user) {
+        return sendError(res, 'User not found.', 200);
+      }
+      // return user's documents
+      return Document.findAll({
+        where: {owner: req.params.id},
+      })
+      .then(documents => {
+        if (!documents) {
+          return sendError(res, 'Document not found.', 200);
+        }
+        return sendData(res, documents, 200);
+      })
+      .catch(error => sendError(res, 'document error' + error.message, 400));
+      })
     .catch(error => sendError(res, error.message, 400));
   }
 };

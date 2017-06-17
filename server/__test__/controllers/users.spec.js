@@ -257,6 +257,40 @@ describe('/users ', () => {
           done();
         });
     });
+  });
+
+  describe('GET /users/:id/documents ', () => {
+    it('A user should get a documents belonging to a user by userid ' +
+      '\'when id exist\'',(done) => {
+      request
+        .get('/users/4/documents')
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('User not found.');
+            }
+          } 
+          done();
+        });
     });
+
+    it('A user should recieve \'User not found\' for unknown userid ',
+    (done) => {
+      request
+      .get('/users/-2/documents')
+      .end((err, res) => {
+        if(!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('User not found.');
+        } 
+        done();
+      });
+    });
+  });
 });
 

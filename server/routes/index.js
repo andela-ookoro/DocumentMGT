@@ -4,7 +4,7 @@ const accessRightController = require('../controllers/').AccessRight;
 const rolesController = require('../controllers/').Role;
 
 module.exports = (app) => {
-  app.get('/users/:id/documents', documentsController.getUserDocument);
+  app.get('/users/:id/documents', usersController.getUserDocument);
   app.get('/search/users', usersController.lookupUser);
   app.get('/search/documents', documentsController.searchByTitle);
 

@@ -82,7 +82,7 @@ describe('/document ', () => {
   });
 
   describe('GET /documents/:id ', () => {
-    it('A user should get a user by id \'when id exist\'',(done) => {
+    it('A user should get a document by id \'when id exist\'',(done) => {
       request
         .get('/documents/10')
         .end((err, res) => {
@@ -151,7 +151,7 @@ describe('/document ', () => {
     });
   })
 
-    describe('DETELE /documents/:id ', () => {
+  describe('DETELE /documents/:id ', () => {
     it('A user can delete a document by id \'when id exist\'',(done) => {
       request
         .delete(`/documents/${registeredDocument.id}`)
