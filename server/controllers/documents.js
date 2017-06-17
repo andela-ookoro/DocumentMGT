@@ -80,7 +80,24 @@ module.exports = {
     .catch(error => sendError(res, error.message, 400));
   },
   deleteDocument(req, res) { },
-  updateDocument(req, res) { },
+  updateDocument(req, res) {
+    // get new user info
+    const changes = req.body;
+    // get user with this id
+    Document.findOne({
+      where: {id: req.params.id}
+    })
+    .then(document => {
+      if (!document) {
+        return sendError(res, 'Document not found.', 200);
+      }
+      return document
+      .update({ ...changes })
+      .then(() => sendData(res, document, 200))
+      .catch((error) => sendError(res,error.message, 400));
+    })
+    .catch(error => sendError(res, error.message, 400));
+  },
   getUserDocument(req, res) { },
   searchByTitle(req, res) { },
 };
