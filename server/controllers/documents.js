@@ -64,7 +64,7 @@ module.exports = {
     }
   },
   getDocument(req, res) {
-    // get user with this id
+    // get document with this id
     Document.findOne({
       where: {id: req.params.id},
     })
@@ -111,6 +111,5 @@ module.exports = {
     })
     .catch(error => sendError(res, error.message, 400));
   },
-  getUserDocument(req, res) { },
   searchByTitle(req, res) { },
 };
