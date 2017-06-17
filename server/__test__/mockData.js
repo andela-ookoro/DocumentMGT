@@ -80,6 +80,13 @@ const mockData = {
     owner: 4,
     accessRight: 1
   },
+  updatedocument: {
+    title: faker.lorem.words(2), 
+    synopsis: faker.lorem.sentences(),
+    body: faker.lorem.sentences(),
+    owner: 4,
+    accessRight: 1
+  },
   DocumentWithoutTitle:{
     title: null, 
     synopsis: faker.lorem.sentences(),

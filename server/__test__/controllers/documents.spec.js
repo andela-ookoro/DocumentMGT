@@ -86,7 +86,6 @@ describe('/document ', () => {
         .get('/documents/10')
         .end((err, res) => {
           if(!err) {
-            console.log(res.body);
             res.should.have.status(200);
             // if there is no error, that is user exist 
             if(!res.body.message) {
@@ -113,5 +112,42 @@ describe('/document ', () => {
       });
     });
   });
+
+  describe('PUT /documents/:id ', () => {
+    it('A user should update a document by id \'when documents exist\'',
+    (done) => {
+      request
+        .put('/documents/10')
+        .send(mockdata.updatedocument)
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+              res.body.data
+            } else {
+              res.body.message.should.be.eql('Document not found.');
+            }
+          } 
+          done();
+        });
+    });
+
+    it('A user should recieve \'Document not found\' for unknown documentid ',
+    (done) => {
+      request
+      .put('/documents/-2')
+      .send(mockdata.updatedocument)
+      .end((err, res) => {
+        if(!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('Document not found.');
+        }
+        done();
+      });
+    });
+  })
 });
 
