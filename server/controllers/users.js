@@ -220,10 +220,10 @@ module.exports = {
   }, 
   lookupUser(req, res) {
     // get new user info
-    const changes = req.query;
+    const query = req.query;
     // get user with this id
     User.findAll({
-      where: { ...changes },
+      where: { ...query },
       attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
     })
     .then(users => {

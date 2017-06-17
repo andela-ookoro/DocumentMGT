@@ -111,5 +111,19 @@ module.exports = {
     })
     .catch(error => sendError(res, error.message, 400));
   },
-  searchByTitle(req, res) { },
+  searchByTitle(req, res) {
+    // get new document info
+    const query = req.query;
+    // get user with this id
+    Document.findAll({
+      where: { ...query }
+    })
+    .then(documents => {
+      if (!documents) {
+        return sendError(res, 'No document was found.', 200);
+      }
+      return sendData(res, documents, 200);
+    })
+    .catch(error => sendError(res, error.message, 400));
+  },
 };

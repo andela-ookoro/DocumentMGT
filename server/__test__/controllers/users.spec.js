@@ -251,7 +251,7 @@ describe('/users ', () => {
               res.body.status.should.be.eql('success');
               res.body.users.should.be.an('array');
             } else {
-              res.body.message.should.be.eql('No use found.');
+              res.body.message.should.be.eql('No user found.');
             }
           } 
           done();
