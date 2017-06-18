@@ -34,12 +34,8 @@ import Utility from './helpers/utilities';
     // check for required fields
     if (role.title) {
       Role.create(role)
-      .then(newRole => {
-        Utility.sendData(res, newRole, 201);
-      })
-      .catch(err => {
-        Utility.sendError(res, err.message, 500);
-      });
+      .then(newRole => Utility.sendData(res, newRole, 201))
+      .catch(err => Utility.sendError(res, err.message, 500));
     } else {
       Utility.sendError(res, 'Role title is compulsory.', 500);
     }
@@ -49,7 +45,19 @@ import Utility from './helpers/utilities';
    * @param {*} req - client request
    * @param {*} res - server response
    */
-  getRole(req, res) {},
+  getRole(req, res) {
+    // get user with this id
+    Role.findOne({
+      where: {id: req.params.id}
+    })
+    .then(role => {
+      if (!role) {
+        return Utility.sendError(res, 'Role not found.', 200);
+      }
+      return Utility.sendData(res, role, 200);
+    })
+    .catch(error => Utility.sendError(res, error.message, 400));
+  },
   /**
    * - update role with id
    * @param {*} req - client request

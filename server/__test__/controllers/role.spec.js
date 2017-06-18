@@ -27,6 +27,7 @@ describe('/document ', () => {
         .end((err, res) => {
           if(!err) {
             // store new Role for futher testing
+            console.log(res.body);
             registeredRole.title = res.body.data.title;
             registeredRole.id = res.body.data.id;
             res.should.have.status(201);
@@ -65,6 +66,39 @@ describe('/document ', () => {
           }
           done();
         });
+    });
+  });
+
+    describe('GET /roles/:id ', () => {
+    it('A user should get a role by id \'when id exist\'',(done) => {
+      request
+        .get(`/roles/${ registeredRole.id}`)
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('Role not found.');
+            }
+          } 
+          done();
+        });
+    });
+
+    it('A user should recieve \'Role not found\' for unknown roleid ',
+    (done) => {
+      request
+      .get('/roles/-2')
+      .end((err, res) => {
+        if(!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('Role not found.');
+        } 
+        done();
+      });
     });
   });
 });
