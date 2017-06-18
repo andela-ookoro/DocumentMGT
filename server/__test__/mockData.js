@@ -6,6 +6,11 @@ const mockData = {
     status: 'enable',
     description: faker.lorem.sentences()
   },
+  roleWithTitle: {
+    title: '',
+    status: 'enable',
+    description: faker.lorem.sentences()
+  },
   accessRight: {
     title: faker.lorem.words(2),
     status: 'enable',
