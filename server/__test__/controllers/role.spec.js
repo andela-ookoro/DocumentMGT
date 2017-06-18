@@ -51,5 +51,21 @@ describe('/document ', () => {
         });
     });
   });
+
+  describe('GET /roles ', () => {
+    it('A user should recieve a list of roles',
+    (done) => {
+      request
+        .get('/roles')
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            res.body.status.should.be.eql('success');
+            res.body.data.should.be.an('array');
+          }
+          done();
+        });
+    });
+  });
 });
 
