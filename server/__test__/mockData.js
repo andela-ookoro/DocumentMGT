@@ -6,8 +6,13 @@ const mockData = {
     status: 'enable',
     description: faker.lorem.sentences()
   },
-  roleWithTitle: {
+  roleWithoutTitle: {
     title: '',
+    status: 'enable',
+    description: faker.lorem.sentences()
+  },
+  updateRole: {
+    title: faker.lorem.words(2),
     status: 'enable',
     description: faker.lorem.sentences()
   },

@@ -15,7 +15,7 @@ chai.use(chaiHttp);
 //import mockdata
 import mockdata from '../mockData';
 let role =  mockdata.role;
-let roleWithTitle = mockdata.roleWithTitle; 
+let roleWithoutTitle = mockdata.roleWithoutTitle; 
 let registeredRole= {};
 
 describe('/document ', () => {
@@ -27,7 +27,6 @@ describe('/document ', () => {
         .end((err, res) => {
           if(!err) {
             // store new Role for futher testing
-            console.log(res.body);
             registeredRole.title = res.body.data.title;
             registeredRole.id = res.body.data.id;
             res.should.have.status(201);
@@ -41,7 +40,7 @@ describe('/document ', () => {
     (done) => {
       request
         .post('/roles')
-        .send(roleWithTitle)
+        .send(roleWithoutTitle)
         .end((err, res) => {
           if(res) {
             res.should.have.status(500);
@@ -69,7 +68,7 @@ describe('/document ', () => {
     });
   });
 
-    describe('GET /roles/:id ', () => {
+ describe('GET /roles/:id ', () => {
     it('A user should get a role by id \'when id exist\'',(done) => {
       request
         .get(`/roles/${ registeredRole.id}`)
@@ -101,5 +100,44 @@ describe('/document ', () => {
       });
     });
   });
+
+  describe('PUT /documents/:id ', () => {
+    let updateRole = mockdata.updateRole;
+
+    it('A user should update a role by id \'when role exist\'',
+    (done) => {
+      request
+        .put(`/roles/${ registeredRole.id }`)
+        .send(updateRole)
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+              res.body.data
+            } else {
+              res.body.message.should.be.eql('Role not found.');
+            }
+          } 
+          done();
+        });
+    });
+
+    it('A user should recieve \'Role not found\' for unknown roleid ',
+    (done) => {
+      request
+      .put('/roles/-2')
+      .send(mockdata.updatedocument)
+      .end((err, res) => {
+        if(!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('Role not found.');
+        }
+        done();
+      });
+    });
+  })
 });
 
