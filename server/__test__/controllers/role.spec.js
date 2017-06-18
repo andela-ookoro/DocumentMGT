@@ -172,5 +172,39 @@ describe('/document ', () => {
       });
     });
   });
+
+  describe('GET /roles/:id/users ', () => {
+    it('A user should get list of users belonging to a role by roleid ' +
+      '\'when id exist\'',(done) => {
+      request
+        .get('/roles/3/users')
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('Role not found.');
+            }
+          } 
+          done();
+        });
+    });
+
+    it('A user should recieve \'Role not found\' for unknown roleid ',
+    (done) => {
+      request
+      .get('/roles/-2/users')
+      .end((err, res) => {
+        if(!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('Role not found.');
+        } 
+        done();
+      });
+    });
+  });
 });
 
