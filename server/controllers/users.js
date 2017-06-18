@@ -3,7 +3,7 @@ import  bcrypt from 'bcrypt';
 import model from '../models/index';
 
 const User = model.user;
-const Document = require('../models').document;
+const Document = model.document;
 /**
  * return user metadata and jwt to the user
  * @param {*} res server response object
@@ -280,7 +280,7 @@ module.exports = {
         }
         return sendData(res, documents, 200);
       })
-      .catch(error => sendError(res, 'document error' + error.message, 400));
+      .catch(error => sendError(res, error.message, 400));
       })
     .catch(error => sendError(res, error.message, 400));
   }
