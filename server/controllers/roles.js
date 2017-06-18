@@ -86,7 +86,23 @@ import Utility from './helpers/utilities';
    * @param {*} req - client request
    * @param {*} res - server response
    */
-  deleteRole(req, res) {},
+  deleteRole(req, res) {
+    // get document with this id
+    Role.findOne({
+      where: {id: req.params.id}
+    })
+    .then(role => {
+      if (!role) {
+        return Utility.sendError(res, 'Role not found.', 200);
+      }
+
+      return role
+      .destroy()
+      .then(() => Utility.sendData(res, role, 200))  
+      .catch(error => Utility.sendError(res, error.message, 400));
+    })
+    .catch(error => Utility.sendError(res, error.message, 400));
+  },
    /**
    * - get user in a  role with id
    * @param {*} req - client request

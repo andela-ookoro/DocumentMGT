@@ -139,5 +139,38 @@ describe('/document ', () => {
       });
     });
   })
+
+  describe('DETELE /roles/:id ', () => {
+    it('A user can delete a role by id \'when id exist\'',(done) => {
+      request
+        .delete(`/roles/${ registeredRole.id }`)
+        .end((err, res) => {
+          if(!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist 
+            if(!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('Role not found.');
+            }
+          } 
+          done();
+        });
+    });
+
+    it('A user should recieve \'Role not found\' for unknown userid ',
+    (done) => {
+      request
+      .delete('/roles/-2')
+      .end((err, res) => {
+        if(!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('Role not found.');
+        } 
+        done();
+      });
+    });
+  });
 });
 
