@@ -63,7 +63,24 @@ import Utility from './helpers/utilities';
    * @param {*} req - client request
    * @param {*} res - server response
    */
-  updateRole(req, res) {},
+  updateRole(req, res) {
+    // get new user info
+    const changes = req.body;
+    // get user with this id
+    Role.findOne({
+      where: {id: req.params.id}
+    })
+    .then(role => {
+      if (!role) {
+        return Utility.sendError(res, 'Role not found.', 200);
+      }
+      return role
+      .update({ ...changes })
+      .then(() => Utility.sendData(res, role, 200))
+      .catch(error => Utility.sendError(res,error.message, 400));
+    })
+    .catch(error => Utility.sendError(res, error.message, 400));
+  },
   /**
    * - delete role with id
    * @param {*} req - client request
