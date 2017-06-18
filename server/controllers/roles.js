@@ -7,7 +7,21 @@ import Utility from './helpers/utilities';
    * @param {*} req - client request
    * @param {*} res - server response
    */
-  getRoles(req, res) {},
+  getRoles(req, res) {
+     let hint;
+    // check it limit and offset where passed
+    if (req.query.offset && req.query.limit ) {
+      hint = { offset: req.query.offset , limit: req.query.limit };
+    }
+
+    // get all users
+    Role.findAll({
+       order: [['title', 'ASC']],
+       ...hint
+    })
+    .then(roles => Utility.sendData(res, roles, 200))
+    .catch(error => sendError(res, error.message, 500));
+  },
   /**
    * - create Role
    * @param {*} req - client request
