@@ -53,7 +53,11 @@ const sendData = (res, data ,statusCode) => {
 
 
 module.exports = {
-  //
+   /**
+   * - login registered users
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   login(req, res) {
     // create object from request
     const user = req.body;
@@ -89,13 +93,18 @@ module.exports = {
     }
     
   },
+   /**
+   * - logout user
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   logout(req, res) {
       req.logout();
       res.redirect('/');
   },
   /**
    * - get a list of registered users
-   * @param {*} req - client request
+   * @param {*} req - client requesit
    * @param {*} res - server response
    */
   getUsers(req, res) {
@@ -189,6 +198,11 @@ module.exports = {
     })
     .catch(error => sendError(res, error.message, 400));
   },
+   /**
+   * - update registered users
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   updateUser(req, res) { 
     const userId = req.params.id;
     // get new user info
@@ -217,7 +231,12 @@ module.exports = {
       .catch((error) => sendError(res,error.message, 400));
     })
     .catch(error => sendError(res, error.message, 400));
-  }, 
+  },
+   /**
+   * - search for users with a list of attributes
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   lookupUser(req, res) {
     // get new user info
     const query = req.query;
@@ -237,6 +256,11 @@ module.exports = {
     })
     .catch(error => sendError(res, error.message, 400));
   },
+   /**
+   * - get a list of registered user's documents
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   getUserDocument(req, res) {
     // get user with this id
     User.findOne({

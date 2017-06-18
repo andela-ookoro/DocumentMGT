@@ -29,6 +29,16 @@ module.exports = (app) => {
   .get(documentsController.getDocuments)
   .post(documentsController.createDocument);
 
+  app.route('/roles')
+  .get(rolesController.getRoles)
+  .post(rolesController.createRole)
+
+  app.route('/roles/:id')
+  .get(rolesController.getRole)
+  .put(rolesController.updateRole)
+  .delete(rolesController.deleteRole)
+
+  app.get('/roles/:id/users', rolesController.getUsers)
 
 app.all('*', (req, res) => res.status(200).send({
   message: 'Welcome to the beginning of nothingness.',

@@ -26,7 +26,11 @@ const sendData = (res, data ,statusCode) => {
 }
 
 module.exports = {
-  //
+   /**
+   * - get a list of documents
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   getDocuments(req, res) {
     let hint;
     // check it limit and offset where passed
@@ -46,6 +50,11 @@ module.exports = {
     )
     .catch(error => sendError(res, error.message, 500));
   },
+   /**
+   * - create a document
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   createDocument(req, res) {
     // create object from request
     const document = req.body;
@@ -63,6 +72,11 @@ module.exports = {
       sendError(res, 'Document\'s title and body are compulsory.', 500);
     }
   },
+   /**
+   * - get a document by id
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   getDocument(req, res) {
     // get document with this id
     Document.findOne({
@@ -76,6 +90,11 @@ module.exports = {
     })
     .catch(error => sendError(res, error.message, 400));
   },
+   /**
+   * - delete a document by id
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   deleteDocument(req, res) { 
     // get document with this id
     Document.findOne({
@@ -93,6 +112,11 @@ module.exports = {
     })
     .catch(error => sendError(res, error.message, 400));
   },
+   /**
+   * - update a document by id
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   updateDocument(req, res) {
     // get new user info
     const changes = req.body;
@@ -111,6 +135,11 @@ module.exports = {
     })
     .catch(error => sendError(res, error.message, 400));
   },
+   /**
+   * - get documents that has a list of attributes 
+   * @param {*} req - client request
+   * @param {*} res - server response
+   */
   searchByTitle(req, res) {
     // get new document info
     const query = req.query;
