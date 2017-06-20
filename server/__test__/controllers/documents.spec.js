@@ -1,9 +1,9 @@
 
 
-//Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let should = chai.should();
+// Require the dev-dependencies
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const should = chai.should();
 
 import app from '../../../server';
 
@@ -12,19 +12,19 @@ const request = supertest.agent(app);
 chai.use(chaiHttp);
 
 
-//import mockdata
+// import mockdata
 import mockdata from '../mockData';
-let document =  mockdata.document;
-let registeredDocument = {};
+const document = mockdata.document;
+const registeredDocument = {};
 
 describe('/document ', () => {
   describe('POST /document ', () => {
-    it('As a user , I should be able to create a document',(done) => {
+    it('As a user , I should be able to create a document', (done) => {
       request
         .post('/documents')
         .send(document)
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             // store new document for futher testing
             registeredDocument.title = res.body.data.title;
             registeredDocument.id = res.body.data.id;
@@ -37,12 +37,12 @@ describe('/document ', () => {
     });
 
     it('A user must provide the  document title and body', (done) => {
-      document.title = ''; 
+      document.title = '';
       request
         .post('/documents')
         .send(document)
         .end((err, res) => {
-          if(res) {
+          if (res) {
             res.should.have.status(500);
             res.body.status.should.be.eql('fail');
             res.body.message.should.be.eql('Document\'s title and body ' +
@@ -59,7 +59,7 @@ describe('/document ', () => {
       request
         .get('/documents')
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
             res.body.status.should.be.eql('success');
           }
@@ -69,32 +69,32 @@ describe('/document ', () => {
 
     it('A user should recieve a limited list of documents starting from an index',
    (done) => {
-      request
+     request
         .get('/documents?offset=2&limit=2')
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
             res.body.status.should.be.eql('success');
           }
           done();
         });
-    });
+   });
   });
 
   describe('GET /documents/:id ', () => {
-    it('A user should get a document by id \'when id exist\'',(done) => {
+    it('A user should get a document by id \'when id exist\'', (done) => {
       request
-        .get(`/documents/${ registeredDocument.id}`)
+        .get(`/documents/${registeredDocument.id}`)
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
-            // if there is no error, that is user exist 
-            if(!res.body.message) {
+            // if there is no error, that is user exist
+            if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
               res.body.message.should.be.eql('Document not found.');
             }
-          } 
+          }
           done();
         });
     });
@@ -104,11 +104,11 @@ describe('/document ', () => {
       request
       .get('/documents/-2')
       .end((err, res) => {
-        if(!err) {
+        if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
           res.body.message.should.be.eql('Document not found.');
-        } 
+        }
         done();
       });
     });
@@ -121,16 +121,16 @@ describe('/document ', () => {
         .put('/documents/10')
         .send(mockdata.updatedocument)
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
-            // if there is no error, that is user exist 
-            if(!res.body.message) {
+            // if there is no error, that is user exist
+            if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data
+              res.body.data;
             } else {
               res.body.message.should.be.eql('Document not found.');
             }
-          } 
+          }
           done();
         });
     });
@@ -141,7 +141,7 @@ describe('/document ', () => {
       .put('/documents/-2')
       .send(mockdata.updatedocument)
       .end((err, res) => {
-        if(!err) {
+        if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
           res.body.message.should.be.eql('Document not found.');
@@ -149,22 +149,22 @@ describe('/document ', () => {
         done();
       });
     });
-  })
+  });
 
   describe('DETELE /documents/:id ', () => {
-    it('A user can delete a document by id \'when id exist\'',(done) => {
+    it('A user can delete a document by id \'when id exist\'', (done) => {
       request
         .delete(`/documents/${registeredDocument.id}`)
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
-            // if there is no error, that is user exist 
-            if(!res.body.message) {
+            // if there is no error, that is user exist
+            if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
               res.body.message.should.be.eql('Document not found.');
             }
-          } 
+          }
           done();
         });
     });
@@ -174,31 +174,31 @@ describe('/document ', () => {
       request
       .delete('/documents/-2')
       .end((err, res) => {
-        if(!err) {
+        if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
           res.body.message.should.be.eql('Document not found.');
-        } 
+        }
         done();
       });
     });
   });
 
   describe('GET /search/documents/?q={} ', () => {
-    it('A user should get list of  user with a list of attributes',(done) => {
+    it('A user should get list of  user with a list of attributes', (done) => {
       request
-        .get('/search/documents?title=officia ut&owner=4')
+        .get('/search/documents?role=1')
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
-            // if there is no error, that is user exist 
-            if(!res.body.message) {
+            // if there is no error, that is user exist
+            if (!res.body.message) {
               res.body.status.should.be.eql('success');
               res.body.data.should.be.an('array');
             } else {
               res.body.message.should.be.eql('No document found.');
             }
-          } 
+          }
           done();
         });
     });

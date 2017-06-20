@@ -1,0 +1,21 @@
+{
+  "name": "documentmgt",
+  "description": "create and share documents",
+  "main": ".eslintrc.js",
+  "authors": [
+    "okoro okwudiri"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "document",
+    "management"
+  ],
+  "homepage": "https://github.com/andela-ookoro/DocumentMGT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

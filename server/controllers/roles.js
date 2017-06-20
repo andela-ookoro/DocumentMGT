@@ -2,27 +2,27 @@ import model from '../models/index';
 const Role = model.role;
 const User = model.user;
 import Utility from './helpers/utilities';
- 
-  module.exports = {
+
+module.exports = {
    /**
    * - get a list of roles
    * @param {*} req - client request
    * @param {*} res - server response
    */
   getRoles(req, res) {
-     let hint;
+    let hint;
     // check it limit and offset where passed
-    if (req.query.offset && req.query.limit ) {
-      hint = { offset: req.query.offset , limit: req.query.limit };
+    if (req.query.offset && req.query.limit) {
+      hint = { offset: req.query.offset, limit: req.query.limit };
     }
 
     // get all users
     Role.findAll({
-       order: [['title', 'ASC']],
-       ...hint
+      order: [['title', 'ASC']],
+      ...hint
     })
     .then(roles => Utility.sendData(res, roles, 200))
-    .catch(error => sendError(res, error.message, 500));
+    .catch(error => Utility.sendError(res, error.message, 500));
   },
   /**
    * - create Role
@@ -50,9 +50,9 @@ import Utility from './helpers/utilities';
   getRole(req, res) {
     // get user with this id
     Role.findOne({
-      where: {id: req.params.id}
+      where: { id: req.params.id }
     })
-    .then(role => {
+    .then((role) => {
       if (!role) {
         return Utility.sendError(res, 'Role not found.', 200);
       }
@@ -70,16 +70,16 @@ import Utility from './helpers/utilities';
     const changes = req.body;
     // get user with this id
     Role.findOne({
-      where: {id: req.params.id}
+      where: { id: req.params.id }
     })
-    .then(role => {
+    .then((role) => {
       if (!role) {
         return Utility.sendError(res, 'Role not found.', 200);
       }
       return role
       .update({ ...changes })
       .then(() => Utility.sendData(res, role, 200))
-      .catch(error => Utility.sendError(res,error.message, 400));
+      .catch(error => Utility.sendError(res, error.message, 400));
     })
     .catch(error => Utility.sendError(res, error.message, 400));
   },
@@ -91,16 +91,16 @@ import Utility from './helpers/utilities';
   deleteRole(req, res) {
     // get document with this id
     Role.findOne({
-      where: {id: req.params.id}
+      where: { id: req.params.id }
     })
-    .then(role => {
+    .then((role) => {
       if (!role) {
         return Utility.sendError(res, 'Role not found.', 200);
       }
 
       return role
       .destroy()
-      .then(() => Utility.sendData(res, role, 200))  
+      .then(() => Utility.sendData(res, role, 200))
       .catch(error => Utility.sendError(res, error.message, 400));
     })
     .catch(error => Utility.sendError(res, error.message, 400));
@@ -113,26 +113,25 @@ import Utility from './helpers/utilities';
   getUsers(req, res) {
     // get role with this id
     Role.findOne({
-      where: {id: req.params.id}
+      where: { id: req.params.id }
     })
-    .then(role => {
+    .then((role) => {
       if (!role) {
         return Utility.sendError(res, 'Role not found.', 200);
       }
       // return user's documents
       return User.findAll({
-        where: {roleId: req.params.id},
+        where: { roleId: req.params.id },
       })
-      .then(users => {
+      .then((users) => {
         if (!users) {
           return Utility.sendError(res, 'Users not found.', 200);
         }
         return Utility.sendData(res, users, 200);
       })
       .catch(error => Utility.sendError(res, error.message, 400));
-      })
+    })
     .catch(error => Utility.sendError(res, error.message, 400));
   }
-}
-  
-  
+};
+

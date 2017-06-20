@@ -5,7 +5,7 @@ import model from '../../models';
 import mockData from '../mockData';
 
 const AccessRight = model.accessRight;
-let mockAccessRight = mockData.accessRight;
+const mockAccessRight = mockData.accessRight;
 
 describe('AccessRight Model', () => {
   let accessRight;
@@ -18,7 +18,7 @@ describe('AccessRight Model', () => {
           done();
         })
         .catch((err) => {
-          console.log('error',err);
+          console.log('error', err);
         });
     });
 

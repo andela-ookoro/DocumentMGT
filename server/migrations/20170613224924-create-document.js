@@ -1,6 +1,6 @@
-'use strict';
+
 module.exports = {
-  up: function(queryInterface, Sequelize) {
+  up(queryInterface, Sequelize) {
     return queryInterface.createTable('documents', {
       id: {
         allowNull: false,
@@ -12,12 +12,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-         is: {
-           args: ["^[a-z]+$",'i'],
-           msg: 'should contain only  alphabets'
-          }, 
-          len:{
-            arg: [2,20],
+          is: {
+            args: ['^[a-z]+$', 'i'],
+            msg: 'should contain only  alphabets'
+          },
+          len: {
+            arg: [2, 20],
             msg: 'should contain between 2 to 20 letters'
           }
         }
@@ -32,7 +32,7 @@ module.exports = {
       },
       accessRight: {
         type: Sequelize.INTEGER,
-         references: {
+        references: {
           model: 'accessRights',
           key: 'id',
           as: 'accessRightId',
@@ -40,9 +40,13 @@ module.exports = {
         onUpdate: 'cascade',
         onDelete: 'cascade'
       },
+      role: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+      },
       owner: {
         type: Sequelize.INTEGER,
-         references: {
+        references: {
           model: 'users',
           key: 'id',
           as: 'userId',
@@ -60,7 +64,7 @@ module.exports = {
       }
     });
   },
-  down: function(queryInterface, Sequelize) {
+  down(queryInterface, Sequelize) {
     return queryInterface.dropTable('documents');
   }
 };

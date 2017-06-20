@@ -6,7 +6,7 @@ import mockData from '../mockData';
 
 const User = model.user;
 const badUser = mockData.badUser;
-let mockUser = mockData.user;
+const mockUser = mockData.user;
 
 describe('User Model', () => {
   let user;
@@ -19,7 +19,7 @@ describe('User Model', () => {
           done();
         })
         .catch((err) => {
-          console.log('error',err);
+          console.log('error', err);
         });
     });
 
@@ -28,7 +28,7 @@ describe('User Model', () => {
       expect(user).toExist('fname');
     });
 
-     it('should create a user with hashed password', () => {
+    it('should create a user with hashed password', () => {
       expect(user.password).toNotEqual(mockUser.password);
     });
   });
@@ -67,7 +67,7 @@ describe('User Model', () => {
     });
   });
 
-   describe('Email Validation', () => {
+  describe('Email Validation', () => {
     it('requires user mail to be in proper email format', () => {
       User.create(mockData.UserWithInvalidEmail)
         .catch((error) => {
@@ -78,11 +78,11 @@ describe('User Model', () => {
     });
   });
 
-   describe('First and Last name Validation', () => {
+  describe('First and Last name Validation', () => {
     it('first and last name should contain at least two alphabet', () => {
       User.create(mockData.UserWithInvalidName)
         .catch((error) => {
-          expect(/Validation error: Validation is  failed/
+          expect(/Validation error: Validation is {2}failed/
             .test(error.message)).toBeTruthy;
           expect(/SequelizeValidationError/.test(error.name)).toBeTruthy;
         });

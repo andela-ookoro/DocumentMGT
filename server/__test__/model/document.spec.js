@@ -11,7 +11,7 @@ const User = model.user;
 // mock data
 const mockUser = mockData.user;
 const mockAccessRight = mockData.accessRight;
-const mockDocument =  mockData.document;
+const mockDocument = mockData.document;
 
 describe('Document Model', () => {
   let document;
@@ -27,7 +27,7 @@ describe('Document Model', () => {
           done();
         })
         .catch((err) => {
-          console.log('error newDocument',err);
+          console.log('error newDocument', err);
         });
     });
 
@@ -35,15 +35,13 @@ describe('Document Model', () => {
       expect(document).toExist();
       expect(document).toExist('title');
     });
-
-    
   });
 
   describe('Document Validation', () => {
     it('requires title field to create a document', (done) => {
       Document.create(mockData.DocumentWithoutTitle)
         .catch((error) => {
-          console.log('h20',error.message);
+          console.log('h20', error.message);
           expect(/notNull Violation/.test(error.message)).toBeTruthy;
           done();
         });
@@ -59,11 +57,11 @@ describe('Document Model', () => {
   });
 
 
-   describe('Document\'s title  and body  Validation', () => {
+  describe('Document\'s title  and body  Validation', () => {
     it('title  and body should contain at least two alphabet', () => {
       User.create(mockData.DocumentWithInvalidTitleBody)
         .catch((error) => {
-          expect(/Validation error: Validation is  failed/
+          expect(/Validation error: Validation is {2}failed/
             .test(error.message)).toBeTruthy;
           expect(/SequelizeValidationError/.test(error.name)).toBeTruthy;
         });

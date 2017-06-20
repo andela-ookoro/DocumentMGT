@@ -1,23 +1,22 @@
 import expect from 'expect';
-import supertest from 'supertest'
+import supertest from 'supertest';
 import model from '../../models';
 import mockData from './mockdata';
 
 import app from '../../../server';
 
 
-//Require the dev-dependencie
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let should = chai.should();
+// Require the dev-dependencie
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const should = chai.should();
 
 const request = supertest.agent(app);
-chai.use(chaiHttp)
+chai.use(chaiHttp);
 
 
-
-//import mockdata
-let document =  mockdata.document;
-let registeredDocument = {};
-let user =  mockdata.user;
-let registeredUser = {};
+// import mockdata
+const document = mockdata.document;
+const registeredDocument = {};
+const user = mockdata.user;
+const registeredUser = {};

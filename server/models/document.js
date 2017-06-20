@@ -1,12 +1,11 @@
-'use strict';
-module.exports = function(sequelize, DataTypes) {
-  var document = sequelize.define('document', {
+module.exports = (sequelize, DataTypes) => {
+  const document = sequelize.define('document', {
     title: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len:{
-          arg: [2,255],
+        len: {
+          arg: [2, 255],
           msg: 'should contain between 2 to 255 character'
         }
       }
@@ -19,11 +18,15 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len:{
-          arg: [2,5000],
+        len: {
+          arg: [2, 5000],
           msg: 'should contain between 2 to 5000 character'
         }
       }
+    },
+    role: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     },
     accessRight: {
       type: DataTypes.INTEGER,
@@ -43,7 +46,7 @@ module.exports = function(sequelize, DataTypes) {
     }
   }, {
     classMethods: {
-      associate: function(models) {
+      associate(models) {
         // has an owner
         document.belongsTo(models.user, {
           foriegnKey: 'userId',

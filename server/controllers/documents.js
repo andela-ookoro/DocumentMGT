@@ -5,25 +5,25 @@ const Document = require('../models').document;
  * @param {*} res - server response object
  * @param {*} message - error message
  */
-const sendError = (res, message ,statusCode) => {
-   res.status(statusCode).send({
+const sendError = (res, message, statusCode) => {
+  res.status(statusCode).send({
     status: 'fail',
     message
   });
-}
+};
 
 /**
- * 
+ *
  * @param {*} res - server response object
- * @param {*} data - data to be sent 
+ * @param {*} data - data to be sent
  * @param {*} statusCode - status Code
  */
-const sendData = (res, data ,statusCode) => {
-   res.status(statusCode).send({
+const sendData = (res, data, statusCode) => {
+  res.status(statusCode).send({
     status: 'success',
     data
   });
-}
+};
 
 module.exports = {
    /**
@@ -34,14 +34,14 @@ module.exports = {
   getDocuments(req, res) {
     let hint;
     // check it limit and offset where passed
-    if (req.query.offset && req.query.limit ) {
-      hint = { offset: req.query.offset , limit: req.query.limit };
+    if (req.query.offset && req.query.limit) {
+      hint = { offset: req.query.offset, limit: req.query.limit };
     }
 
     // get all documents
     Document.findAll({
-       order: [['title', 'ASC']],
-       ...hint
+      order: [['title', 'ASC']],
+      ...hint
     })
     .then(documents => res.status(200).send({
       status: 'success',
@@ -60,12 +60,12 @@ module.exports = {
     const document = req.body;
 
     // check for required fields
-    if ( document.title && document.body) {
+    if (document.title && document.body) {
       Document.create(document)
-      .then(newdocument => {
+      .then((newdocument) => {
         sendData(res, newdocument, 201);
       })
-      .catch(err => {
+      .catch((err) => {
         sendError(res, err.message, 500);
       });
     } else {
@@ -80,9 +80,9 @@ module.exports = {
   getDocument(req, res) {
     // get document with this id
     Document.findOne({
-      where: {id: req.params.id},
+      where: { id: req.params.id },
     })
-    .then(document => {
+    .then((document) => {
       if (!document) {
         return sendError(res, 'Document not found.', 200);
       }
@@ -95,20 +95,20 @@ module.exports = {
    * @param {*} req - client request
    * @param {*} res - server response
    */
-  deleteDocument(req, res) { 
+  deleteDocument(req, res) {
     // get document with this id
     Document.findOne({
-      where: {id: req.params.id}
+      where: { id: req.params.id }
     })
-    .then(document => {
+    .then((document) => {
       if (!document) {
         return sendError(res, 'Document not found.', 200);
       }
 
       return document
       .destroy()
-      .then(() =>  sendData(res, document, 200))  
-      .catch((error) => sendError(res, error.message, 400));
+      .then(() => sendData(res, document, 200))
+      .catch(error => sendError(res, error.message, 400));
     })
     .catch(error => sendError(res, error.message, 400));
   },
@@ -122,21 +122,21 @@ module.exports = {
     const changes = req.body;
     // get user with this id
     Document.findOne({
-      where: {id: req.params.id}
+      where: { id: req.params.id }
     })
-    .then(document => {
+    .then((document) => {
       if (!document) {
         return sendError(res, 'Document not found.', 200);
       }
       return document
       .update({ ...changes })
       .then(() => sendData(res, document, 200))
-      .catch((error) => sendError(res,error.message, 400));
+      .catch(error => sendError(res, error.message, 400));
     })
     .catch(error => sendError(res, error.message, 400));
   },
    /**
-   * - get documents that has a list of attributes 
+   * - get documents that has a list of attributes
    * @param {*} req - client request
    * @param {*} res - server response
    */
@@ -147,7 +147,7 @@ module.exports = {
     Document.findAll({
       where: { ...query }
     })
-    .then(documents => {
+    .then((documents) => {
       if (!documents) {
         return sendError(res, 'No document was found.', 200);
       }
