@@ -1,9 +1,9 @@
 
 
-//Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let should = chai.should();
+// Require the dev-dependencies
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+const should = chai.should();
 
 import app from '../../../server';
 
@@ -12,20 +12,20 @@ const request = supertest.agent(app);
 chai.use(chaiHttp);
 
 
-//import mockdata
+// import mockdata
 import mockdata from '../mockData';
-let role =  mockdata.role;
-let roleWithoutTitle = mockdata.roleWithoutTitle; 
-let registeredRole= {};
+const role = mockdata.role;
+const roleWithoutTitle = mockdata.roleWithoutTitle;
+const registeredRole = {};
 
 describe('/document ', () => {
   describe('POST /document ', () => {
-    it('As a user , I should be able to create a role',(done) => {
+    it('As a user , I should be able to create a role', (done) => {
       request
         .post('/roles')
         .send(role)
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             // store new Role for futher testing
             registeredRole.title = res.body.data.title;
             registeredRole.id = res.body.data.id;
@@ -36,13 +36,13 @@ describe('/document ', () => {
           done();
         });
     });
-   it('A user should recieve a message when compulsory fields are not provided',
+    it('A user should recieve a message when compulsory fields are not provided',
     (done) => {
       request
         .post('/roles')
         .send(roleWithoutTitle)
         .end((err, res) => {
-          if(res) {
+          if (res) {
             res.should.have.status(500);
             res.body.status.should.be.eql('fail');
             res.body.message.should.be.eql('Role title is compulsory.');
@@ -58,7 +58,7 @@ describe('/document ', () => {
       request
         .get('/roles')
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
             res.body.status.should.be.eql('success');
             res.body.data.should.be.an('array');
@@ -68,20 +68,20 @@ describe('/document ', () => {
     });
   });
 
- describe('GET /roles/:id ', () => {
-    it('A user should get a role by id \'when id exist\'',(done) => {
+  describe('GET /roles/:id ', () => {
+    it('A user should get a role by id \'when id exist\'', (done) => {
       request
-        .get(`/roles/${ registeredRole.id}`)
+        .get(`/roles/${registeredRole.id}`)
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
-            // if there is no error, that is user exist 
-            if(!res.body.message) {
+            // if there is no error, that is user exist
+            if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
               res.body.message.should.be.eql('Role not found.');
             }
-          } 
+          }
           done();
         });
     });
@@ -91,35 +91,35 @@ describe('/document ', () => {
       request
       .get('/roles/-2')
       .end((err, res) => {
-        if(!err) {
+        if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
           res.body.message.should.be.eql('Role not found.');
-        } 
+        }
         done();
       });
     });
   });
 
   describe('PUT /documents/:id ', () => {
-    let updateRole = mockdata.updateRole;
+    const updateRole = mockdata.updateRole;
 
     it('A user should update a role by id \'when role exist\'',
     (done) => {
       request
-        .put(`/roles/${ registeredRole.id }`)
+        .put(`/roles/${registeredRole.id}`)
         .send(updateRole)
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
-            // if there is no error, that is user exist 
-            if(!res.body.message) {
+            // if there is no error, that is user exist
+            if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data
+              res.body.data;
             } else {
               res.body.message.should.be.eql('Role not found.');
             }
-          } 
+          }
           done();
         });
     });
@@ -130,7 +130,7 @@ describe('/document ', () => {
       .put('/roles/-2')
       .send(mockdata.updatedocument)
       .end((err, res) => {
-        if(!err) {
+        if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
           res.body.message.should.be.eql('Role not found.');
@@ -138,22 +138,22 @@ describe('/document ', () => {
         done();
       });
     });
-  })
+  });
 
   describe('DETELE /roles/:id ', () => {
-    it('A user can delete a role by id \'when id exist\'',(done) => {
+    it('A user can delete a role by id \'when id exist\'', (done) => {
       request
-        .delete(`/roles/${ registeredRole.id }`)
+        .delete(`/roles/${registeredRole.id}`)
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
-            // if there is no error, that is user exist 
-            if(!res.body.message) {
+            // if there is no error, that is user exist
+            if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
               res.body.message.should.be.eql('Role not found.');
             }
-          } 
+          }
           done();
         });
     });
@@ -163,11 +163,11 @@ describe('/document ', () => {
       request
       .delete('/roles/-2')
       .end((err, res) => {
-        if(!err) {
+        if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
           res.body.message.should.be.eql('Role not found.');
-        } 
+        }
         done();
       });
     });
@@ -175,19 +175,19 @@ describe('/document ', () => {
 
   describe('GET /roles/:id/users ', () => {
     it('A user should get list of users belonging to a role by roleid ' +
-      '\'when id exist\'',(done) => {
+      '\'when id exist\'', (done) => {
       request
         .get('/roles/3/users')
         .end((err, res) => {
-          if(!err) {
+          if (!err) {
             res.should.have.status(200);
-            // if there is no error, that is user exist 
-            if(!res.body.message) {
+            // if there is no error, that is user exist
+            if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
               res.body.message.should.be.eql('Role not found.');
             }
-          } 
+          }
           done();
         });
     });
@@ -197,11 +197,11 @@ describe('/document ', () => {
       request
       .get('/roles/-2/users')
       .end((err, res) => {
-        if(!err) {
+        if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
           res.body.message.should.be.eql('Role not found.');
-        } 
+        }
         done();
       });
     });

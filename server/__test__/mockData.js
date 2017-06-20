@@ -1,4 +1,4 @@
-import  faker from 'faker';
+import faker from 'faker';
 
 const mockData = {
   role: {
@@ -43,7 +43,7 @@ const mockData = {
     email: faker.internet.email(),
     roleId: 3
   },
- UserWithoutlastname: {
+  UserWithoutlastname: {
     fname: faker.name.lastName(),
     lname: null,
     mname: faker.name.firstName(),
@@ -75,7 +75,7 @@ const mockData = {
     email: faker.name.lastName(),
     roleId: 3
   },
-   UserWithInvalidName: {
+  UserWithInvalidName: {
     fname: faker.name.lastName(2),
     lname: faker.name.lastName(2),
     mname: faker.name.firstName(),
@@ -84,35 +84,36 @@ const mockData = {
     roleId: 3
   },
   document: {
-    title: faker.lorem.words(2), 
+    title: faker.lorem.words(2),
     synopsis: faker.lorem.sentences(),
     body: faker.lorem.sentences(),
     owner: 4,
-    accessRight: 1
+    accessRight: 1,
+    role: 1
   },
   updatedocument: {
-    title: faker.lorem.words(2), 
+    title: faker.lorem.words(2),
     synopsis: faker.lorem.sentences(),
     body: faker.lorem.sentences(),
     owner: 4,
     accessRight: 1
   },
-  DocumentWithoutTitle:{
-    title: null, 
+  DocumentWithoutTitle: {
+    title: null,
     synopsis: faker.lorem.sentences(),
     body: faker.lorem.sentences(),
     owner: 1,
     accessRight: 1
   },
   DocumentWithoutBody: {
-    title: faker.lorem.words(2), 
+    title: faker.lorem.words(2),
     synopsis: faker.lorem.sentences(),
     body: null,
     owner: 1,
     accessRight: 1
   },
-  DocumentWithInvalidTitleBody : {
-    title: faker.name.lastName(2), 
+  DocumentWithInvalidTitleBody: {
+    title: faker.name.lastName(2),
     synopsis: faker.lorem.sentences(),
     body: faker.name.lastName(2),
     owner: 1,

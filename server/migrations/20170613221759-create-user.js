@@ -1,6 +1,6 @@
-'use strict';
+
 module.exports = {
-  up: function(queryInterface, Sequelize) {
+  up(queryInterface, Sequelize) {
     return queryInterface.createTable('users', {
       id: {
         allowNull: false,
@@ -13,11 +13,11 @@ module.exports = {
         allowNull: false,
         validate: {
           is: {
-            args: ["^[a-z]+$",'i'],
+            args: ['^[a-z]+$', 'i'],
             msg: 'last name should contain only  alphabets'
-          }, 
-          len:{
-            arg: [2,20],
+          },
+          len: {
+            arg: [2, 20],
             msg: 'last name should contain between 2 to 20 letters'
           }
         }
@@ -27,11 +27,11 @@ module.exports = {
         allowNull: false,
         validate: {
           is: {
-            args: ["^[a-z]+$",'i'],
+            args: ['^[a-z]+$', 'i'],
             msg: 'last name should contain only  alphabets'
-          }, 
-          len:{
-            arg: [2,20],
+          },
+          len: {
+            arg: [2, 20],
             msg: 'last name should contain between 2 to 20 letters'
           }
         }
@@ -77,7 +77,7 @@ module.exports = {
       }
     });
   },
-  down: function(queryInterface, Sequelize) {
+  down(queryInterface, Sequelize) {
     return queryInterface.dropTable('users');
   }
 };

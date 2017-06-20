@@ -1,21 +1,31 @@
-import  path from 'path';
+import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import Dotenv from 'dotenv-webpack';
 
 module.exports = {
+  context: __dirname,
   entry: [
     'webpack-hot-middleware/client',
-    // path.join(__dirname, 'client/index.js')
+    path.join(__dirname, 'client/index.js'),
+    path.join(__dirname, 'client/style/main.scss')
   ],
   output: {
-    path: '/',
-    filename: 'bundle.js',
+    path:  path.join(__dirname, 'public'),
+    filename: 'bundle.min.js',
   },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin,
     new webpack.optimize.OccurrenceOrderPlugin,
     new webpack.HotModuleReplacementPlugin,
+    new webpack.optimize.UglifyJsPlugin({
+      mangle: false,
+      sourcemap: false
+    }),
+  new ExtractTextPlugin({
+    filename: path.join(__dirname, 'public/style.css'),
+    allChunks: true
+  }),
     new Dotenv({
       path: '.env',
       safe: true,
@@ -26,8 +36,8 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         loader: ['react-hot-loader', 'babel-loader'],
-        exclude: /node_modules/,
-        include: '/client/'
+        exclude: /(node_modules|bower_components)/,
+        include: /client/,
       },
       {
         test: /\.(scss|sass)$/,
@@ -39,6 +49,6 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js']
+    extensions: ['.js', '.jsx', '.json', '*']
   }
 }

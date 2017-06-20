@@ -1,5 +1,8 @@
 module.exports = {
   "root": true,
+  "plugins": [
+    "react"
+  ],
   "extends": "airbnb",
   "env": {
     "browser": true,
@@ -8,9 +11,6 @@ module.exports = {
     "jest": true,
     "jquery": true
   },
-  "plugins": [
-    "react"
-  ],
   "rules": {
     "one-var": 0,
     "one-var-declaration-per-line": 0,

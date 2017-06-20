@@ -1,24 +1,35 @@
-const usersController = require('../controllers').User;
-const documentsController = require('../controllers/').Document;
-const accessRightController = require('../controllers/').AccessRight;
-const rolesController = require('../controllers/').Role;
+import Controllers from '../controllers';
+import Utility from '../controllers/helpers/utilities';
 
-module.exports = (app) => {
+// import the model
+const usersController = Controllers.User;
+const documentsController = Controllers.Document;
+const accessRightController = Controllers.AccessRight;
+const rolesController = Controllers.Role;
+module.exports = (app, express, path, passport) => {
+  // serve static files in public folder
+  const publicPath = path.join(__dirname, '../../public/');
+  app.use(express.static(publicPath));
+
+  // unathenticated routes
+  app.get('/users/login', usersController.login);
+  app.post('/users/logout', usersController.logout);
+  app.post('/users/', usersController.createUser);
+
+  // check for user session
+  // app.use(Utility.validateUser);
+
+  // the routes below are authenticated
   app.get('/users/:id/documents', usersController.getUserDocument);
   app.get('/search/users', usersController.lookupUser);
   app.get('/search/documents', documentsController.searchByTitle);
-
-  app.get('/users/login', usersController.login)
-  app.post('/users/logout', usersController.logout);
 
   app.route('/users/:id')
   .get(usersController.getUser)
   .delete(usersController.deleteUser)
   .put(usersController.updateUser);
 
-  app.route('/users')
-  .get(usersController.getUsers)
-  .post(usersController.createUser);
+  app.get('/users', usersController.getUsers);
 
   app.route('/documents/:id')
   .get(documentsController.getDocument)
@@ -31,17 +42,19 @@ module.exports = (app) => {
 
   app.route('/roles')
   .get(rolesController.getRoles)
-  .post(rolesController.createRole)
+  .post(rolesController.createRole);
 
   app.route('/roles/:id')
   .get(rolesController.getRole)
   .put(rolesController.updateRole)
-  .delete(rolesController.deleteRole)
+  .delete(rolesController.deleteRole);
 
-  app.get('/roles/:id/users', rolesController.getUsers)
+  app.get('/roles/:id/users', rolesController.getUsers);
 
-app.all('*', (req, res) => res.status(200).send({
-  message: 'Welcome to the beginning of nothingness.',
-}));
-  
-};  
+  app.all('/', (req, res) =>
+  res.sendFile(`${publicPath}index.html`)
+);
+  app.all('/', (req, res) => res.status(404).send({
+    message: 'Route was not found.'
+  }));
+};

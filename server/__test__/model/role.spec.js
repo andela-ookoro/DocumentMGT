@@ -5,7 +5,7 @@ import model from '../../models';
 import mockData from '../mockData';
 
 const Role = model.role;
-let mockRole = mockData.role;
+const mockRole = mockData.role;
 
 describe('Role Model', () => {
   let role;
@@ -18,7 +18,7 @@ describe('Role Model', () => {
           done();
         })
         .catch((err) => {
-          console.log('error',err);
+          console.log('error', err);
         });
     });
 

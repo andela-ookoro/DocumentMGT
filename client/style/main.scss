@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css?family=Droid+Serif|El+Messiri|Lora|Merriweather|Titillium+Web');
+@import url('https://fonts.googleapis.com/css?family=Barrio|Lora|Roboto+Slab|Slabo+27px');
+@import url('https://fonts.googleapis.com/css?family=Slabo+27px');
+
+body {
+  font-family: 'Slabo 27px', serif;
+  font-family: 'Lora', serif;
+  font-family: 'Barrio', cursive;
+  font-family: 'Indie Flower', cursive;
+  font-family: 'Abril Fatface', cursive;
+  font-family: 'Abel', sans-serif;
+   background-color: #ffffff;
+}
+.heading{
+  background-color: #ffffff;
+  border: none;
+}
+.header a{
+  color: #212121;
+  border: none;
+}
+nav{
+  box-shadow: none;
+  background-color: #ffffff;
+}
+button{
+  background-color: #a1887f !important;
+}
+.body{
+  background-color: #f9f8f2;
+  padding: 2px
+}
+.page-footer{
+  background-color:#a1887f
+}
+#document-body{
+  text-align: justify;
+}
+.sitemap{
+  color: #ffffff;
+  background-color: #8d6e63
+}
+.sitemap a {
+  color: #ffffff;
+}
+#logoImg{
+  height: 30px;
+  width: 30px;
+}
+.mainHeader{
+  position: fixed;
+  width: 100%;
+  background: #fff;
+  z-index: 1000
+}
+.sitemapdiv{
+  padding: 100px 0 0 0;
+}
+#footerDiv{
+  position: fixed;
+  width: 100%;
+  background: #fff;
+  z-index: 1000;
+  bottom: 0px
+}
+.extraDiv{
+  padding: 50px
+}

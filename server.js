@@ -47,7 +47,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Require our routes into the application.
-require('./server/routes')(app);
+require('./server/routes')(app, express, path, passport);
 
 // require passport
 require('./server/config/passport')(passport);
