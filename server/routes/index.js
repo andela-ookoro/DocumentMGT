@@ -17,7 +17,7 @@ module.exports = (app, express, path, passport) => {
   app.post('/users/', usersController.createUser);
 
   // check for user session
-  // app.use(Utility.validateUser);
+  app.use(Utility.validateUser);
 
   // the routes below are authenticated
   app.get('/users/:id/documents', usersController.getUserDocument);

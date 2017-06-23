@@ -26,15 +26,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     role: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: false
     },
     accessRight: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'accessRight',
-        key: 'id',
-        as: 'accessRightId',
-      },
+      type: DataTypes.STRING,
+      allowNull: true
     },
     owner: {
       type: DataTypes.INTEGER,

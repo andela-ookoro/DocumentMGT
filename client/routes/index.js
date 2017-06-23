@@ -9,14 +9,7 @@ import Documents from '../components/Documents';
 import Document from '../components/Document';
 import CreateDocument from '../components/CreateDocument'
 import configureStore from '../store/configureStore';
-
-const requireAuth = () => {
-  console.log('came here');
-  if (localStorage.getItem('jwt')) {
-    console.log(' window.location = /#/signup');
-    window.location = '/#/signup'
-  }
-};
+import { requireAuth }from '../helper';
 
 // function requireAuth(nextState, replace) {  
 //   if (!localStorage.jwt) {

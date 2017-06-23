@@ -33,12 +33,12 @@ module.exports = {
    * @param {*} next - call the next route
    */
   validateUser(req, res, next) {
-    const token = req.body.token || req.query.token || req.headers['x-access-token'];
+    const token = req.headers.authorization || req.body.token || req.query.token;
     // decoding the token
     if (token) {
       jwt.verify(token, process.env.TOKENSECRET, (error, decoded) => {
         if (error) {
-          return res.status(403).json({
+          return res.status(401).json({
             message: 'Failed to authenticate token.'
           });
         }
@@ -48,7 +48,7 @@ module.exports = {
       });
     } else {
       // if there is no token available return a message
-      return res.status(200).send({
+      return res.status(401).send({
         message: 'No token provided.'
       });
     }
@@ -64,7 +64,8 @@ module.exports = {
     const userInfo = {
       email: user.email,
       name: `${user.fname} ${user.mname} ${user.lname}`,//user.getFullname(),
-      role: user.roleId
+      role: user.roleId,
+      id: user.id
     };
     const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET);
 

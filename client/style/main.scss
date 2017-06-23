@@ -9,7 +9,7 @@ body {
   font-family: 'Indie Flower', cursive;
   font-family: 'Abril Fatface', cursive;
   font-family: 'Abel', sans-serif;
-   background-color: #ffffff;
+  background-color: #ffffff;
 }
 .heading{
   background-color: #ffffff;
@@ -72,6 +72,9 @@ button{
 }
 .welcomeDiv span {
   font-size: 32px
+}
+.activelink {
+   border-bottom: 4px solid #a1887f !important;  
 }
 select{
   background-color: #f9f8f2;
@@ -136,4 +139,14 @@ input[type=text].valid {
 input[type=text].invalid{
   border-bottom: 1px solid #1d283a !important;
   box-shadow: 0 1px 0 0 #1d283a !important;
+}
+.mce-tinymce{
+  width: 95% !important;
+  float: right !important;
+  margin-top: 12px !important;
+}
+[type="radio"]:checked + label:after,
+[type="radio"].with-gap:checked + label:after {
+  background-color: #a1887f !important;
+  border: 2px solid #a1887f;
 }

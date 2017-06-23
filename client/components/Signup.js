@@ -2,8 +2,8 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as signupActions from '../actions/signupActions';
-import * as roleActions  from '../actions/rolesActions';
+import { signupUser } from '../actions/signupActions';
+import { getRoles } from '../actions/rolesActions';
 import Login from './Login';
 
 class Signup extends React.Component{
@@ -161,8 +161,8 @@ class Signup extends React.Component{
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    signUp: credentials => signupActions.signupUser(credentials),
-    getRoles: () => roleActions.getRoles()
+    signUp: credentials => signupUser(credentials),
+    getRoles: () => getRoles()
   }
 };
 // Maps state from store to props
