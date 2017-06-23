@@ -1,11 +1,15 @@
 import { combineReducers } from 'redux';
-import users from './user';
+import loginMessage from './loginReducer';
+import session from './sessionReducer';
+import SignupMessage from './signupReducer';
+import roles from './roleReducer';
 
 /**
  * contains every reducers
  */
 export default combineReducers({
-  users: users,
-  // More reducers if there are
-  // can go here
+  loginMessage,
+  session,
+  SignupMessage,
+  roles
 });

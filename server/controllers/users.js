@@ -23,7 +23,7 @@ const returnJWt = (res, user, statusCode) => {
   // send response to client
   res.status(statusCode).send({
     status: 'success',
-    data: tokenData,
+    userInfo: tokenData,
     jwtToken
   });
 };
@@ -63,7 +63,6 @@ module.exports = {
   login(req, res) {
     // create object from request
     const user = req.body;
-
     // check for required fields
     if (user.email && user.password) {
       // get user with this email
@@ -134,7 +133,6 @@ module.exports = {
   createUser(req, res) {
     // create object from request
     const user = req.body;
-    console.log('...............', req.body);
     // check for required fields
     if (user.fname && user.lname && user.email && user.password) {
       User.create(user)
