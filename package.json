@@ -13,6 +13,7 @@
     "test": "babel-node ./node_modules/istanbul/lib/cli cover _mocha -- --compilers js:babel-core/register ./server/__test__/**/*.spec.js"
   },
   "dependencies": {
+    "axios": "^0.16.2",
     "babel-register": "^6.24.1",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
@@ -27,12 +28,16 @@
     "passport-local": "^1.0.0",
     "pg": "^6.2.4",
     "pg-hstore": "^2.3.2",
+    "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^5.0.5",
     "react-router-dom": "^4.1.1",
     "redux": "^3.7.0",
-    "sequelize": "^4.1.0"
+    "redux-promise": "^0.5.3",
+    "redux-thunk": "^2.2.0",
+    "sequelize": "^4.1.0",
+    "thunk": "0.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

@@ -61,17 +61,17 @@ module.exports = {
    */
   returnJWt(res, user, statusCode) {
     // create jwt payload
-    const tokenData = {
+    const userInfo = {
       email: user.email,
-      name: user.getFullname(),
+      name: `${user.fname} ${user.mname} ${user.lname}`,//user.getFullname(),
       role: user.roleId
     };
-    const jwtToken = jwt.sign(tokenData, process.env.TOKENSECRET);
+    const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET);
 
     // send response to client
     res.status(statusCode).send({
       status: 'success',
-      data: tokenData,
+      userInfo,
       jwtToken
     });
   }

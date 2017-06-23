@@ -63,6 +63,77 @@ button{
   z-index: 1000;
   bottom: 0px
 }
-.extraDiv{
+.extraDiv {
   padding: 50px
+}
+.welcomeDiv{
+  color:#a1887f;
+  padding: 50px
+}
+.welcomeDiv span {
+  font-size: 32px
+}
+select{
+  background-color: #f9f8f2;
+  border-color: #a1887f !important;
+}
+.input-field:focus, .input-field select.browser-default:focus{
+  background-color: #f9f8f2;
+  border: 4px solid #a1887f !important;
+  box-shadow: transparent;
+}
+.tabs {
+  background-color: #f9f8f2;
+}
+.tabs .tab a {
+  color:#a1887f !important;
+}
+.tabs .tab a:hover, .tabs .tab a.active {
+  color:#a1887f !important;
+}
+.tabs .indicator{
+  background-color:#a1887f !important;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus:not([readonly]),
+.input-field input[type=password]:focus:not([readonly]),
+.input-field input[type=email]:focus:not([readonly]),
+input[type=text]:focus:not([readonly]),
+input[type=password]:focus,
+input[type=search]:focus,
+.input-field select:focus,
+input[type=email]:focus:not([readonly]),
+input[type=email]:focus:not([readonly]),
+input[type=text]:focus:not([readonly]),
+input[type=search]:focus:not([readonly]){
+  border-bottom: 1px solid #a1887f !important;
+  box-shadow: 0 1px 0 0 #a1887f !important;
+}
+.input-field .prefix.active {
+    color: #a1887f !important;
+}
+.input-field input, input[type=text], input[type=email]{
+  border-bottom: 1px solid #a1887f !important;
+}
+
+/* label focus color */
+.input-field input[type=text]:focus + label,
+.input-field input[type=password]:focus + label,
+.input-field input[type=email]:focus + label,
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=email]:focus{
+  color: #a1887f !important;
+}
+/* valid color */
+.input-field input[type=text].valid,
+input[type=text].valid {
+  border-bottom: 1px solid #a1887f !important;
+  box-shadow: 0 1px 0 0 #a1887f !important;
+}
+/* invalid color */
+.input-field input[type=text].invalid,
+input[type=text].invalid{
+  border-bottom: 1px solid #1d283a !important;
+  box-shadow: 0 1px 0 0 #1d283a !important;
 }

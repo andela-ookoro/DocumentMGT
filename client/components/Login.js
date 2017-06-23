@@ -1,40 +1,72 @@
 import React from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// import * as bookActions from '../actions/bookActions';
+import PropTypes from 'prop-types';
+import * as sessionActions from '../actions/sessionActions';
 
 class Login extends React.Component{
   constructor(props){
     super(props);
+    this.state = {
+      email: '',
+      password: ''
+    };
+    this.onChange = this.onChange.bind(this);
+    this.onSave = this.onSave.bind(this);
   }
 
-  // submitBook(input){
-  //   this.props.createBook(input);
-  // }
+  /**
+   * set the value of the control to the respective state node
+   * @param {*} e 
+   */
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
+
+  /**
+   * 
+   * @param {*} event 
+   */
+  onSave(event) {
+    event.preventDefault();
+    this.props.siginin(this.state);
+  }
 
   render(){
-    let titleInput;
     return(
-     <div className="container">
-      <div className="body row">
+      <div>
+        <br />
+        <p>  {this.props.loginMessage}  </p>
         <form className="col s12">
-          <div className="input-field col  l4 m6 s12">
+          <div className="input-field col  s12">
             <i className="material-icons prefix">email</i>
-            <input placeholder="Email" id="email" type="email" className="validate" />
-            <label for="email" data-error="wrong" data-success="right">Email</label>
+            <input
+              placeholder="Email" value={this.state.email} onChange={this.onChange}
+              name="email" type="email" className="validate" required
+            />
+            <label htmlFor="email" data-error="wrong" data-success="right">Email</label>
           </div>
-          <div className="input-field col  l4 m6 s12">
+          <div className="input-field col  s12">
             <i className="material-icons prefix">lock</i>
-            <input placeholder="Password" id="password" type="password" className="validate" />
-            <label for="password">Password</label>
+            <input placeholder="Password" name="password"
+              value={this.state.password} onChange={this.onChange}
+              type="password" className="validate" required
+            />
+            <label htmlFor="password">Password</label>
           </div>
-          <div className="input-field col l4 m12 s12" >
-            <button className="btn waves-effect waves-light right" type="submit" name="action">
+          <div className="input-field col s12" >
+            <button
+              className="btn waves-effect waves-light right" type="submit"
+              onClick={this.onSave} name="action">
               Login <i className="material-icons right">send</i>
               </button>
           </div>
+
+              <br />
         </form>
       </div>
-    </div>
     )
   }
 }
@@ -43,17 +75,17 @@ class Login extends React.Component{
 const mapStateToProps = (state, ownProps) => {
   return {
     // You can now say this.props.books
-    // books: state.pens
+    loginMessage: state.loginMessage
   }
 };
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-  // You can now say this.props.createBook
-    // createBook: book => dispatch(bookActions.createBook(book))
+    siginin: credentials => dispatch(sessionActions.logInUser(credentials))
   }
 };
 
 // Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
+

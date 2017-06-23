@@ -5,3 +5,4 @@ lcov-report/
 coverage/
 learn
 lcov.info
+public/lib

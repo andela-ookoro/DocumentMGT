@@ -12,7 +12,7 @@ module.exports = (app, express, path, passport) => {
   app.use(express.static(publicPath));
 
   // unathenticated routes
-  app.get('/users/login', usersController.login);
+  app.post('/users/login', usersController.login);
   app.post('/users/logout', usersController.logout);
   app.post('/users/', usersController.createUser);
 

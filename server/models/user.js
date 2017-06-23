@@ -127,9 +127,10 @@ module.exports = (sequelize, DataTypes) => {
      * @method
      * @returns {String} user fullname
   */
-  user.prototype.getFullname = () => (
-    `${this.fname} ${this.mname} ${this.lname}`
-  );
+  user.prototype.getFullname = () => {
+    console.log('came here......................', this);
+    return `${this.fname} ${this.mname} ${this.lname}`;
+};
 
    /**
    * verify plain password against user's hashed password

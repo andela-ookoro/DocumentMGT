@@ -18,6 +18,7 @@ module.exports = {
 
     // get all users
     Role.findAll({
+      attributes: ['id', 'title', 'description'],
       order: [['title', 'ASC']],
       ...hint
     })

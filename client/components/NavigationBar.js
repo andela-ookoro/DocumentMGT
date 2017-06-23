@@ -23,7 +23,7 @@ class NavigationBar extends React.Component{
                     <i className="material-icons">menu</i>
                   </a>
                   <ul className="right hide-on-med-and-down">
-                    <li><Link to="/documents">Documents</Link></li>
+                    <li><Link to="/dashboard">Documents</Link></li>
                     <li><Link to="/document">Document</Link></li>
                     <li><Link to="/createDocument">Create Document</Link></li>
                     <li><a >Okoro Celestine</a></li>

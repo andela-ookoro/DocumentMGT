@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import * as bookActions from '../actions/bookActions';
+import { withRouter } from 'react-router-dom'
 
 class CreateDocument extends React.Component{
   constructor(props){
@@ -21,21 +21,21 @@ class CreateDocument extends React.Component{
               <div className="input-field col s12">
                 <i className="material-icons prefix">subject</i>
                 <input placeholder="Title" id="title" type="text" className="validate" />
-                <label for="title">Title</label>
+                <label htmlFor="title">Title</label>
               </div>
             </div>
             <div className="row">
               <div className="input-field col s12">
                 <i className="material-icons prefix">toc</i>
                 <textarea placeholder="Synopsis" id="synopsis" type="text" className="materialize-textarea"></textarea>
-                <label for="synopsis">Synopsis</label>
+                <label htmlFor="synopsis">Synopsis</label>
               </div>
             </div>
             <div className="row">
               <div className="input-field col s12">
                 <i className="material-icons prefix">view_headline</i>
                  <textarea placeholder="Body" id="body" type="text" className="materialize-textarea"></textarea>
-                <label for="body">Body</label>
+                <label htmlFor="body">Body</label>
               </div>
             </div>
             <div className="row">
@@ -45,15 +45,15 @@ class CreateDocument extends React.Component{
               </div>
               <div className="input-field col l2 s4">
                 <input name="accessMode" type="radio" id="private" />
-                 <label for="private">Private</label>
+                 <label htmlFor="private">Private</label>
               </div>
               <div className="input-field col l2 s4">
                 <input name="accessMode" type="radio" id="public" />
-                 <label for="public">Public</label>
+                 <label htmlFor="public">Public</label>
               </div>
               <div className="input-field col l2 s4">
                 <input name="accessMode" type="radio" id="role" />
-                 <label for="role">Role</label>
+                 <label htmlFor="role">Role</label>
               </div>
             </div>
             <div className="row">
@@ -87,4 +87,4 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 // Use connect to put them together
-export default connect(mapStateToProps, mapDispatchToProps)(CreateDocument);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(CreateDocument));

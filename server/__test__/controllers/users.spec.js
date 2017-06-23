@@ -62,7 +62,7 @@ describe('/users ', () => {
     'after successful login',
     (done) => {
       request
-        .get('/users/login')
+        .post('/users/login')
         .send(registeredUser)
         .end((err, res) => {
           if (!err) {
@@ -78,7 +78,7 @@ describe('/users ', () => {
     (done) => {
       registeredUser.password += 'wrong';
       request
-        .get('/users/login')
+        .post('/users/login')
         .send(registeredUser)
         .end((err, res) => {
           if (!err) {
@@ -94,7 +94,7 @@ describe('/users ', () => {
     (done) => {
       registeredUser.password = '';
       request
-        .get('/users/login')
+        .post('/users/login')
         .send(registeredUser)
         .end((err, res) => {
           if (res) {
