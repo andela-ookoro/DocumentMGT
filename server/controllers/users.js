@@ -5,54 +5,6 @@ import Utilities from './helpers/utilities';
 
 const User = model.user;
 const Document = model.document;
-/**
- * return user metadata and jwt to the user
- * @param {*} res server response object
- * @param {*} user user object
- * @param {*} statusCode status Code
- */
-const returnJWt = (res, user, statusCode) => {
-  // create jwt payload
-  const tokenData = {
-    email: user.email,
-    name: user.getFullname(),
-    role: user.roleId
-  };
-  const jwtToken = jwt.sign(tokenData, process.env.TOKENSECRET);
-
-  // send response to client
-  res.status(statusCode).send({
-    status: 'success',
-    userInfo: tokenData,
-    jwtToken
-  });
-};
-
-/**
- * send error message to client
- * @param {*} res - server response object
- * @param {*} message - error message
- */
-const sendError = (res, message, statusCode) => {
-  res.status(statusCode).send({
-    status: 'fail',
-    message
-  });
-};
-
-/**
- *
- * @param {*} res - server response object
- * @param {*} data - data to be sent
- * @param {*} statusCode - status Code
- */
-const sendData = (res, data, statusCode) => {
-  res.status(statusCode).send({
-    status: 'success',
-    data
-  });
-};
-
 
 module.exports = {
    /**
@@ -249,7 +201,6 @@ module.exports = {
    */
   getUserDocument(req, res) {
     // get user with this id
-    console.log('..................', req.decode);
     User.findOne({
       where: { id: req.params.id }
     })

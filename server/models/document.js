@@ -39,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
         as: 'userId',
       },
+    },
+    author: {
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     classMethods: {
@@ -47,6 +51,7 @@ module.exports = (sequelize, DataTypes) => {
         document.belongsTo(models.user, {
           foriegnKey: 'userId',
           onDelete: 'CASCADE',
+          as: 'userId'
         });
         // has an owner
         document.belongsTo(models.accessRight, {

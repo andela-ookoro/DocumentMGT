@@ -42,8 +42,7 @@ module.exports = {
             message: 'Failed to authenticate token.'
           });
         }
-        req.decoded = decoded;
-        console.log(decoded);
+        req.user = decoded;
         next();
       });
     } else {

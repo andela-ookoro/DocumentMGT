@@ -88,7 +88,7 @@ const mockData = {
     synopsis: faker.lorem.sentences(),
     body: faker.lorem.sentences(),
     owner: 4,
-    accessRight: 1,
+    accessRight: 'private',
     role: 1
   },
   updatedocument: {
@@ -96,7 +96,7 @@ const mockData = {
     synopsis: faker.lorem.sentences(),
     body: faker.lorem.sentences(),
     owner: 4,
-    accessRight: 1
+    accessRight: 'role'
   },
   DocumentWithoutTitle: {
     title: null,
