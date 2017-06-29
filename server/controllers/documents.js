@@ -1,29 +1,8 @@
-const Document = require('../models').document;
+import model from '../models/index';
+import Utilities from './helpers/utilities';
 
-/**
- * send error message to client
- * @param {*} res - server response object
- * @param {*} message - error message
- */
-const sendError = (res, message, statusCode) => {
-  res.status(statusCode).send({
-    status: 'fail',
-    message
-  });
-};
-
-/**
- *
- * @param {*} res - server response object
- * @param {*} data - data to be sent
- * @param {*} statusCode - status Code
- */
-const sendData = (res, data, statusCode) => {
-  res.status(statusCode).send({
-    status: 'success',
-    data
-  });
-};
+const User = model.user;
+const Document = model.document;
 
 module.exports = {
    /**
@@ -39,7 +18,7 @@ module.exports = {
     }
 
     // get all documents
-    Document.findAll({
+    Document.findAndCountAll({
       order: [['title', 'ASC']],
       ...hint
     })
@@ -48,7 +27,7 @@ module.exports = {
       documents
     })
     )
-    .catch(error => sendError(res, error.message, 500));
+    .catch(error => Utilities.sendError(res, error.message, 500));
   },
    /**
    * - create a document
@@ -58,18 +37,26 @@ module.exports = {
   createDocument(req, res) {
     // create object from request
     const document = req.body;
-
     // check for required fields
-    if (document.title && document.body) {
-      Document.create(document)
-      .then((newdocument) => {
-        sendData(res, newdocument, 201);
+    if (document.title && document.body && (document.owner === req.user.id)) {
+      // get owner name
+      User.findOne({
+        where: { id: req.user.id },
+        attributes: ['fname', 'lname', 'mname']
       })
-      .catch((err) => {
-        sendError(res, err.message, 500);
-      });
+      .then((user) => {
+        document.author = `${user.fname} ${user.mname} ${user.lname}`;
+        Document.create(document)
+        .then((newdocument) => {
+          Utilities.sendData(res, newdocument, 201);
+        })
+        .catch((err) => {
+          Utilities.sendError(res, err.message, 500);
+        });
+      })
+      .catch(error => Utilities.sendError(res, error.message, 400));
     } else {
-      sendError(res, 'Document\'s title and body are compulsory.', 500);
+      Utilities.sendError(res, 'Document\'s title and body are compulsory.', 500);
     }
   },
    /**
@@ -80,15 +67,24 @@ module.exports = {
   getDocument(req, res) {
     // get document with this id
     Document.findOne({
-      where: { id: req.params.id },
+      where: { id: req.params.id }
     })
     .then((document) => {
       if (!document) {
-        return sendError(res, 'Document not found.', 200);
+        return Utilities.sendError(res, 'Document not found.', 200);
+      } else if (document.accessRight === 'private' && document.owner !== req.user.id) {
+        return Utilities.sendError(res, 'Document not found.', 200);
+      } else if ( document.accessRight === 'role') {
+        if (document.role !== req.user.role && document.owner !== req.user.id ) {
+          return Utilities.sendError(res, 'Document not found2.', 200);
+        } else {
+          return Utilities.sendData(res, document, 200);
+        }
+      } else {
+       return Utilities.sendData(res, document, 200);
       }
-      return sendData(res, document, 200);
     })
-    .catch(error => sendError(res, error.message, 400));
+    .catch(error => Utilities.sendError(res, error.message, 400));
   },
    /**
    * - delete a document by id
@@ -98,19 +94,19 @@ module.exports = {
   deleteDocument(req, res) {
     // get document with this id
     Document.findOne({
-      where: { id: req.params.id }
+      where: { id: req.params.id, owner: req.user.id }
     })
     .then((document) => {
       if (!document) {
-        return sendError(res, 'Document not found.', 200);
+        return Utilities.sendError(res, 'Document not found.', 200);
       }
 
       return document
       .destroy()
-      .then(() => sendData(res, document, 200))
-      .catch(error => sendError(res, error.message, 400));
+      .then(() => Utilities.sendData(res, document, 200))
+      .catch(error => Utilities.sendError(res, error.message, 400));
     })
-    .catch(error => sendError(res, error.message, 400));
+    .catch(error => Utilities.sendError(res, error.message, 400));
   },
    /**
    * - update a document by id
@@ -120,20 +116,21 @@ module.exports = {
   updateDocument(req, res) {
     // get new user info
     const changes = req.body;
+    console.log('changes', changes);
     // get user with this id
     Document.findOne({
-      where: { id: req.params.id }
+      where: { id: req.params.id , owner: req.user.id }
     })
     .then((document) => {
       if (!document) {
-        return sendError(res, 'Document not found.', 200);
+        return Utilities.sendError(res, 'Document not found.', 200);
       }
       return document
-      .update({ ...changes })
-      .then(() => sendData(res, document, 200))
-      .catch(error => sendError(res, error.message, 400));
+      .update(changes)
+      .then(() => Utilities.sendData(res, document, 200))
+      .catch(error => Utilities.sendError(res, error.message, 400));
     })
-    .catch(error => sendError(res, error.message, 400));
+    .catch(error => Utilities.sendError(res, error.message, 400));
   },
    /**
    * - get documents that has a list of attributes
@@ -141,18 +138,94 @@ module.exports = {
    * @param {*} res - server response
    */
   searchByTitle(req, res) {
+    let hint = {};
     // get new document info
-    const query = req.query;
+    let query;
+    let documents;
+    /**
+     * Security check
+     * ensure that request userid same as client id
+     */
+    const owner = req.query.owner || req.body.owner || undefined;
+    const title = req.query.title;
+    const offset = req.query.offset || req.body.offset || 0;
+    const limit = req.query.limit || req.body.limit || 7;
+    const accessRight = req.query.accessRight || req.body.accessRight || '';
+
+    // ensure that a user does not access another user's document
+    if (owner && owner !== req.user.id) {
+      return Utilities.sendError(res, 'No document was found.', 401);
+    }
+
+    // check it limit and offset where passed
+    if (req.body) {
+      hint = { offset: req.body.offset, limit: req.body.limit };
+    }
+
+    // edit query based on accessRight
+    if (accessRight !== '') {
+      switch (accessRight) {
+        case 'private' :
+          req.query.owner = req.user.id;
+          break;
+        case 'role' :
+          req.query.role = req.user.role;
+          break;
+        case 'myDocument' :
+          // set the owner to login user and delete the access right
+          req.query.owner = req.user.id;
+          delete req.query.accessRight;
+      }
+      if (req.query.title === '') {
+        delete req.query.title;
+      }
+      query = req.query;
+      documents =  Document.findAndCountAll({ 
+        where: {...query},
+        ...hint,
+        order: [['title', 'ASC']],
+      });
+    } 
+
+    let documentSearch = [];
+    let titleSearch;
+    if(title !== '') {
+      // remove accessRight from where clause
+      documents =  Document.findAndCountAll({ 
+        where: {
+          $or: [
+            {
+              accessRight: 'role',
+              role: req.user.role
+            },
+            {
+              accessRight: 'private',
+              owner: req.user.id
+            },
+            {
+              accessRight: 'public',
+            }
+          ],
+          title: {
+            $iLike: '%' + title + '%'
+          }
+        },
+        ...hint,
+        order: [['title', 'ASC']],
+      });
+    } else {
+      // remove title from where clause
+      delete query.title;
+    }
+    
     // get user with this id
-    Document.findAll({
-      where: { ...query }
-    })
+    documents
     .then((documents) => {
       if (!documents) {
-        return sendError(res, 'No document was found.', 200);
+        return Utilities.sendError(res, 'No document was found.', 200);
       }
-      return sendData(res, documents, 200);
+      return Utilities.sendData(res, documents, 200);
     })
-    .catch(error => sendError(res, error.message, 400));
+    .catch(error => Utilities.sendError(res, error.message, 400));
   },
 };
