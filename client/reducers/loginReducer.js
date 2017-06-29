@@ -1,5 +1,4 @@
 import * as types from '../actions/actionTypes';
-import { HashRouter } from 'react-router-dom';
 
 export default function sessionReducer(state = '', action) {
   switch(action.type) {

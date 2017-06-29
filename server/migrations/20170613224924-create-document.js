@@ -31,14 +31,8 @@ module.exports = {
         allowNull: false
       },
       accessRight: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'accessRights',
-          key: 'id',
-          as: 'accessRightId',
-        },
-        onUpdate: 'cascade',
-        onDelete: 'cascade'
+        type: Sequelize.STRING,
+        allowNull: false
       },
       role: {
         type: Sequelize.INTEGER,

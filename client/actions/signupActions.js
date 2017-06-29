@@ -13,17 +13,17 @@ export const signupFailed = (signupMessage) => {
 }
 
 export const signupUser = (credentials) => {
-  return (dispacth) => {
+  return (dispatch) => {
     console.log('credentials', credentials);
     return axios.post('/users', credentials)
     .then(response => {
       localStorage.setItem('jwt', response.data.jwtToken);
       localStorage.setItem('userInfo', response.data.userInfo);
-      dispacth(signupSuccess());
+      dispatch(signupSuccess());
     })
     .catch(error => {
       if (error.response) {
-        dispacth(signupFailed(error.response.data.message));
+        dispatch(signupFailed(error.response.data.message));
       }
     });
   }
