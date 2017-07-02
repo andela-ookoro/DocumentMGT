@@ -33,23 +33,31 @@ module.exports = {
    * @param {*} next - call the next route
    */
   validateUser(req, res, next) {
-    const token = req.headers.authorization || req.body.token || req.query.token;
-    // decoding the token
-    if (token) {
-      jwt.verify(token, process.env.TOKENSECRET, (error, decoded) => {
-        if (error) {
-          return res.status(401).json({
-            message: 'Failed to authenticate token.'
-          });
-        }
-        req.user = decoded;
-        next();
-      });
-    } else {
-      // if there is no token available return a message
+    if (!req.headers && !req.body && !req.query) {
+      // if there is no data to process
       return res.status(401).send({
         message: 'No token provided.'
       });
+    } else {
+      const token = req.headers.authorization || req.body.token || req.query.token;
+      // decoding the token
+      if (token) {
+        jwt.verify(token, process.env.TOKENSECRET, (error, decoded) => {
+          if (error) {
+            return res.status(401).send({
+              message: 'Failed to authenticate token.'
+            });
+          }
+          // attach user info to the request object
+          req.user = decoded;
+          next();
+        });
+      } else {
+        // if there is no token available return a message
+        return res.status(401).send({
+          message: 'No token provided.'
+        });
+      }
     }
   },
   /**

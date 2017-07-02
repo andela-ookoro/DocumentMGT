@@ -9,7 +9,6 @@ class SessionApi {
     return axios.get('/users/login',
       { ...credentials })
     .then(response => {
-      console.log('.................',response);
       return response.json();
     })
     .catch(error => error );

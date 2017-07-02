@@ -1,8 +1,8 @@
 
 
 // Require the dev-dependencies
-const chai = require('chai');
-const chaiHttp = require('chai-http');
+import  chai from 'chai';
+import chaiHttp from 'chai-http';
 const should = chai.should();
 
 import app from '../../../server';
@@ -15,24 +15,42 @@ chai.use(chaiHttp);
 // import mockdata
 import mockdata from '../mockData';
 let user = mockdata.user;
+let secondUser = mockdata.user;
 const registeredUser = {};
 
 describe('/users ', () => {
+  // cache jwt and userinfo
+  let jwt;
+  let testUser;
+
+  // create user to own the request
+  before((done) => {
+    request
+    .post('/users')
+    .send(user)
+    .end((err, res) => {
+      if (!err) {
+        jwt = res.body.jwtToken;
+        // store registered user for futher testing
+        registeredUser.email = user.email;
+        registeredUser.password = user.password;
+        done();
+      }
+    });
+  });
+
   describe('POST /users ', () => {
     it('A user should recieve a jwt token, user metadata and a status ' +
     'after successful signup',
     (done) => {
+      secondUser.email = `u${secondUser.email}`;
       request
         .post('/users')
-        .send(user)
+        .send(secondUser)
         .end((err, res) => {
           if (!err) {
-            // store registered user for futher testing
-            registeredUser.email = user.email;
-            registeredUser.password = user.password;
-            // test response
             res.should.have.status(201);
-            res.body.data.email.should.be.eql(user.email);
+            res.body.userInfo.email.should.be.eql(secondUser.email);
             res.body.status.should.be.eql('success');
           }
           done();
@@ -67,7 +85,7 @@ describe('/users ', () => {
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
-            res.body.data.email.should.be.eql(registeredUser.email);
+            res.body.userInfo.email.should.be.eql(registeredUser.email);
             res.body.status.should.be.eql('success');
           }
           done();
@@ -112,6 +130,7 @@ describe('/users ', () => {
     (done) => {
       request
         .get('/users')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             // test response
@@ -126,6 +145,7 @@ describe('/users ', () => {
    (done) => {
      request
         .get('/users?offset=2&limit=5')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             // test response
@@ -141,6 +161,7 @@ describe('/users ', () => {
     it('A user should get a user by id \'when id exist\'', (done) => {
       request
         .get('/users/1')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -159,6 +180,7 @@ describe('/users ', () => {
     (done) => {
       request
       .get('/users/-2')
+      .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           // test response
@@ -175,6 +197,7 @@ describe('/users ', () => {
     it('A user should update a user by id \'when id exist\'', (done) => {
       request
         .put('/users/1')
+        .set('Authorization', jwt)
         .send(mockdata.updateuser)
         .end((err, res) => {
           if (!err) {
@@ -194,6 +217,7 @@ describe('/users ', () => {
     (done) => {
       request
       .put('/users/-2')
+      .set('Authorization', jwt)
       .send(mockdata.user)
       .end((err, res) => {
         if (!err) {
@@ -210,6 +234,7 @@ describe('/users ', () => {
     it('A user can delete a user by id \'when id exist\'', (done) => {
       request
         .delete('/users/1')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -228,6 +253,7 @@ describe('/users ', () => {
     (done) => {
       request
       .delete('/users/-2')
+      .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);
@@ -243,15 +269,16 @@ describe('/users ', () => {
     it('A user should get list of  user with a list of attributes', (done) => {
       request
         .get('/search/users?fname=Cullen&lname=Luettgen')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.users.should.be.an('array');
+              res.body.data.should.be.an('array');
             } else {
-              res.body.message.should.be.eql('No user found.');
+              res.body.status.should.be.eql('No user found.');
             }
           }
           done();
@@ -264,6 +291,7 @@ describe('/users ', () => {
       '\'when id exist\'', (done) => {
       request
         .get('/users/4/documents')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -282,6 +310,7 @@ describe('/users ', () => {
     (done) => {
       request
       .get('/users/-2/documents')
+      .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);

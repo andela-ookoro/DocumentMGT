@@ -18,9 +18,6 @@ describe('User Model', () => {
           expect(user).toExist('fname');
           done();
         })
-        .catch((err) => {
-          console.log('error', err);
-        });
     });
 
     it('created role should exist', () => {

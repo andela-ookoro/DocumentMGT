@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Droid+Serif|El+Messiri|Lora|Merriweather|Titillium+Web');
 @import url('https://fonts.googleapis.com/css?family=Barrio|Lora|Roboto+Slab|Slabo+27px');
 @import url('https://fonts.googleapis.com/css?family=Slabo+27px');
+@import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
+@import url('https://fonts.googleapis.com/css?family=Fresca|Josefin+Sans|Oswald|Roboto');
+@import url('https://fonts.googleapis.com/css?family=Fjalla+One');
 
 body {
   font-family: 'Slabo 27px', serif;
@@ -11,52 +14,73 @@ body {
   font-family: 'Abel', sans-serif;
   background-color: #ffffff;
 }
-.heading{
+
+button, i {
+  cursor: pointer
+}
+
+td  a {
+  color: #ED7810;
+  font-family: 'Josefin Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  font-family: 'Oswald', sans-serif;
+  font-family: 'Fresca', sans-serif;
+}
+td  button {
+  color: #ED7810 !important;
+  font-family: 'Josefin Sans', sans-serif;
+  font-family: 'Roboto', sans-serif;
+  font-family: 'Oswald', sans-serif;
+  font-family: 'Fresca', sans-serif;
+}
+.heading {
   background-color: #ffffff;
   border: none;
 }
-.header a{
+.header a {
   color: #212121;
   border: none;
 }
-nav{
+
+nav {
   box-shadow: none;
   background-color: #ffffff;
 }
-button{
+button {
   background-color: #a1887f !important;
 }
-.body{
+.body {
   background-color: #f9f8f2;
-  padding: 2px
+  padding: 5px;
+  min-height: 170px;
 }
-.page-footer{
+.page-footer {
   background-color:#a1887f
 }
-#document-body{
+#document-body {
   text-align: justify;
 }
-.sitemap{
+.sitemap {
   color: #ffffff;
   background-color: #8d6e63
 }
 .sitemap a {
   color: #ffffff;
 }
-#logoImg{
+#logoImg {
   height: 30px;
   width: 30px;
 }
-.mainHeader{
+.mainHeader {
   position: fixed;
   width: 100%;
   background: #fff;
   z-index: 1000
 }
-.sitemapdiv{
+.sitemapdiv {
   padding: 100px 0 0 0;
 }
-#footerDiv{
+#footerDiv {
   position: fixed;
   width: 100%;
   background: #fff;
@@ -66,7 +90,7 @@ button{
 .extraDiv {
   padding: 50px
 }
-.welcomeDiv{
+.welcomeDiv {
   color:#a1887f;
   padding: 50px
 }
@@ -76,11 +100,11 @@ button{
 .activelink {
    border-bottom: 4px solid #a1887f !important;  
 }
-select{
+select {
   background-color: #f9f8f2;
   border-color: #a1887f !important;
 }
-.input-field:focus, .input-field select.browser-default:focus{
+.input-field:focus, .input-field select.browser-default:focus {
   background-color: #f9f8f2;
   border: 4px solid #a1887f !important;
   box-shadow: transparent;
@@ -94,7 +118,7 @@ select{
 .tabs .tab a:hover, .tabs .tab a.active {
   color:#a1887f !important;
 }
-.tabs .indicator{
+.tabs .indicator {
   background-color:#a1887f !important;
 }
 /* label underline focus color */
@@ -108,14 +132,14 @@ input[type=search]:focus,
 input[type=email]:focus:not([readonly]),
 input[type=email]:focus:not([readonly]),
 input[type=text]:focus:not([readonly]),
-input[type=search]:focus:not([readonly]){
+input[type=search]:focus:not([readonly]) {
   border-bottom: 1px solid #a1887f !important;
   box-shadow: 0 1px 0 0 #a1887f !important;
 }
 .input-field .prefix.active {
     color: #a1887f !important;
 }
-.input-field input, input[type=text], input[type=email]{
+.input-field input, input[type=text], input[type=email] {
   border-bottom: 1px solid #a1887f !important;
 }
 
@@ -125,7 +149,7 @@ input[type=search]:focus:not([readonly]){
 .input-field input[type=email]:focus + label,
 input[type=text]:focus,
 input[type=password]:focus,
-input[type=email]:focus{
+input[type=email]:focus {
   color: #a1887f !important;
 }
 /* valid color */
@@ -136,17 +160,130 @@ input[type=text].valid {
 }
 /* invalid color */
 .input-field input[type=text].invalid,
-input[type=text].invalid{
+input[type=text].invalid {
   border-bottom: 1px solid #1d283a !important;
   box-shadow: 0 1px 0 0 #1d283a !important;
 }
-.mce-tinymce{
-  width: 95% !important;
-  float: right !important;
-  margin-top: 12px !important;
-}
+
 [type="radio"]:checked + label:after,
 [type="radio"].with-gap:checked + label:after {
   background-color: #a1887f !important;
   border: 2px solid #a1887f;
+}
+
+.pagination {
+  right: 20% !important
+}
+.pagination li.active a {
+  color: #fff !important;
+  background-color: #a1887f !important;
+}
+
+.pagination li a {
+  color: #a1887f !important;
+  font-family: 'Josefin Sans', sans-serif;
+  text-transform: capitalize
+}
+.info {
+  color: #a1887f !important;
+  padding: 10%;
+}
+#documentDashboard {
+  display: block !important;
+  text-align: center;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    padding: 5px
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #a1887f;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #a1887f transparent transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+#doc-heading {
+  padding-top: 0px;
+  margin-top: 0px
+
+}
+#author {
+  float: right;
+  color: #000;
+  padding-right: 5px;
+  text-transform: capitalize;
+  font-size: 14px;
+  margin-top: 0px
+}
+#title {
+  color: #a1887f !important;
+  font-family: 'Fjalla One', sans-serif;
+  padding-left: 5px;
+}
+.document-body {
+  padding: 5px 10px;
+  text-align: justify;
+  color: #000000;
+}
+.mce-tinymce {
+  width: 95% !important;
+  float: right !important;
+  margin-top: 12px !important;
+}
+.mce-panel {
+  width: 100% !important;
+}
+.mce-btn button {
+  background-color: #ffffff !important;
+}
+.mce-menu-align {
+  max-width: 600px !important;
+}
+#gsearch{
+  background-color: #a1887f !important;
+  height: 50px;
+  max-width: 400px;
+  margin-top: -9px;
+}
+.gsc-search-button{
+  background-color: #a1887f !important
+}
+#searchDiv{
+  float: right;
+  max-height: 35px;
+}
+.username{
+  text-transform: capitalize;
+  color: #a1887f !important;
+  font-family: 'Fjalla One', sans-serif;
 }

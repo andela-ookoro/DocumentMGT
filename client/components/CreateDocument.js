@@ -28,6 +28,21 @@ class CreateDocument extends React.Component{
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+    if (nextProps.createDocStatus) {
+      let message;
+      if (nextProps.createDocStatus === "success"){
+        message = "Document has been saved successfully";
+      } else {
+        message = nextProps.errorMessage
+      }
+      this.setState({
+        message
+      });
+      Materialize.toast(message, 3000, 'rounded');
+    }
+  }
   /**
    * set state to documents or error message
    * @param {object} response - promise from the api called
@@ -51,6 +66,8 @@ class CreateDocument extends React.Component{
           docId: curDocument.id
         });
 
+        // set the title
+        this.title.value = this.state.title;
         // find the selected access right
         const accessRights = document.getElementsByName("accessRight");
         const accessRight = curDocument.accessRight;
@@ -80,7 +97,6 @@ class CreateDocument extends React.Component{
     let accessRight;
 
     for(let i = 0; i < accessRights.length; i++) {
-      console.log(accessRights[i].id, accessRights[i].checked);
       if(accessRights[i].checked) {
         accessRight = accessRights[i].id;
         break;
@@ -107,39 +123,36 @@ class CreateDocument extends React.Component{
        */
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const document = {
-        title: this.state.title,
+        title: this.title.value,
         body,
         owner: userInfo.id,
         accessRight: accessRight,
         role: userInfo.role
       };
-      console.log(document);
       //call upsertDocument action 
-     upsertDocument(document, this.state.docId)
-     .then(response => {
-       if(response.status === 'success') {
-        message = 'Document has been saved successfully';
-        // reset  state
-        this.setState({
-          message,
-          title: '',
-          curDocument: {},
-          body: ''
-        });
-        tinymce.get('content').setContent('');
-      } else{
-        message = response.message;
-        this.setState({
-          message
-        });
-      }
-     })
-     .catch(err => {
-       console.log('err', err);
-     });
-    }
-    if (message) {
-      Materialize.toast(message, 3000, 'rounded')
+     this.props.upsertDocument(document, this.state.docId);
+    //   .then(response => {
+    //     message = 'Document has been saved successfully';
+    //     // reset  state
+    //     this.setState({
+    //       message,
+    //       title: '',
+    //       curDocument: {},
+    //       body: ''
+    //     });
+    //     if (message) {
+    //       Materialize.toast(message, 3000, 'rounded')
+    //     }
+    //   },
+    //   (error) => {
+    //     message = error.data.message;
+    //     this.setState({
+    //       message
+    //     });
+    //     if (message) {
+    //       Materialize.toast(message, 3000, 'rounded')
+    //     }
+    //  })
     }
   }
 
@@ -157,7 +170,8 @@ class CreateDocument extends React.Component{
 
   render(){
     const body = this.state.body;
-     $(document).ready(() => {
+    let message;
+    $(document).ready(() => {
       tinymce.init({
         selector: '#content',
         height : 300,
@@ -168,6 +182,10 @@ class CreateDocument extends React.Component{
         e.target.setContent(body);
       });
     });
+    if (this.props.createDocStatus ===  'successs') {
+      message = 'Document has been saved successfully';
+      tinymce.get('content').setContent('');
+    }
     return(
     <div className="container">
         <div className="body row">
@@ -177,8 +195,9 @@ class CreateDocument extends React.Component{
             <div className="input-field col s12">
               <input
                 placeholder="Title" id="title" type="text" name="title"
-                className="validate" value={this.state.title}
-                onChange={this.onChange} autoFocus required/>
+                className="validate"
+                ref={(input) => { this.title = input; }} 
+                autoFocus required/>
               <label htmlFor="title">Title</label>
             </div>
             <div className="input-field col s12">
@@ -222,16 +241,17 @@ class CreateDocument extends React.Component{
 // Maps state from store to props
 const mapStateToProps = (state, ownProps) => {
   return {
-    // createDocStatus: state.createDocStatus
+    createDocStatus: state.createDocStatus.status,
+    errorMessage: state.createDocStatus.message
   }
 };
 
 // Maps actions to props
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//   createDocument: document => createDocument(document)
-//   }
-// };
+const mapDispatchToProps = (dispatch) => {
+  return {
+    upsertDocument
+  }
+};
 
 // Use connect to put them together
-export default withRouter(connect(mapStateToProps, null)(CreateDocument));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreateDocument));

@@ -16,16 +16,16 @@ module.exports = {
     if (req.query.offset && req.query.limit) {
       hint = { offset: req.query.offset, limit: req.query.limit };
     }
-
+    console.log('gintdddddd......', hint);
     // get all documents
     Document.findAndCountAll({
       order: [['title', 'ASC']],
       ...hint
     })
     .then(documents => res.status(200).send({
-      status: 'success',
-      documents
-    })
+        status: 'success',
+        documents
+      })
     )
     .catch(error => Utilities.sendError(res, error.message, 500));
   },
@@ -116,7 +116,6 @@ module.exports = {
   updateDocument(req, res) {
     // get new user info
     const changes = req.body;
-    console.log('changes', changes);
     // get user with this id
     Document.findOne({
       where: { id: req.params.id , owner: req.user.id }
@@ -141,29 +140,30 @@ module.exports = {
     let hint = {};
     // get new document info
     let query;
-    let documents;
+    let documentQuery;
     /**
      * Security check
      * ensure that request userid same as client id
      */
-    const owner = req.query.owner || req.body.owner || undefined;
-    const title = req.query.title;
-    const offset = req.query.offset || req.body.offset || 0;
-    const limit = req.query.limit || req.body.limit || 7;
-    const accessRight = req.query.accessRight || req.body.accessRight || '';
+    const owner = req.query.owner || undefined;
+    const title = req.query.title || '';
+    const offset = req.query.offset || 0;
+    const limit = req.query.limit || 7;
+    const accessRight = req.query.accessRight ||  '';
 
     // ensure that a user does not access another user's document
     if (owner && owner !== req.user.id) {
       return Utilities.sendError(res, 'No document was found.', 401);
     }
 
-    // check it limit and offset where passed
-    if (req.body) {
-      hint = { offset: req.body.offset, limit: req.body.limit };
-    }
+    console.log(',,,,,,,,,,,,,,,,,,,',offset,limit, req.query);
+    // remove offset and limit from query 
+    delete req.query.offset;
+    delete req.query.limit
+    console.log('req.body', req.query);
 
     // edit query based on accessRight
-    if (accessRight !== '') {
+    if (accessRight !== '' ) {
       switch (accessRight) {
         case 'private' :
           req.query.owner = req.user.id;
@@ -180,9 +180,10 @@ module.exports = {
         delete req.query.title;
       }
       query = req.query;
-      documents =  Document.findAndCountAll({ 
+      documentQuery =  Document.findAndCountAll({ 
         where: {...query},
-        ...hint,
+        offset,
+        limit,
         order: [['title', 'ASC']],
       });
     } 
@@ -190,8 +191,7 @@ module.exports = {
     let documentSearch = [];
     let titleSearch;
     if(title !== '') {
-      // remove accessRight from where clause
-      documents =  Document.findAndCountAll({ 
+      documentQuery =  Document.findAndCountAll({ 
         where: {
           $or: [
             {
@@ -210,16 +210,13 @@ module.exports = {
             $iLike: '%' + title + '%'
           }
         },
-        ...hint,
+        offset,
+        limit,
         order: [['title', 'ASC']],
       });
-    } else {
-      // remove title from where clause
-      delete query.title;
     }
-    
-    // get user with this id
-    documents
+    // get the documents
+    documentQuery
     .then((documents) => {
       if (!documents) {
         return Utilities.sendError(res, 'No document was found.', 200);

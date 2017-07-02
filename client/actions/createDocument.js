@@ -1,8 +1,9 @@
 import axios from 'axios';
-import addJWT from './addJWT';
+import * as types from './actionTypes';  
 
 export const createDocStatus = ( status, message ) => (
   {
+    type: types.CREATE_DOCUMENT_STATUS,
     status,
     message
  }
@@ -19,17 +20,17 @@ export const upsertDocument = (document, docId) => {
     url = `${url}/${docId}`;
     apiRequest = axios.put(url, document);
   }
-  addJWT();
-
-  return apiRequest
-  .then(response => {
-    return createDocStatus('success', document.title);
-  })
-  .catch(error => {
-    if (error.response) {
-      return createDocStatus('failed', error.response.data.message);
-    }
-  });
+  return (dispatch) => {
+    return apiRequest
+      .then(response => {
+        dispatch(createDocStatus('success', document.title));
+      })
+      .catch(error => {
+        if (error.response) {
+          dispatch(createDocStatus('failed', error.response.data.message));
+        }
+      });
+  }
 }
 
 
