@@ -1,8 +1,8 @@
 
 
 // Require the dev-dependencies
-const chai = require('chai');
-const chaiHttp = require('chai-http');
+import  chai from 'chai';
+import chaiHttp from 'chai-http';
 const should = chai.should();
 
 import app from '../../../server';
@@ -15,15 +15,46 @@ chai.use(chaiHttp);
 // import mockdata
 import mockdata from '../mockData';
 const role = mockdata.role;
+let mockUser = mockdata.user;
 const roleWithoutTitle = mockdata.roleWithoutTitle;
 const registeredRole = {};
 
 describe('/document ', () => {
+  // cache jwt and userinfo
+  let jwt;
+  let testUser;
+
+  // create user to own the request
+  before((done) => {
+    request
+    .post('/users')
+    .send(mockUser)
+    .end((err, res) => {
+      if (!err) {
+        jwt = res.body.jwtToken;
+        done();
+      }
+    });
+  });
+
+  // delete user after test
+  after((done) => {
+    request
+    .delete('/users/1')
+    .set('Authorization', jwt)
+    .end((err, res) => {
+      if (!err) {
+        done();
+      }
+    });
+  });
+
   describe('POST /document ', () => {
     it('As a user , I should be able to create a role', (done) => {
       request
         .post('/roles')
         .send(role)
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             // store new Role for futher testing
@@ -40,6 +71,7 @@ describe('/document ', () => {
     (done) => {
       request
         .post('/roles')
+        .set('Authorization', jwt)
         .send(roleWithoutTitle)
         .end((err, res) => {
           if (res) {
@@ -57,6 +89,7 @@ describe('/document ', () => {
     (done) => {
       request
         .get('/roles')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -72,6 +105,7 @@ describe('/document ', () => {
     it('A user should get a role by id \'when id exist\'', (done) => {
       request
         .get(`/roles/${registeredRole.id}`)
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -90,6 +124,7 @@ describe('/document ', () => {
     (done) => {
       request
       .get('/roles/-2')
+      .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);
@@ -108,6 +143,7 @@ describe('/document ', () => {
     (done) => {
       request
         .put(`/roles/${registeredRole.id}`)
+        .set('Authorization', jwt)
         .send(updateRole)
         .end((err, res) => {
           if (!err) {
@@ -128,6 +164,7 @@ describe('/document ', () => {
     (done) => {
       request
       .put('/roles/-2')
+      .set('Authorization', jwt)
       .send(mockdata.updatedocument)
       .end((err, res) => {
         if (!err) {
@@ -144,6 +181,7 @@ describe('/document ', () => {
     it('A user can delete a role by id \'when id exist\'', (done) => {
       request
         .delete(`/roles/${registeredRole.id}`)
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -162,6 +200,7 @@ describe('/document ', () => {
     (done) => {
       request
       .delete('/roles/-2')
+      .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);
@@ -178,6 +217,7 @@ describe('/document ', () => {
       '\'when id exist\'', (done) => {
       request
         .get('/roles/3/users')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -196,6 +236,7 @@ describe('/document ', () => {
     (done) => {
       request
       .get('/roles/-2/users')
+      .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);

@@ -3,6 +3,7 @@ import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import Dotenv from 'dotenv-webpack';
 
+
 module.exports = {
   context: __dirname,
   entry: [
@@ -20,7 +21,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin,
     new webpack.optimize.UglifyJsPlugin({
       mangle: false,
-      sourcemap: false
+      sourcemap: true
     }),
   new ExtractTextPlugin({
     filename: path.join(__dirname, 'public/style.css'),

@@ -2,7 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import * as sessionActions from '../actions/sessionActions';
+import { logInUser } from '../actions/session';
 
 class Login extends React.Component{
   constructor(props){
@@ -15,6 +15,9 @@ class Login extends React.Component{
     this.onSave = this.onSave.bind(this);
   }
 
+   componentWillReceiveProps(nextProps) {
+      Materialize.toast(nextProps.loginMessage, 3000, 'rounded');
+   }
   /**
    * set the value of the control to the respective state node
    * @param {*} e 
@@ -82,7 +85,7 @@ const mapStateToProps = (state, ownProps) => {
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    siginin: credentials => dispatch(sessionActions.logInUser(credentials))
+    siginin: credentials => dispatch(logInUser(credentials))
   }
 };
 

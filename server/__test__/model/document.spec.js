@@ -21,14 +21,10 @@ describe('Document Model', () => {
     it('should create new dcument', (done) => {
       Document.create(mockDocument)
         .then((newDocument) => {
-          console.log('newDocument', newDocument);
           document = newDocument;
           expect(document).toExist('title');
           done();
         })
-        .catch((err) => {
-          console.log('error newDocument', err);
-        });
     });
 
     it('created document should exist', () => {
@@ -41,7 +37,6 @@ describe('Document Model', () => {
     it('requires title field to create a document', (done) => {
       Document.create(mockData.DocumentWithoutTitle)
         .catch((error) => {
-          console.log('h20', error.message);
           expect(/notNull Violation/.test(error.message)).toBeTruthy;
           done();
         });

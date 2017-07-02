@@ -14,8 +14,8 @@ module.exports = (app, express, path, passport) => {
   // unathenticated routes
   app.post('/users/login', usersController.login);
   app.post('/users/logout', usersController.logout);
-  app.post('/users/', usersController.createUser);
-
+  app.post('/users', usersController.createUser);
+  app.get('/roles', rolesController.getRoles);
   // check for user session
   app.use(Utility.validateUser);
 
@@ -40,9 +40,7 @@ module.exports = (app, express, path, passport) => {
   .get(documentsController.getDocuments)
   .post(documentsController.createDocument);
 
-  app.route('/roles')
-  .get(rolesController.getRoles)
-  .post(rolesController.createRole);
+  app.post('/roles', rolesController.createRole);
 
   app.route('/roles/:id')
   .get(rolesController.getRole)

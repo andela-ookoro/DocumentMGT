@@ -1,11 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-// import * as UserAction from '../actions/users';
+import $ from 'jquery';
 
 class Footer extends React.Component{
   constructor(props){
     super(props);
+  }
+
+  componentDidMount(){
+    // create custom google search markup
+    const embedcode = `<script>
+      (function() {
+        var cx = '008956209690011123482:ot0nxazwtpq';
+        var gcse = document.createElement('script');
+        gcse.type = 'text/javascript';
+        gcse.async = true;
+        gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(gcse, s);
+      })();
+    </script>
+    <gcse:search></gcse:search>`;
+   $('#gsearch').html(embedcode);
   }
 
   render(){
@@ -14,9 +29,10 @@ class Footer extends React.Component{
       <div className="extraDiv"></div>
       <div id="footerDiv">
         <footer className="page-footer">
+          <div id="gsearch"></div>
           <div className="footer-copyright" >
             <div className="container">
-             © 2017 Cele
+             © 2017 1moreSmile
              <a className="grey-text text-lighten-4 right"
                 href="mailto:okwudiri.okoro@andela.com?Subject=User%20Feedback"
                 target="_top"
@@ -31,21 +47,5 @@ class Footer extends React.Component{
     );
  }
 }
- // Maps state from store to props
-  const mapStateToProps = (state, ownProps) => {
-    return {
-      // You can now say this.props.books
-      // books: state.pens
-    }
-  };
 
-// Maps actions to props
-const mapDispatchToProps = (dispatch) => {
-  return {
-  // You can now say this.props.createBook
-  // createBook: book => dispatch(bookActions.createBook(book))
-  }
-};
-
-// Use connect to put them together
-export default connect(mapStateToProps, mapDispatchToProps)(Footer);
+export default Footer;

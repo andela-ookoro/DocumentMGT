@@ -1,8 +1,8 @@
 
 
 // Require the dev-dependencies
-const chai = require('chai');
-const chaiHttp = require('chai-http');
+import  chai from 'chai';
+import chaiHttp from 'chai-http';
 const should = chai.should();
 
 import app from '../../../server';
@@ -15,13 +15,48 @@ chai.use(chaiHttp);
 // import mockdata
 import mockdata from '../mockData';
 const document = mockdata.document;
+let mockUser = mockdata.user;
 const registeredDocument = {};
 
 describe('/document ', () => {
+  // cache jwt and userinfo
+  let jwt;
+  let testUser;
+
+  // create user to own the request
+  before((done) => {
+    console.log('should run first');
+    request
+    .post('/users')
+    .send(mockUser)
+    .end((err, res) => {
+      if (!err) {
+        jwt = res.body.jwtToken;
+        testUser = res.body.userInfo;
+        // set document owner to testUser 
+        document.owner = testUser.id
+        done();
+      }
+    });
+  });
+
+  // delete user after test
+  after((done) => {
+    request
+    .delete('/users/1')
+    .set('Authorization', jwt)
+    .end((err, res) => {
+      if (!err) {
+        done();
+      }
+    });
+  });
+
   describe('POST /document ', () => {
     it('As a user , I should be able to create a document', (done) => {
       request
         .post('/documents')
+        .set('Authorization', jwt)
         .send(document)
         .end((err, res) => {
           if (!err) {
@@ -40,6 +75,7 @@ describe('/document ', () => {
       document.title = '';
       request
         .post('/documents')
+        .set('Authorization', jwt)
         .send(document)
         .end((err, res) => {
           if (res) {
@@ -54,10 +90,11 @@ describe('/document ', () => {
   });
 
   describe('GET /documents ', () => {
-    it('A user should recieve a list of all documents when no query is passed',
+    it('A user should recieve a list of all documents',
     (done) => {
       request
         .get('/documents')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -67,10 +104,11 @@ describe('/document ', () => {
         });
     });
 
-    it('A user should recieve a limited list of documents starting from an index',
+    it('A user should recieve a list of documents starting from an index',
    (done) => {
      request
         .get('/documents?offset=2&limit=2')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -85,6 +123,7 @@ describe('/document ', () => {
     it('A user should get a document by id \'when id exist\'', (done) => {
       request
         .get(`/documents/${registeredDocument.id}`)
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -103,6 +142,7 @@ describe('/document ', () => {
     (done) => {
       request
       .get('/documents/-2')
+      .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);
@@ -120,6 +160,7 @@ describe('/document ', () => {
       request
         .put('/documents/10')
         .send(mockdata.updatedocument)
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -140,6 +181,7 @@ describe('/document ', () => {
       request
       .put('/documents/-2')
       .send(mockdata.updatedocument)
+      .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);
@@ -155,6 +197,7 @@ describe('/document ', () => {
     it('A user can delete a document by id \'when id exist\'', (done) => {
       request
         .delete(`/documents/${registeredDocument.id}`)
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
@@ -173,6 +216,7 @@ describe('/document ', () => {
     (done) => {
       request
       .delete('/documents/-2')
+      .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);
@@ -188,13 +232,14 @@ describe('/document ', () => {
     it('A user should get list of  user with a list of attributes', (done) => {
       request
         .get('/search/documents?role=1')
+        .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data.should.be.an('array');
+              res.body.data.rows.should.be.an('array');
             } else {
               res.body.message.should.be.eql('No document found.');
             }

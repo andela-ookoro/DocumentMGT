@@ -1,14 +1,47 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as UserAction from '../actions/users';
 
 class NavigationBar extends React.Component{
   constructor(props){
     super(props);
+    this.signout = this.signout.bind(this);
+  }
+
+  /**
+   * remove the userInfo and jwt from localStorage
+   * redirect user to root page
+   * @return {null} Return no value.
+  */
+  signout() {
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('jwt');
+    window.location = '/#/';
   }
 
   render(){
+    // get the user's info from localstorage
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const nav = () => (
+      <div>
+        <li>
+          <Link to="/dashboard" id="dashboard">
+          Documents
+          </Link>
+        </li>
+        <li>
+          <Link to="/createDocument" id="createDocument">
+            Create Document
+          </Link>
+        </li>
+        <li>
+           <a className="username">{userInfo.name}</a>
+        </li>
+        <li>
+          <a onClick={this.signout}>Sign Out</a>
+        </li>
+      </div>
+    );
     return (
       <div className="mainHeader">
         <div className="container">
@@ -23,18 +56,10 @@ class NavigationBar extends React.Component{
                     <i className="material-icons">menu</i>
                   </a>
                   <ul className="right hide-on-med-and-down">
-                    <li><Link to="/dashboard" id="dashboard">Documents</Link></li>
-                    <li><Link to="/document" id="document">Document</Link></li>
-                    <li><Link to="/createDocument" id="createDocument">Create Document</Link></li>
-                    <li><a >Okoro Celestine</a></li>
-                    <li><Link to="/signup">Signup</Link></li>
-                    <li><Link to="/login">Signin</Link></li>
+                    {nav()}
                   </ul>
                   <ul className="side-nav" id="mobile-demo">
-                    <li><a href="sass.html">Sass</a></li>
-                    <li><a href="badges.html">Components</a></li>
-                    <li><a href="collapsible.html">Javascript</a></li>
-                    <li><a href="mobile.html">Mobile</a></li>
+                    {nav()}
                   </ul>
                 </div>
               </nav>
@@ -45,21 +70,6 @@ class NavigationBar extends React.Component{
     );
  }
 }
- // Maps state from store to props
-  const mapStateToProps = (state, ownProps) => {
-    return {
-      // You can now say this.props.books
-      books: state.pens
-    }
-  };
-
-// Maps actions to props
-const mapDispatchToProps = (dispatch) => {
-  return {
-  // You can now say this.props.createBook
-    createBook: book => dispatch(bookActions.createBook(book))
-  }
-};
 
 // Use connect to put them together
-export default connect(mapStateToProps, mapDispatchToProps)(NavigationBar);
+export default NavigationBar;

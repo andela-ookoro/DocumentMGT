@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
-import loginMessage from './loginReducer';
-import session from './sessionReducer';
-import SignupMessage from './signupReducer';
-import roles from './roleReducer';
-import createDocStatus from './createDocReducer';
-
+import loginMessage from './login';
+import session from './session';
+import SignupMessage from './signup';
+import roles from './role';
+import createDocStatus from './createDoc';
+import Documents from './documents';
+import deleteDocument from './deleteDocument';
+import document from './getDocument';
 /**
  * contains every reducers
  */
@@ -13,5 +15,8 @@ export default combineReducers({
   session,
   SignupMessage,
   roles,
-  createDocStatus
+  createDocStatus,
+  Documents,
+  deleteDocument,
+  document
 });

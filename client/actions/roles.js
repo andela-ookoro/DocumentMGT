@@ -22,18 +22,16 @@ export const getRoleFailed = (roleLooadError) => {
 
 
 export const getRoles = () => {
-  return (dispatch) => {
-    return axios.get('/roles')
-    .then(response => {
-      if (response.data.status === 'success') {
-        dispatch(sendRoles(response.data.data));
-      }
-    })
-    .catch(error => {
-      if(error.response) {
-        dispatch(getRoleFailed(error.response.data.message));
-      }
-    });
-  }
+  return axios.get('/roles')
+  .then(response => {
+    if (response.data.status === 'success') {
+      return sendRoles(response.data.data);
+    }
+  })
+  .catch(error => {
+    if(error.response) {
+      return getRoleFailed(error.response.data.message);
+    }
+  });
 }
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { signupUser } from '../actions/signupActions';
-import { getRoles } from '../actions/rolesActions';
-import Login from './Login';
+import { signup } from '../actions/signup';
+import { getRoles } from '../actions/roles';
 
 class Signup extends React.Component{
   constructor(props){
@@ -15,15 +15,39 @@ class Signup extends React.Component{
       mname: '',
       email: '',
       password: '',
-      roleId: '',
+      roleId: ''
     };
     this.onChange = this.onChange.bind(this);
     this.onSave = this.onSave.bind(this);
+    this.matchPassword = this.matchPassword.bind(this);
    
   }
 
   componentWillMount() {
-     this.props.getRoles();
+    this.props.getRoles();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.roles.length > 0) {
+      console.log('nextProps.roles.length', nextProps.roles.length);
+    }
+  }
+
+
+  /**
+   * check if password and comfirm password match
+   * @memberof Signup
+   */
+  matchPassword() {
+     const comfirmpassword = this.comfirmpassword.value;
+     //if password and comfirm password match, set label to matched
+     if (comfirmpassword === this.state.password) {
+       this.comfirmPasswordStatus.text = 'Right password';
+       console.log('Right password');
+     } else{
+       this.comfirmPasswordStatus.text = 'Wrong password';
+       console.log('Wrong password');
+     }
   }
   /**
    * set the value of the control to the respective state node
@@ -36,7 +60,6 @@ class Signup extends React.Component{
         [e.target.name]: e.target.value
       });
     }
-    
   }
 
   /**
@@ -45,24 +68,11 @@ class Signup extends React.Component{
    */
   onSave(event) {
     event.preventDefault();
-    this.props.signupUser(this.state);
+    this.props.signUp(this.state);
   }
 
   render(){
     return(
-      <div className="container">
-      <div className="welcomeDiv">
-        <img src="/logo.png" id="logoImg"/>
-        <span className="logoName"> Doc Hub </span>
-        welcome .....
-      </div>
-       <div className="row">
-        <div className="col s12">
-          <ul className="tabs">
-            <li className="tab col s3"><a className="active" href="#signin">Sign in</a></li>
-            <li className="tab col s3"><a  href="#signup">Create a account</a></li>
-          </ul>
-        </div>
         <div className="body row" id="signup">
           <form className="col s12">
             <br />
@@ -107,6 +117,18 @@ class Signup extends React.Component{
                 <label htmlFor="password">Password</label>
               </div>
               <div className="input-field col  l4 m6 s12">
+                <i className="material-icons prefix">lock</i>
+                <input
+                  placeholder="Comfirm Password" name="comfirmpassword" id="comfirmpassword"
+                  type="password" className="validate" 
+                  onChange={this.matchPassword}
+                  ref={(input) => { this.comfirmpassword = input; }}
+                />
+                <label
+                ref={(input) => { this.comfirmPasswordStatus = input; }}
+                htmlFor="comfirmpassword">Comfirm Password</label>
+              </div>
+              <div className="input-field col  l4 m6 s12">
                 <i className="material-icons prefix">email</i>
                 <input
                   placeholder="Email" name="email" type="email"
@@ -115,7 +137,9 @@ class Signup extends React.Component{
                 />
                 <label htmlFor="email" data-error="wrong" data-success="right">Email</label>
               </div>
-               <div className="input-field col  l4 m6 s12">
+            </div>
+            <div className="row">
+              <div className="input-field col  l4 m6 s12">
                  {
                    <select
                   className="browser-default" name="roleId"
@@ -132,9 +156,7 @@ class Signup extends React.Component{
                    </select>
                  }
               </div>
-            </div>
-            <div className="row">
-              <div className="input-field col s12" >
+              <div className="input-field col l4 m6 s12" >
                  <button
                   className="btn waves-effect waves-light right" type="submit"
                   name="action" onClick={this.onSave} 
@@ -145,12 +167,6 @@ class Signup extends React.Component{
             </div>
             </form>
           </div>
-        
-            <div className="body row" id="signin">
-              <Login />
-           </div>
-      </div>
-    </div>
     )
   }
 }
@@ -161,8 +177,8 @@ class Signup extends React.Component{
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
   return {
-    signUp: credentials => signupUser(credentials),
-    getRoles: () => getRoles()
+    signUp: user => dispatch(signup(user)),
+    getRoles: () => dispatch(getRoles())
   }
 };
 // Maps state from store to props
@@ -173,8 +189,6 @@ const mapStateToProps = (state, ownProps) => {
     signupMessage: state.signupMessage
   }
 };
-
-
 
 // Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);

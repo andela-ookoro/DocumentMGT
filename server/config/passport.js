@@ -32,9 +32,7 @@ module.exports = (passport) => {
   jwtOptions.secretOrKey = process.env.TOKENSECRET;
   passport.use(new JwtStrategy(jwtOptions,
     (jwt_payload, next) => {
-      console.log('payload received', jwt_payload);
       // usually this would be a database call:
-      console.log(jwt_payload.email);
       User.findOne({ email: jwt_payload.email })
       .then((user) => {
         if (user) {

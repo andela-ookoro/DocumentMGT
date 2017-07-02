@@ -1,8 +1,9 @@
 import axios from 'axios';
-import addJWT from './addJWT';
+import * as types from './actionTypes';  
 
 const sendReponse = ( status, document = {}, message = '') => {
   return {
+    type: types.GET_DOCUMENT,
     status,
     document,
     message
@@ -11,19 +12,16 @@ const sendReponse = ( status, document = {}, message = '') => {
 
 
 const getDocument = (documentId) => {
-  // add JWT token to axios
-  addJWT();
   return axios.get(`/documents/${documentId}`)
-  .then(response => {
-     return sendReponse('success', response, '');
-  })
+  .then(response => 
+      sendReponse('success', response.data.data, '')
+  )
   .catch(error => {
-    console.log('error', error);
     if (error.response) {
       return sendReponse('failed', {}, error.response);
     }
   });
-} 
+}
 
 export default getDocument;
 

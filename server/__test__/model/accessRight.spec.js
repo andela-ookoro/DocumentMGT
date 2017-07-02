@@ -17,9 +17,6 @@ describe('AccessRight Model', () => {
           expect(accessRight).toExist('title');
           done();
         })
-        .catch((err) => {
-          console.log('error', err);
-        });
     });
 
     it('created accessRight should exist', () => {

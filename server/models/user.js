@@ -128,7 +128,6 @@ module.exports = (sequelize, DataTypes) => {
      * @returns {String} user fullname
   */
   user.prototype.getFullname = () => {
-    console.log('came here......................', this);
     return `${this.fname} ${this.mname} ${this.lname}`;
 };
 
