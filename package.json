@@ -10,6 +10,7 @@
   "scripts": {
     "start": "nodemon --watch server --exec babel-node  -- server.js",
     "start:dev": "nodemon ./bin/www",
+    "test-client": "jest  --config jest.config.js -u ",
     "test": "babel-node ./node_modules/istanbul/lib/cli cover _mocha -- --timeout 90000 --compilers js:babel-core/register ./server/__test__/controllers/documents.spec.js"
   },
   "dependencies": {

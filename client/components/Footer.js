@@ -1,12 +1,19 @@
 import React from 'react';
 import $ from 'jquery';
 
-class Footer extends React.Component{
-  constructor(props){
-    super(props);
-  }
 
-  componentDidMount(){
+/**
+ * @class Footer
+ * @extends {React.Component}
+ */
+class Footer extends React.Component {
+
+
+  /**
+   *  @returns{null} - null
+   * @memberof Footer
+   */
+  componentDidMount() {
     // create custom google search markup
     const embedcode = `<script>
       (function() {
@@ -20,32 +27,37 @@ class Footer extends React.Component{
       })();
     </script>
     <gcse:search></gcse:search>`;
-   $('#gsearch').html(embedcode);
+    $('#gsearch').html(embedcode);
   }
 
-  render(){
+  /**
+   * @returns  {null} - null
+   * @memberof Document
+   */
+  render() {
     return (
       <div>
-      <div className="extraDiv"></div>
-      <div id="footerDiv">
-        <footer className="page-footer">
-          <div id="gsearch"></div>
-          <div className="footer-copyright" >
-            <div className="container">
-             © 2017 1moreSmile
-             <a className="grey-text text-lighten-4 right"
+        <div className="extraDiv" />
+        <div id="footerDiv">
+          <footer className="page-footer">
+            <div id="gsearch" />
+            <div className="footer-copyright" >
+              <div className="container">
+              © 2017 1moreSmile
+              <a
+                className="grey-text text-lighten-4 right"
                 href="mailto:okwudiri.okoro@andela.com?Subject=User%20Feedback"
                 target="_top"
               >
-              Feedback mail
-            </a>
+                Feedback mail
+              </a>
+              </div>
             </div>
-          </div>
-        </footer>
+          </footer>
+        </div>
       </div>
-    </div>
     );
- }
+  }
 }
 
 export default Footer;

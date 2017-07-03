@@ -7,24 +7,24 @@ const sendReponse = (status, document = {}, message = '') => {
     status,
     document,
     message
- }
+  };
 };
 
 /**
  * - delete document by id
  * @param {int} documentId -  the id of the document
+ * @return {null} - sendReponse
  */
-const deleteDocument = (documentId) => {
-  return axios.delete(`/documents/${documentId}u`)
-  .then(response => {
-     return sendReponse('success', response, '');
-  })
+const deleteDocument = documentId =>
+  axios.delete(`/documents/${documentId}`)
+  .then(response =>
+      sendReponse('success', response, '')
+  )
   .catch(error => {
     if (error.response) {
       return sendReponse('failed', {}, error.response.data.message);
     }
   });
-} 
 
 export default deleteDocument;
 
