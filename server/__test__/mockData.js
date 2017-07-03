@@ -120,7 +120,9 @@ const mockData = {
     body: faker.name.lastName(2),
     owner: 1,
     accessRight: 1
-  }
+  },
+  errorMessage: 'error occurred',
+  message: faker.lorem.sentences()
 
 };
 

@@ -1,19 +1,19 @@
 import axios from 'axios';
-import * as types from './actionTypes';  
+import * as types from './actionTypes';
 
-const sendReponse = ( status, document = {}, message = '') => {
+const sendReponse = (status, document = {}, message = '') => {
   return {
     type: types.GET_DOCUMENT,
     status,
     document,
     message
- }
+  };
 };
 
 
-const getDocument = (documentId) => {
-  return axios.get(`/documents/${documentId}`)
-  .then(response => 
+const getDocument = (documentId) => 
+  axios.get(`/documents/${documentId}`)
+  .then(response =>
       sendReponse('success', response.data.data, '')
   )
   .catch(error => {
@@ -21,7 +21,6 @@ const getDocument = (documentId) => {
       return sendReponse('failed', {}, error.response);
     }
   });
-}
 
 export default getDocument;
 

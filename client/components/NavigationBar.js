@@ -1,9 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 
-class NavigationBar extends React.Component{
-  constructor(props){
+
+/**
+ * @class NavigationBar
+ * @extends {React.Component}
+ */
+class NavigationBar extends React.Component {
+
+  /**
+   * Creates an instance of NavigationBar.
+   * @param {any} props -
+   * @memberof NavigationBar
+   * @returns {null} -
+   */
+  constructor(props) {
     super(props);
     this.signout = this.signout.bind(this);
   }
@@ -19,7 +30,12 @@ class NavigationBar extends React.Component{
     window.location = '/#/';
   }
 
-  render(){
+
+  /**
+   * @returns {object} - html DOM
+   * @memberof NavigationBar
+   */
+  render() {
     // get the user's info from localstorage
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const nav = () => (
@@ -35,7 +51,7 @@ class NavigationBar extends React.Component{
           </Link>
         </li>
         <li>
-           <a className="username">{userInfo.name}</a>
+          <a className="username">{userInfo.name}</a>
         </li>
         <li>
           <a onClick={this.signout}>Sign Out</a>
@@ -47,10 +63,10 @@ class NavigationBar extends React.Component{
         <div className="container">
           <div className="row">
             <div className=" col l12 m12 s12" >
-              <nav className="heading"> 
+              <nav className="heading">
                 <div className="header nav-wrapper" >
                   <a href="#!" className="brand-logo">
-                    <img src="/logo.png" id="logoImg"/>
+                    <img src="/logo.png" id="logoImg" alt="logo" />
                     Doc Hub</a>
                   <a href="#" data-activates="mobile-demo" className="button-collapse">
                     <i className="material-icons">menu</i>
@@ -68,7 +84,7 @@ class NavigationBar extends React.Component{
         </div>
       </div>
     );
- }
+  }
 }
 
 // Use connect to put them together
