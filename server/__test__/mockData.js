@@ -121,7 +121,8 @@ const mockData = {
     owner: 1,
     accessRight: 1
   },
-  errorMessage: 'error occurred'
+  errorMessage: 'error occurred',
+  message: faker.lorem.sentences()
 
 };
 

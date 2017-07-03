@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { signup } from '../actions/signup';
 import { getRoles } from '../actions/roles';
 
-
 /**
  * @class Signup
  * @extends {React.Component}
@@ -226,7 +225,7 @@ class Signup extends React.Component {
   }
 }
 
-// Maps state from store to props
+
 
 // Maps actions to props
 const mapDispatchToProps = (dispatch) => {
@@ -244,5 +243,20 @@ const mapStateToProps = (state) => {
   };
 };
 
+Signup.propTypes = {
+  getRoles: PropTypes.func.isRequired,
+  signUp: PropTypes.func.isRequired,
+  roles: React.PropTypes.arrayOf(React.PropTypes.shape({
+    id: React.PropTypes.number.isRequired,
+    description: React.PropTypes.string.isRequired,
+  }
+  )),
+  signupMessage: PropTypes.string
+};
+
+Signup.defaultProps = {
+  signupMessage: '',
+  roles: []
+};
 // Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(Signup);

@@ -3,7 +3,7 @@ import * as types from './actionTypes';
 
 export const signupSuccess = () => {  
   return {
-    type: types.SIGNUP_IN_SUCCESS
+    type: types.SIGN_UP_SUCCESS
   };
 };
 
