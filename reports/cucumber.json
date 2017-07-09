@@ -1,0 +1,60 @@
+[
+  {
+    "keyword": "Feature",
+    "line": 3,
+    "name": "Google Search",
+    "tags": [],
+    "uri": "/Users/andeladeveloper/Documents/andela/documentMGT/client/__tests__/e2e/features/google.feature",
+    "elements": [
+      {
+        "keyword": "Scenario",
+        "line": 5,
+        "name": "Searching Google",
+        "tags": [],
+        "id": "google-search;searching-google",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "name": "I open Google's search page",
+            "result": {
+              "status": "passed",
+              "duration": 1545
+            },
+            "line": 7,
+            "match": {
+              "location": "/Users/andeladeveloper/Documents/andela/documentMGT/client/__tests__/e2e/features/step_definitions/steps.js:10"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "name": "the title is \"Google\"",
+            "result": {
+              "status": "failed",
+              "duration": 23,
+              "error_message": "Testing if the page title equals \"Google\". - Expected \"Google\" but got: \"google.com\"\n    at _callee2$ (/Users/andeladeveloper/Documents/andela/documentMGT/client/__tests__/e2e/features/step_definitions/steps.js:16:25)\n    at step (/Users/andeladeveloper/Documents/andela/documentMGT/client/__tests__/e2e/features/step_definitions/steps.js:11:191)\n    at /Users/andeladeveloper/Documents/andela/documentMGT/client/__tests__/e2e/features/step_definitions/steps.js:11:437\n    at World.<anonymous> (/Users/andeladeveloper/Documents/andela/documentMGT/client/__tests__/e2e/features/step_definitions/steps.js:11:99)\n    at World.<anonymous> (/Users/andeladeveloper/Documents/andela/documentMGT/client/__tests__/e2e/features/step_definitions/steps.js:15:3)"
+            },
+            "line": 8,
+            "match": {
+              "location": "/Users/andeladeveloper/Documents/andela/documentMGT/client/__tests__/e2e/features/step_definitions/steps.js:15"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "name": "the Google search form exists",
+            "result": {
+              "status": "skipped"
+            },
+            "line": 9,
+            "match": {
+              "location": "/Users/andeladeveloper/Documents/andela/documentMGT/client/__tests__/e2e/features/step_definitions/steps.js:19"
+            }
+          }
+        ]
+      }
+    ],
+    "id": "google-search"
+  }
+]
