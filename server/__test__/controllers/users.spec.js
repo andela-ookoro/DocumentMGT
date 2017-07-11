@@ -286,7 +286,7 @@ describe('/users ', () => {
     });
   });
 
-  describe('GET /users/:id/documents ', () => {
+  describe('GET /users/:userId/documents ', () => {
     it('A user should get a documents belonging to a user by userid ' +
       '\'when id exist\'', (done) => {
       request

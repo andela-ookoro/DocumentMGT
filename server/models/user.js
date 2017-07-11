@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt-nodejs';
 
 module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define('user', {
@@ -95,8 +95,20 @@ module.exports = (sequelize, DataTypes) => {
           // let password, hashPassword;
 
           // hash the random string
-        return bcrypt.hash(newuser.password, 10).then((randomWordHash) => {
-          newuser.password = randomWordHash;
+        newuser.password = bcrypt
+        .hashSync(newuser.password, bcrypt.genSaltSync(10));
+        // return bcrypt.hash(newuser.password, bcrypt.genSaltSync(10), null,
+        // (err, hash) => {
+        //   if (hash) {
+        //     return newuser.password = hash;
+        //   } else {
+        //     throw (err);
+        //   }
+        //  console.log('...........................', newuser.password, hash);
+          
+        // }); 
+        // return bcrypt.hash(newuser.password, 10).then((randomWordHash) => {
+        //   newuser.password = randomWordHash;
           //   password = randomWordHash;
 
           //    //create hashpassword = hash(password)+ password
@@ -105,7 +117,7 @@ module.exports = (sequelize, DataTypes) => {
           //     newuser.password = password;
           //     newuser.hashPassword = hashPassword;
           //   });
-        });
+        // });
       },
       beforeUpdate(newuser) {
         /**
@@ -115,9 +127,11 @@ module.exports = (sequelize, DataTypes) => {
         // const randomWord = Math.random().toString(36).substring(2);
         // let password, hashPassword;
         // hash the random string
-        return bcrypt.hash(user.password, 10).then((randomWordHash) => {
-          newuser.password = randomWordHash;
-        });
+        // return bcrypt.hash(user.password, 10).then((randomWordHash) => {
+        //   newuser.password = randomWordHash;
+        // });
+        newuser.password = bcrypt
+        .hashSync(newuser.password, bcrypt.genSaltSync(10));
       }
     }
   });
@@ -127,9 +141,9 @@ module.exports = (sequelize, DataTypes) => {
      * @method
      * @returns {String} user fullname
   */
-  user.prototype.getFullname = () => {
-    return `${this.fname} ${this.mname} ${this.lname}`;
-};
+  user.prototype.getFullname = () => (
+    `${this.fname} ${this.mname} ${this.lname}`
+  );
 
    /**
    * verify plain password against user's hashed password

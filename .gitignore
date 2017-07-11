@@ -5,4 +5,5 @@ lcov-report/
 coverage/
 learn
 lcov.info
-public/lib/
+bower_components
+reports

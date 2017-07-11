@@ -1,12 +1,13 @@
 import Controllers from '../controllers';
-import Utility from '../controllers/helpers/utilities';
+import { validateUser, adminOnly } from '../controllers/helpers/utilities';
+
+
 
 // import the model
 const usersController = Controllers.User;
 const documentsController = Controllers.Document;
-const accessRightController = Controllers.AccessRight;
 const rolesController = Controllers.Role;
-module.exports = (app, express, path, passport) => {
+module.exports = (app, express, path) => {
   // serve static files in public folder
   const publicPath = path.join(__dirname, '../../public/');
   app.use(express.static(publicPath));
@@ -17,11 +18,11 @@ module.exports = (app, express, path, passport) => {
   app.post('/users', usersController.createUser);
   app.get('/roles', rolesController.getRoles);
   // check for user session
-  app.use(Utility.validateUser);
+  app.use(validateUser);
 
   // the routes below are authenticated
-  app.get('/users/:id/documents', usersController.getUserDocument);
-  app.get('/search/users', usersController.lookupUser);
+  app.get('/users/:id/documents', adminOnly, usersController.getUserDocument);
+  app.get('/search/users', adminOnly, usersController.lookupUser);
   app.get('/search/documents', documentsController.searchByTitle);
 
   app.route('/users/:id')
@@ -29,7 +30,7 @@ module.exports = (app, express, path, passport) => {
   .delete(usersController.deleteUser)
   .put(usersController.updateUser);
 
-  app.get('/users', usersController.getUsers);
+  app.get('/users', adminOnly, usersController.getUsers);
 
   app.route('/documents/:id')
   .get(documentsController.getDocument)
@@ -37,22 +38,23 @@ module.exports = (app, express, path, passport) => {
   .put(documentsController.updateDocument);
 
   app.route('/documents')
-  .get(documentsController.getDocuments)
+  .get(adminOnly, documentsController.getDocuments)
   .post(documentsController.createDocument);
 
-  app.post('/roles', rolesController.createRole);
+  app.post('/roles', adminOnly, rolesController.createRole);
 
   app.route('/roles/:id')
-  .get(rolesController.getRole)
-  .put(rolesController.updateRole)
-  .delete(rolesController.deleteRole);
+  .get(adminOnly, rolesController.getRole)
+  .put(adminOnly, rolesController.updateRole)
+  .delete(adminOnly, rolesController.deleteRole);
 
-  app.get('/roles/:id/users', rolesController.getUsers);
+  app.get('/roles/:id/users', adminOnly, rolesController.getUsers);
 
   app.all('/', (req, res) =>
-  res.sendFile(`${publicPath}index.html`)
-);
-  app.all('/', (req, res) => res.status(404).send({
+    res.sendFile(`${publicPath}index.html`)
+  );
+
+  app.all('*', (req, res) => res.status(404).send({
     message: 'Route was not found.'
   }));
 };

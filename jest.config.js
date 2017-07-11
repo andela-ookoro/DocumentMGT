@@ -11,5 +11,6 @@ module.exports = {
   collectCoverageFrom: [
     '**/src/client/**',
   ],
-  testMatch: ['**/client/__tests__/**/*.test.js?(x)']
+  testMatch: ['**/client/__tests__/components/createDoc.test.js?(x)'],
+  verbose: true,
 };

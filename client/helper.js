@@ -1,4 +1,4 @@
-import tinymce from 'tinymce';
+// import tinymce from 'tinymce';
 
 export const requireAuth = () => {
   if (localStorage.getItem('jwt')) {
@@ -10,10 +10,10 @@ export const toServertime = (time =>
 );
 
 
-export const initiateEditor = (target =>
-  tinymce.init({
-    selector: target,
-    height: 300,
-    browser_spellcheck: true,
-  })
-);
+// export const initiateEditor = (target =>
+//   tinymce.init({
+//     selector: target,
+//     height: 300,
+//     browser_spellcheck: true,
+//   })
+// );

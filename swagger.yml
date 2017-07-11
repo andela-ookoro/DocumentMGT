@@ -1,0 +1,54 @@
+swagger: "2.0"
+
+info:
+  version: 1.0.0
+  title: Document Hub  API
+  description: A API to manage user's document
+
+schemes:
+  - http
+host: localhost:1142
+basePath: ''
+
+# paths are defined here
+paths:
+  /users/login:
+    post:
+      summary: Login user
+      description: Returns user's metadata and JWT token.
+      responses:
+        200:
+          description: User metedata and JWT token
+          schema:
+            type: object
+            items:
+              required:
+                - username
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                username:
+                  type: strin
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

@@ -1,8 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import tinymce from 'tinymce';
-import { upsertDocument } from '../actions/createDocument';
+import toaster from 'toastr';
+import upsertDocument from '../actions/createDocument';
 import getDocument from '../actions/getDocument';
 
 
@@ -11,7 +13,7 @@ import getDocument from '../actions/getDocument';
  * @class CreateDocument
  * @extends {React.Component}
  */
-class CreateDocument extends React.Component {
+export class CreateDocument extends React.Component {
 
   /**
    * Creates an instance of CreateDocument.
@@ -40,7 +42,7 @@ class CreateDocument extends React.Component {
   componentWillMount() {
     const documentID = this.props.match.params.documentId;
     if (documentID) {
-      this.setDocument(getDocument(documentID));
+      this.props.getDocument(documentID);
     }
   }
 
@@ -52,19 +54,45 @@ class CreateDocument extends React.Component {
    * @returns {null} - null
    */
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-    if (nextProps.createDocStatus) {
-      let message;
-      if (nextProps.createDocStatus === 'success') {
-        message = 'Document has been saved successfully';
-      } else {
-        message = nextProps.errorMessage
-      }
+    // show the document for update
+    if (nextProps.document) {
+      const curDocument = nextProps.document;
       this.setState({
-        message
+        title: curDocument.title,
+        body: curDocument.body.toString(),
+        curDocument,
+        docId: curDocument.id
       });
-      Materialize.toast(message, 3000, 'rounded');
+
+      // set the title
+      this.title.value = this.state.title;
+      document.getElementById('title').value = curDocument.title;
+      // find the selected access right
+      const accessRights = document.getElementsByName('accessRight');
+      const accessRight = curDocument.accessRight;
+
+      for (let i = 0; i < accessRights.length; i += 1) {
+        if (accessRights[i].id === accessRight) {
+          accessRights[i].checked = true;
+        }
+      }
     }
+    if (nextProps.messageFrom === 'upsertDocument') {
+      toaster.info(nextProps.message);
+      this.setState({
+        message: nextProps.message
+      });
+    }
+  }
+  /**
+   * set the value of the control to the respective state node
+   * @param {*} e
+   * @returns {null} - null
+   */
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
   }
 
   /**
@@ -76,14 +104,14 @@ class CreateDocument extends React.Component {
   setDocument(apiResponse) {
     // get server response and set state
     apiResponse
-    .then(response => {
+    .then((response) => {
       if (response.message) {
         this.setState({
           message: response.message
         });
-        Materialize.toast(response.message, 3000, 'rounded');
+        toaster.warning(response.message);
       } else {
-        const curDocument = response.document.data.data;
+        const curDocument = response.document.data;
         this.setState({
           title: curDocument.title,
           body: curDocument.body.toString(),
@@ -92,7 +120,7 @@ class CreateDocument extends React.Component {
         });
 
         // set the title
-        this.title.value = this.state.title;
+        this.title.value = curDocument.title;
         // find the selected access right
         const accessRights = document.getElementsByName('accessRight');
         const accessRight = curDocument.accessRight;
@@ -103,17 +131,6 @@ class CreateDocument extends React.Component {
           }
         }
       }
-    });
-  }
-
-  /**
-   * set the value of the control to the respective state node
-   * @param {*} e
-   * @returns {null} - null
-   */
-  onChange(e) {
-    this.setState({
-      [e.target.name]: e.target.value
     });
   }
 
@@ -163,7 +180,7 @@ class CreateDocument extends React.Component {
         role: userInfo.role
       };
       // call upsertDocument action
-     this.props.upsertDocument(document, this.state.docId);
+      this.props.upsertDocument(document, this.state.docId);
     //   .then(response => {
     //     message = 'Document has been saved successfully';
     //     // reset  state
@@ -227,7 +244,6 @@ class CreateDocument extends React.Component {
                 name="title"
                 className="validate"
                 ref={(input) => { this.title = input; }}
-                autoFocus
                 required
               />
               <label htmlFor="title">Title</label>
@@ -276,20 +292,45 @@ class CreateDocument extends React.Component {
 }
 
 // Maps state from store to props
-const mapStateToProps = (state) => {
-  return {
-    createDocStatus: state.createDocStatus.status,
-    errorMessage: state.createDocStatus.message
-  };
-};
+const mapStateToProps = state => (
+  {
+    message: state.message.info,
+    messageFrom: state.message.from,
+    document: state.document.document
+  }
+);
 
 // Maps actions to props
-const mapDispatchToProps = (dispatch) => {
-  return {
+const mapDispatchToProps = dispatch => (
+  {
     upsertDocument: (document, docId) =>
-     dispatch(upsertDocument(document, docId))
-  };
+     dispatch(upsertDocument(document, docId)),
+    getDocument: documentID => dispatch(getDocument(documentID))
+  }
+);
+
+CreateDocument.propTypes = {
+  upsertDocument: PropTypes.func.isRequired,
+  getDocument: PropTypes.func.isRequired,
+  messageFrom: PropTypes.string,
+  message: PropTypes.string,
+  document: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    body: PropTypes.string,
+    author: PropTypes.string,
+    accessRight: PropTypes.string,
+    owner: PropTypes.number,
+    createdAt: PropTypes.string
+  }),
 };
 
+CreateDocument.defaultProps = {
+  message: '',
+  messageFrom: '',
+  document: {}
+};
 // Use connect to put them together
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(CreateDocument));
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(
+  CreateDocument));

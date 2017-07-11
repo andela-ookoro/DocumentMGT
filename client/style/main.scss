@@ -4,6 +4,7 @@
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans');
 @import url('https://fonts.googleapis.com/css?family=Fresca|Josefin+Sans|Oswald|Roboto');
 @import url('https://fonts.googleapis.com/css?family=Fjalla+One');
+@import './toastr.scss';
 
 body {
   font-family: 'Slabo 27px', serif;
@@ -286,4 +287,16 @@ input[type=text].invalid {
   text-transform: capitalize;
   color: #a1887f !important;
   font-family: 'Fjalla One', sans-serif;
+}
+.comfirmPasswordStatus{
+    display: block;
+    content: "";
+    position: absolute;
+    top: 60px;
+    margin-left: 45px;
+    margin-top: -15px;
+    transition: .2s opacity ease-out, .2s color ease-out;
+}
+.errorMessage {
+  color: #BD2F10;
 }
