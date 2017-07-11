@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import $ from 'jquery';
 import addJWT from '../actions/addJWT';
 // import component
@@ -56,4 +57,14 @@ class Layout extends React.Component {
   }
 }
 
+Layout.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(React.PropTypes.node),
+    PropTypes.node
+  ]).isRequired
+};
+
+Layout.defaultProps = {
+  children: '',
+};
 export default Layout;

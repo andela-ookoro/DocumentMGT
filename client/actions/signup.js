@@ -1,29 +1,23 @@
 import axios from 'axios';
 import * as types from './actionTypes';
+import sendMessage from './message';
 
-export const signupSuccess = () => {  
-  return {
+export const signupSuccess = () => (
+  {
     type: types.SIGN_UP_SUCCESS
-  };
-};
-
-export const signupFailed = (signupMessage) => {
-  return {
-    type: types.SIGNUP_FAILED,
-    signupMessage
-  };
-};
+  }
+);
 
 export const signup = credentials =>
   axios.post('/users', credentials)
-  .then(response => {
+  .then((response) => {
     localStorage.setItem('jwt', JSON.stringify(response.data.jwtToken));
     localStorage.setItem('userInfo', JSON.stringify(response.data.userInfo));
     return signupSuccess();
   })
-  .catch(error => {
+  .catch((error) => {
     if (error.response) {
-      return signupFailed(error.response.data.message);
+      return sendMessage('signup', error.response.data.message);
     }
   });
 

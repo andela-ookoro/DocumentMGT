@@ -1,19 +1,18 @@
-
-
 // Require the dev-dependencies
-import  chai from 'chai';
+import chai from 'chai';
 import chaiHttp from 'chai-http';
-const should = chai.should();
+import supertest from 'supertest';
 
 import app from '../../../server';
+import mockdata from '../mockData';
 
-import supertest from 'supertest';
+
+
 const request = supertest.agent(app);
 chai.use(chaiHttp);
 
 
 // import mockdata
-import mockdata from '../mockData';
 const document = mockdata.document;
 let mockUser = mockdata.user;
 const registeredDocument = {};
@@ -33,8 +32,8 @@ describe('/document ', () => {
       if (!err) {
         jwt = res.body.jwtToken;
         testUser = res.body.userInfo;
-        // set document owner to testUser 
-        document.owner = testUser.id
+        // set document owner to testUser
+        document.owner = testUser.id;
         done();
       }
     });

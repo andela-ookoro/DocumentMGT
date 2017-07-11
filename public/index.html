@@ -11,8 +11,10 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/> 
   <link rel="stylesheet" type="text/css" href="./style.css">
   <script src='/lib/jquery/dist/jquery.min.js'></script>
+  <script src="/lib/jquery.validate.js"></script>
   <script src="/lib/materialize/bin/materialize.js"></script>
   <script src='/lib/tinymce/tinymce.min.js'></script>
+  <script src="/lib/toastr/toastr.js"></script>
   <script>  
     $(document).ready(() => {
        // initialize  materailise tab and side nav
@@ -20,6 +22,70 @@
       $('ul.tabs').tabs();
     });
   </script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect('http://localhost:1142');
+    socket.on('news', function (data) {
+      console.log(data);
+      socket.emit('my other event', { my: 'data' });
+    });
+  </script>
+    <script src="/lib/FileSaver.min.js"></script>
+    <!--
+    Mandatory in IE 6, 7, 8 and 9.
+    -->
+    <!--[if IE]>
+        <script type="text/javascript" src="examples/vendor/jszip-utils-ie.js"></script>
+    <![endif]-->
+    <script>
+    function exportDoc(name, content) {
+       var htmlString = content;
+
+      var byteNumbers = new Uint8Array(htmlString.length);
+
+      for (var i = 0; i < htmlString.length; i++) {
+
+      byteNumbers[i] = htmlString.charCodeAt(i);
+
+      }
+      var blob = new Blob([byteNumbers], {type: 'text/html'});
+      saveAs(blob, name + '.docx');
+    }
+    // loadFile("/exportDocTemplate.docx",function(error,content){
+    //     if (error) { throw error };
+    //     var zip = new JSZip(content);
+    //     var doc=new Docxtemplater().loadZip(zip)
+    //     doc.setData({
+    //         first_name: 'John',
+    //         last_name: 'Doe',
+    //         phone: '0652455478',
+    //         description: 'New Website'
+    //     });
+
+    //     try {
+    //         // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
+    //         doc.render()
+    //     }
+    //     catch (error) {
+    //         var e = {
+    //             message: error.message,
+    //             name: error.name,
+    //             stack: error.stack,
+    //             properties: error.properties,
+    //         }
+    //         console.log(JSON.stringify({error: e}));
+    //         // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+    //         throw error;
+    //     }
+
+    //     var out=doc.getZip().generate({
+    //         type:"blob",
+    //         mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    //     }) //Output the document using Data-URI
+    //     saveAs(out,"output.docx")
+    // })
+   
+    </script>
 </head>
 <body >
    <div id = "app"></div>

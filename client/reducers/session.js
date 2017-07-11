@@ -10,4 +10,3 @@ export default (state = initialState.session, action) => {
       return state;
   }
 };
-

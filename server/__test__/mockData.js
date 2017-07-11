@@ -1,4 +1,5 @@
 import faker from 'faker';
+import jest from 'jest';
 
 const mockData = {
   role: {
@@ -122,8 +123,15 @@ const mockData = {
     accessRight: 1
   },
   errorMessage: 'error occurred',
-  message: faker.lorem.sentences()
-
+  message: faker.lorem.sentences(),
+  // mockEvent: {
+  //   preventDefault: jest.fn(),
+  //   target: {
+  //     name: 'password',
+  //     value: 'test'
+  // /
+  // /   }
+  // }
 };
 
 export default mockData;

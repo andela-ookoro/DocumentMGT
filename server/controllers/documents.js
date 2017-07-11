@@ -9,6 +9,7 @@ module.exports = {
    * - get a list of documents
    * @param {*} req - client request
    * @param {*} res - server response
+   * @returns {object} - documents
    */
   getDocuments(req, res) {
     let hint;
@@ -16,16 +17,15 @@ module.exports = {
     if (req.query.offset && req.query.limit) {
       hint = { offset: req.query.offset, limit: req.query.limit };
     }
-    console.log('gintdddddd......', hint);
     // get all documents
     Document.findAndCountAll({
       order: [['title', 'ASC']],
       ...hint
     })
     .then(documents => res.status(200).send({
-        status: 'success',
-        documents
-      })
+      status: 'success',
+      documents
+    })
     )
     .catch(error => Utilities.sendError(res, error.message, 500));
   },
@@ -33,6 +33,7 @@ module.exports = {
    * - create a document
    * @param {*} req - client request
    * @param {*} res - server response
+   * @returns {null} - null
    */
   createDocument(req, res) {
     // create object from request
@@ -56,33 +57,50 @@ module.exports = {
       })
       .catch(error => Utilities.sendError(res, error.message, 400));
     } else {
-      Utilities.sendError(res, 'Document\'s title and body are compulsory.', 500);
+      Utilities.sendError(res, 'Document\'s title and body are compulsory.',
+      500);
     }
   },
    /**
    * - get a document by id
    * @param {*} req - client request
    * @param {*} res - server response
+   * @returns {object} - document
    */
   getDocument(req, res) {
     // get document with this id
     Document.findOne({
-      where: { id: req.params.id }
+      where: {
+        $or: [
+          {
+            accessRight: 'role',
+            role: req.user.role
+          },
+          {
+            accessRight: 'private',
+            owner: req.user.id
+          },
+          {
+            accessRight: 'public',
+          }
+        ],
+        id: req.params.id
+      }
     })
     .then((document) => {
       if (!document) {
         return Utilities.sendError(res, 'Document not found.', 200);
-      } else if (document.accessRight === 'private' && document.owner !== req.user.id) {
+      } else if (document.accessRight === 'private'
+       && document.owner !== req.user.id) {
         return Utilities.sendError(res, 'Document not found.', 200);
-      } else if ( document.accessRight === 'role') {
-        if (document.role !== req.user.role && document.owner !== req.user.id ) {
-          return Utilities.sendError(res, 'Document not found2.', 200);
-        } else {
-          return Utilities.sendData(res, document, 200);
+      } else if (document.accessRight === 'role') {
+        if (document.role !== req.user.role
+             && document.owner !== req.user.id) {
+          return Utilities.sendError(res, 'Document not found.', 200);
         }
-      } else {
-       return Utilities.sendData(res, document, 200);
+        return Utilities.sendData(res, document, 200);
       }
+      return Utilities.sendData(res, document, 200);
     })
     .catch(error => Utilities.sendError(res, error.message, 400));
   },
@@ -90,6 +108,7 @@ module.exports = {
    * - delete a document by id
    * @param {*} req - client request
    * @param {*} res - server response
+   * @returns {object} - document
    */
   deleteDocument(req, res) {
     // get document with this id
@@ -112,13 +131,14 @@ module.exports = {
    * - update a document by id
    * @param {*} req - client request
    * @param {*} res - server response
+   * @returns {object} - document
    */
   updateDocument(req, res) {
     // get new user info
     const changes = req.body;
     // get user with this id
     Document.findOne({
-      where: { id: req.params.id , owner: req.user.id }
+      where: { id: req.params.id, owner: req.user.id }
     })
     .then((document) => {
       if (!document) {
@@ -126,7 +146,9 @@ module.exports = {
       }
       return document
       .update(changes)
-      .then(() => Utilities.sendData(res, document, 200))
+      .then(() =>
+         Utilities.sendData(res, document, 200)
+      )
       .catch(error => Utilities.sendError(res, error.message, 400));
     })
     .catch(error => Utilities.sendError(res, error.message, 400));
@@ -135,9 +157,9 @@ module.exports = {
    * - get documents that has a list of attributes
    * @param {*} req - client request
    * @param {*} res - server response
+   * @returns {object} - documents
    */
   searchByTitle(req, res) {
-    let hint = {};
     // get new document info
     let query;
     let documentQuery;
@@ -149,22 +171,22 @@ module.exports = {
     const title = req.query.title || '';
     const offset = req.query.offset || 0;
     const limit = req.query.limit || 7;
-    const accessRight = req.query.accessRight ||  '';
+    const accessRight = req.query.accessRight || '';
 
     // ensure that a user does not access another user's document
     if (owner && owner !== req.user.id) {
       return Utilities.sendError(res, 'No document was found.', 401);
     }
 
-    console.log(',,,,,,,,,,,,,,,,,,,',offset,limit, req.query);
-    // remove offset and limit from query 
+    // remove offset and limit from query
     delete req.query.offset;
-    delete req.query.limit
-    console.log('req.body', req.query);
+    delete req.query.limit;
 
     // edit query based on accessRight
-    if (accessRight !== '' ) {
+    if (accessRight !== '') {
       switch (accessRight) {
+        case 'public' :
+          break;
         case 'private' :
           req.query.owner = req.user.id;
           break;
@@ -175,23 +197,24 @@ module.exports = {
           // set the owner to login user and delete the access right
           req.query.owner = req.user.id;
           delete req.query.accessRight;
+          break;
+        default :
+          return Utilities.sendError(res, 'No document was found.', 401);
       }
       if (req.query.title === '') {
         delete req.query.title;
       }
       query = req.query;
-      documentQuery =  Document.findAndCountAll({ 
-        where: {...query},
+      documentQuery = Document.findAndCountAll({
+        where: { ...query },
         offset,
         limit,
         order: [['title', 'ASC']],
       });
-    } 
+    }
 
-    let documentSearch = [];
-    let titleSearch;
-    if(title !== '') {
-      documentQuery =  Document.findAndCountAll({ 
+    if (title !== '') {
+      documentQuery = Document.findAndCountAll({
         where: {
           $or: [
             {
@@ -207,7 +230,7 @@ module.exports = {
             }
           ],
           title: {
-            $iLike: '%' + title + '%'
+            $iLike: `%${title}%`
           }
         },
         offset,

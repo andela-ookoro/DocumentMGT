@@ -4,34 +4,61 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import Dotenv from 'dotenv-webpack';
 
 
+const debug = process.env.NODE_ENV !== 'production';
+const basePlugins = [
+  new webpack.ProvidePlugin({
+    $: 'jquery',
+    jQuery: 'jquery',
+    'window.$': 'jquery',
+    'window.jQuery': 'jquery',
+    Hammer: 'hammerjs/hammer'
+  }),
+  new webpack.NoEmitOnErrorsPlugin(),
+  new webpack.optimize.OccurrenceOrderPlugin(),
+  new webpack.HotModuleReplacementPlugin(),
+  new webpack.optimize.UglifyJsPlugin({
+    mangle: false,
+    sourcemap: true
+  }),
+  new ExtractTextPlugin({
+    filename: path.join(__dirname, 'public/style.css'),
+    allChunks: true
+  }),
+  new Dotenv({
+    path: '.env',
+    safe: true,
+  })
+];
+const debugPlugins = [new ExtractTextPlugin('style.css')];
+const productionPlugins = [
+  new webpack.optimize.DedupePlugin(),
+  new webpack.optimize.OccurrenceOrderPlugin(),
+  new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
+  new ExtractTextPlugin({
+    filename: path.join(__dirname, 'public/style.css'),
+    allChunks: true
+  })
+];
+
+const plugins = debug ?
+  debugPlugins.concat(basePlugins) : productionPlugins.concat(basePlugins);
+
 module.exports = {
   context: __dirname,
+  node: {
+    fs: 'empty'
+  },
   entry: [
+    'babel-polyfill',
     'webpack-hot-middleware/client',
     path.join(__dirname, 'client/index.js'),
     path.join(__dirname, 'client/style/main.scss')
   ],
   output: {
-    path:  path.join(__dirname, 'public'),
+    path: path.join(__dirname, 'public'),
     filename: 'bundle.min.js',
   },
-  plugins: [
-    new webpack.NoEmitOnErrorsPlugin,
-    new webpack.optimize.OccurrenceOrderPlugin,
-    new webpack.HotModuleReplacementPlugin,
-    new webpack.optimize.UglifyJsPlugin({
-      mangle: false,
-      sourcemap: true
-    }),
-  new ExtractTextPlugin({
-    filename: path.join(__dirname, 'public/style.css'),
-    allChunks: true
-  }),
-    new Dotenv({
-      path: '.env',
-      safe: true,
-   })
-  ],
+  plugins,
   module: {
     loaders: [
       {
@@ -46,10 +73,16 @@ module.exports = {
           fallback: 'style-loader',
           use: ['css-loader', 'sass-loader'],
         }),
+      },
+      {
+        test: /materialize-css\/bin\//,
+        loader: 'imports?jQuery=jquery,$=jquery,hammerjs'
       }
     ]
   },
   resolve: {
     extensions: ['.js', '.jsx', '.json', '*']
-  }
-}
+  },
+  devtool: '#eval-source-map',
+};
+
