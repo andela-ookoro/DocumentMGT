@@ -67,46 +67,18 @@ export class Documents extends React.Component {
       this.setState({
         message: nextProps.message
       });
-    }
-    // if (nextProps.status !== 'success'
-    //   || nextProps.deleteStatus !== 'success') {
-    //   this.setState({
-    //     message: nextProps.message
-    //   });
-    //   toaster.error(nextProps.message);
-    //   // Materialize.toast(nextProps.message, 3000, 'rounded');
-    // }
-
-    // show error message when error is reported
-    if (nextProps.messageFrom === 'deleteDocument') {
+    } else if (nextProps.messageFrom === 'deleteDocument') {
       toaster.info(nextProps.message);
       this.setState({
         message: nextProps.message
       });
+    } else {
+      // reset message state
+      this.setState({
+        message: ''
+      });
     }
-    // if (nextProps.deleteStatus === 'success') {
-    //   this.setState({
-    //     message: 'Document has been deleted successfully'
-    //   });
-    //   toaster.success('Document has been deleted successfully');
-    //   // Materialize.toast('Document has been deleted successfully',
-    //   // 3000, 'rounded');
-    // }
   }
-
-  // /**
-  //  * set the value of the control to the respective state node
-  //  * @param {*} e
-  //  *  @returns {null} -
-  //  */
-  // onChange(e) {
-  //   // avoid control 'comfirm password' from setting state
-  //   if (e.target.name) {
-  //     this.setState({
-  //       [e.target.name]: e.target.value
-  //     });
-  //   }
-  // }
 
   /**
    * get the documents in a particular category
@@ -149,8 +121,6 @@ export class Documents extends React.Component {
       category: ''
     });
     toaster.info(`searching for documents with hint ${searchHint}`);
-    // Materialize.toast(`search for documents with hint ${searchHint}`,
-    //  3000, 'rounded');
     this.props.getDocuments('', searchHint, 0, 6);
   }
 
@@ -184,7 +154,7 @@ export class Documents extends React.Component {
             <div className="row">
               <form>
                 <p className="errorMessage col s12 m12 l3 ">
-                  {this.props.message} </p>
+                  {this.state.message} </p>
                 <div className="col s9 m8 l7">
                   <input
                     placeholder="Search for documents"

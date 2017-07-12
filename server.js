@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-
 import express from 'express';
 // package to log error on console
 import logger from 'morgan';
@@ -8,15 +7,6 @@ import helmet from 'helmet';
 import compression from 'compression';
 // package to get request body
 import bodyParser from 'body-parser';
-
-// import passport
-import passport from 'passport';
-
-// initiate dotenv
-dotenv.config();
-
-
-
 // packages for client side
 import webpack from 'webpack';
 import webpackMiddleware from 'webpack-dev-middleware';
@@ -25,6 +15,13 @@ import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 // import the webpack config ftile
 import webpackConfig from './webpack.config';
+
+// initiate dotenv
+dotenv.config();
+
+
+
+
 
 import routes from './server/routes';
 // create new express app

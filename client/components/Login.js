@@ -26,7 +26,8 @@ export class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      validControls: {}
+      validControls: {},
+      message: ''
     };
     this.onChange = this.onChange.bind(this);
     this.onSave = this.onSave.bind(this);
@@ -49,6 +50,9 @@ export class Login extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.messageFrom === 'login') {
       toaster.info(nextProps.message);
+      this.setState({
+        message: nextProps.message
+      });
     }
   }
 
@@ -106,7 +110,7 @@ export class Login extends React.Component {
   onSave(event) {
     event.preventDefault();
     const user = this.state;
-    // delete validControls from the user object
+    // delete validControls and message from the user object
     delete user.validControls;
     this.props.siginin(user);
   }
@@ -119,7 +123,7 @@ export class Login extends React.Component {
     return (
       <div>
         <br />
-        <p className="errorMessage"> {this.props.message} </p>
+        <p className="errorMessage"> {this.state.message} </p>
         <form className="col s12">
           <div className="input-field col  s12">
             <i className="material-icons prefix">email</i>
