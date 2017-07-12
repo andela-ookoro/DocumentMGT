@@ -28,8 +28,8 @@ const router = express.Router();
 const webpackCompiler = webpack(webpackConfig);
 
 // use hemlet to disable settings that would leak security
-app.use(helmet());
-app.use(compression());
+// app.use(helmet());
+// app.use(compression());
 // use the webpack middleware in the server
 app.use(webpackMiddleware(webpackCompiler, {
   hot: true,
