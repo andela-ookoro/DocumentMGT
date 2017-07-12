@@ -54,7 +54,7 @@ class NavigationBar extends React.Component {
           <a className="username">{userInfo.name}</a>
         </li>
         <li>
-          <a onClick={this.signout}>Sign Out</a>
+          <a onClick={this.signout} id="signout">Sign Out</a>
         </li>
       </div>
     );

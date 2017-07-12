@@ -7,11 +7,7 @@ import { validateUser, adminOnly } from '../controllers/helpers/utilities';
 const usersController = Controllers.User;
 const documentsController = Controllers.Document;
 const rolesController = Controllers.Role;
-module.exports = (app, express, path) => {
-  // serve static files in public folder
-  const publicPath = path.join(__dirname, '../../public/');
-  app.use(express.static(publicPath));
-
+module.exports = (app) => {
   // unathenticated routes
   app.post('/users/login', usersController.login);
   app.post('/users/logout', usersController.logout);
@@ -49,12 +45,4 @@ module.exports = (app, express, path) => {
   .delete(adminOnly, rolesController.deleteRole);
 
   app.get('/roles/:id/users', adminOnly, rolesController.getUsers);
-
-  app.all('/', (req, res) =>
-    res.sendFile(`${publicPath}index.html`)
-  );
-
-  app.all('*', (req, res) => res.status(404).send({
-    message: 'Route was not found.'
-  }));
 };

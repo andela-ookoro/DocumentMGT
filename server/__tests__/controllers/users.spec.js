@@ -18,7 +18,7 @@ let user = mockdata.user;
 let secondUser = mockdata.user;
 const registeredUser = {};
 
-describe('/users ', () => {
+describe('/api/v1/users ', () => {
   // cache jwt and userinfo
   let jwt;
   let testUser;
@@ -26,7 +26,7 @@ describe('/users ', () => {
   // create user to own the request
   before((done) => {
     request
-    .post('/users')
+    .post('/api/v1/users')
     .send(user)
     .end((err, res) => {
       if (!err) {
@@ -39,13 +39,13 @@ describe('/users ', () => {
     });
   });
 
-  describe('POST /users ', () => {
+  describe('POST /api/v1/users ', () => {
     it('A user should recieve a jwt token, user metadata and a status ' +
     'after successful signup',
     (done) => {
       secondUser.email = `u${secondUser.email}`;
       request
-        .post('/users')
+        .post('/api/v1/users')
         .send(secondUser)
         .end((err, res) => {
           if (!err) {
@@ -61,7 +61,7 @@ describe('/users ', () => {
     (done) => {
       user = mockdata.UserWithoutFirstname;
       request
-        .post('/users')
+        .post('/api/v1/users')
         .send(user)
         .end((err, res) => {
           if (res) {
@@ -75,12 +75,12 @@ describe('/users ', () => {
     });
   });
 
-  describe('GET /users/login ', () => {
+  describe('GET /api/v1/users/login ', () => {
     it('A user should recieve a jwt token, user metadata and a status ' +
     'after successful login',
     (done) => {
       request
-        .post('/users/login')
+        .post('/api/v1/users/login')
         .send(registeredUser)
         .end((err, res) => {
           if (!err) {
@@ -96,7 +96,7 @@ describe('/users ', () => {
     (done) => {
       registeredUser.password += 'wrong';
       request
-        .post('/users/login')
+        .post('/api/v1/users/login')
         .send(registeredUser)
         .end((err, res) => {
           if (!err) {
@@ -112,7 +112,7 @@ describe('/users ', () => {
     (done) => {
       registeredUser.password = '';
       request
-        .post('/users/login')
+        .post('/api/v1/users/login')
         .send(registeredUser)
         .end((err, res) => {
           if (res) {
@@ -125,7 +125,7 @@ describe('/users ', () => {
     });
   });
 
-  describe('GET /users ', () => {
+  describe('GET /api/v1/users ', () => {
     it('A user should recieve a list of all users when no query is passed',
     (done) => {
       request
@@ -144,7 +144,7 @@ describe('/users ', () => {
     it('A user should recieve a limited list of users starting from an index',
    (done) => {
      request
-        .get('/users?offset=2&limit=5')
+        .get('/api/v1/users?offset=2&limit=5')
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -157,10 +157,10 @@ describe('/users ', () => {
    });
   });
 
-  describe('GET /users/:id ', () => {
+  describe('GET /api/v1/users/:id ', () => {
     it('A user should get a user by id \'when id exist\'', (done) => {
       request
-        .get('/users/1')
+        .get('/api/v1/users/1')
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -179,7 +179,7 @@ describe('/users ', () => {
     it('A user should recieve \'User not found\' for unknown userid ',
     (done) => {
       request
-      .get('/users/-2')
+      .get('/api/v1/users/-2')
       .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
@@ -193,10 +193,10 @@ describe('/users ', () => {
     });
   });
 
-  describe('PUT /users/:id ', () => {
+  describe('PUT /api/v1/users/:id ', () => {
     it('A user should update a user by id \'when id exist\'', (done) => {
       request
-        .put('/users/1')
+        .put('/api/v1/users/1')
         .set('Authorization', jwt)
         .send(mockdata.updateuser)
         .end((err, res) => {
@@ -216,7 +216,7 @@ describe('/users ', () => {
     it('A user should recieve \'User not found\' for unknown userid ',
     (done) => {
       request
-      .put('/users/-2')
+      .put('/api/v1/users/-2')
       .set('Authorization', jwt)
       .send(mockdata.user)
       .end((err, res) => {
@@ -230,10 +230,10 @@ describe('/users ', () => {
     });
   });
 
-  describe('DETELE /users/:id ', () => {
+  describe('DETELE /api/v1/users/:id ', () => {
     it('A user can delete a user by id \'when id exist\'', (done) => {
       request
-        .delete('/users/1')
+        .delete('/api/v1/users/1')
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -252,7 +252,7 @@ describe('/users ', () => {
     it('A user should recieve \'User not found\' for unknown userid ',
     (done) => {
       request
-      .delete('/users/-2')
+      .delete('/api/v1/users/-2')
       .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
@@ -265,10 +265,10 @@ describe('/users ', () => {
     });
   });
 
-  describe('GET /search/users/?q={} ', () => {
+  describe('GET /api/v1/search/users/?q={} ', () => {
     it('A user should get list of  user with a list of attributes', (done) => {
       request
-        .get('/search/users?fname=Cullen&lname=Luettgen')
+        .get('/api/v1/search/users?fname=Cullen&lname=Luettgen')
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -286,11 +286,11 @@ describe('/users ', () => {
     });
   });
 
-  describe('GET /users/:userId/documents ', () => {
+  describe('GET /api/v1/users/:userId/documents ', () => {
     it('A user should get a documents belonging to a user by userid ' +
       '\'when id exist\'', (done) => {
       request
-        .get('/users/4/documents')
+        .get('/api/v1/users/4/documents')
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -309,7 +309,7 @@ describe('/users ', () => {
     it('A user should recieve \'User not found\' for unknown userid ',
     (done) => {
       request
-      .get('/users/-2/documents')
+      .get('/api/v1/users/-2/documents')
       .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {

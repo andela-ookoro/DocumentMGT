@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
 
 import express from 'express';
-import socketIO from 'socket.io';
 // package to log error on console
 import logger from 'morgan';
 import path from 'path';
-
+import helmet from 'helmet';
+import compression from 'compression';
 // package to get request body
 import bodyParser from 'body-parser';
 
@@ -25,12 +25,17 @@ import webpackMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 // import the webpack config ftile
 import webpackConfig from './webpack.config';
+
+import routes from './server/routes';
 // create new express app
 const app = express();
-
+const router = express.Router();
 // create webpack compiler
 const webpackCompiler = webpack(webpackConfig);
 
+// use hemlet to disable settings that would leak security
+app.use(helmet());
+app.use(compression());
 // use the webpack middleware in the server
 app.use(webpackMiddleware(webpackCompiler, {
   hot: true,
@@ -47,15 +52,24 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// serve static files in public folder
+const publicPath = path.join(__dirname, 'public/');
+app.use(express.static(publicPath));
+
 // Require our routes into the application.
-require('./server/routes')(app, express, path, passport);
+// require('./server/routes')(app, express, path, passport);
+// get all routes
+routes(router);
 
-// require passport
-require('./server/config/passport')(passport);
+app.use('/api/v1', router);
+app.all('/', (req, res) =>
+  res.sendFile(`${publicPath}index.html`)
+);
 
+// catch unknown routes
+app.all('*', (req, res) => res.status(404).send({
+  message: 'Route was not found.'
+}));
 
-const server = app.listen(1142, () => console.log("opn('htlocalhost:1142')"));
-const ioObj = socketIO.listen(server, { log: false });
-require('./server/config/socket')(ioObj);
-
+app.listen(process.env.PORT || 1142);
 export default app;

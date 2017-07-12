@@ -53,7 +53,7 @@ export class Signup extends React.Component {
    * @memberof Signup
    */
   componentDidMount() {
-    // document.getElementById('btnSubmit').disabled = true;
+    document.getElementById('signupSubmit').disabled = true;
   }
   /**
   * @param {any} nextProps -
@@ -74,22 +74,23 @@ export class Signup extends React.Component {
   onChange(e) {
     // validate input
     let validationStatus;
+    let ValidatonPrefix = 'Validator';
     if (e.target.name === 'fname' || e.target.name === 'lname'
       || e.target.name === 'mname') {
       validationStatus = validateName(e.target.value);
     } else if (e.target.name === 'email') {
       validationStatus = validateEmail(e.target.value);
+      ValidatonPrefix = `${ValidatonPrefix}signup`;
     } else if (e.target.name === 'password') {
       validationStatus = validatePassword(e.target.value);
+      ValidatonPrefix = `${ValidatonPrefix}signup`;
     } else if (e.target.name === 'roleId') {
-      console.log('rorle', e.target.value);
       validationStatus = validateRoleId(e.target.value);
     }
-
     // get validControls
     const validControls = this.state.validControls;
-    const validationLabel = document
-      .getElementById(`${e.target.name}Validator`);
+    const validationLabelId = `${e.target.name}${ValidatonPrefix}`;
+    const validationLabel = document.getElementById(validationLabelId);
     // set state when input is valid
     if (validationStatus === true) {
       // check if control was valid
@@ -114,9 +115,9 @@ export class Signup extends React.Component {
     });
     // enable button when every control is valid
     if (Object.keys(validControls).length === 6 && this.matchPassword()) {
-      document.getElementById('btnSubmit').disabled = false;
+      document.getElementById('signupSubmit').disabled = false;
     } else {
-      document.getElementById('btnSubmit').disabled = true;
+      document.getElementById('signupSubmit').disabled = true;
     }
   }
 
@@ -151,15 +152,15 @@ export class Signup extends React.Component {
       const validControls = this.state.validControls;
       // enable button when every control is valid
       if (Object.keys(validControls).length === 6) {
-        document.getElementById('btnSubmit').disabled = false;
+        document.getElementById('signupSubmit').disabled = false;
       }
     } else {
-      // document.getElementById('btnSubmit').disabled = true;
+      // document.getElementById('signupSubmit').disabled = true;
       matchStatus = 'Password does not match';
       fontColor = '#ff0000';
       match = false;
       // disable submit button
-      document.getElementById('btnSubmit').disabled = true;
+      document.getElementById('signupSubmit').disabled = true;
     }
 
     //  set the result of the comparism
@@ -240,7 +241,9 @@ export class Signup extends React.Component {
         <form className="col s12" id="frmSignup">
           <br />
           <div className="row">
-            <p className="errorMessage"> {this.props.message} </p>
+            <p className="errorMessage" id="errorMessageSignup">
+              {this.props.message}
+            </p>
             <div className="input-field col l4 m6 s12">
               <i className="material-icons prefix">account_circle</i>
               <input
@@ -296,7 +299,7 @@ export class Signup extends React.Component {
               <input
                 placeholder="Password"
                 name="password"
-                id="password"
+                id="passwordsignup"
                 type="password"
                 className="validate"
                 value={this.state.password}
@@ -304,7 +307,7 @@ export class Signup extends React.Component {
               />
               <label htmlFor="password">Password</label>
               <div className="comfirmPasswordStatus">
-                <span id="passwordValidator" />
+                <span id="passwordValidatorsignup" />
               </div>
             </div>
             <div className="input-field col  l4 m6 s12">
@@ -336,13 +339,14 @@ export class Signup extends React.Component {
                 placeholder="Email"
                 name="email"
                 type="email"
+                id="emailsignup"
                 className="validate"
                 value={this.state.email}
                 onChange={this.onChange}
               />
               <label htmlFor="email" >Email</label>
               <div className="comfirmPasswordStatus">
-                <span id="emailValidator" />
+                <span id="emailValidatorsignup" />
               </div>
             </div>
           </div>
@@ -379,7 +383,7 @@ export class Signup extends React.Component {
                 className="btn waves-effect waves-light right"
                 type="submit"
                 name="action"
-                id="btnSubmit"
+                id="signupSubmit"
                 onClick={this.onSave}
               >
                 Submit <i className="material-icons right">send</i>

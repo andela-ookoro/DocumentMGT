@@ -13,14 +13,14 @@ const sendReponse = (status, document = {}, message = '') => (
 
 
 const getDocument = documentId =>
-  axios.get(`/documents/${documentId}`)
+  axios.get(`/api/v1/documents/${documentId}`)
   .then(response =>
       sendReponse('success', response.data.data, '')
   )
   .catch((error) => {
     if (error.response) {
       const message = error.response.data.message || error.response;
-      return sendMessage('getDocuments', message);
+      return sendMessage('getDocument', message);
     }
   });
 

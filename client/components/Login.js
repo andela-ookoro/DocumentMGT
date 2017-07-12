@@ -38,7 +38,7 @@ export class Login extends React.Component {
     * @returns {null} -
     */
   componentDidMount() {
-    document.getElementById('loginSubmit').disabled = true;
+    document.getElementById('signinSubmit').disabled = true;
   }
 
   /**
@@ -78,7 +78,7 @@ export class Login extends React.Component {
       validationLabel.textContent = '';
     } else {
       // remove control from list of validControls
-      if (!validControls.hasOwnProperty(e.target.name)) {
+      if (validControls.hasOwnProperty(e.target.name)) {
         delete validControls[e.target.name];
       }
       // show error message
@@ -92,9 +92,9 @@ export class Login extends React.Component {
     });
     // enable button when every control is valid
     if (Object.keys(validControls).length === 1) {
-      document.getElementById('loginSubmit').disabled = false;
+      document.getElementById('signinSubmit').disabled = false;
     } else {
-      document.getElementById('loginSubmit').disabled = true;
+      document.getElementById('signinSubmit').disabled = true;
     }
   }
 
@@ -159,7 +159,7 @@ export class Login extends React.Component {
             <button
               className="btn waves-effect waves-light right"
               type="submit"
-              id="loginSubmit"
+              id="signinSubmit"
               onClick={this.onSave}
               name="action"
             >

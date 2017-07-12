@@ -10,7 +10,7 @@ export const loginSuccess = () => (
 
 
 export const logIn = credentials =>
- axios.post('/users/login', credentials)
+ axios.post('/api/v1/users/login', credentials)
   .then((response) => {
     localStorage.setItem('jwt', JSON.stringify(response.data.jwtToken));
     localStorage.setItem('userInfo', JSON.stringify(response.data.userInfo));

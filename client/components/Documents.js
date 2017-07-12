@@ -34,6 +34,7 @@ export class Documents extends React.Component {
     // this.setDocuments = this.setDocuments.bind(this);
     this.deleteDocument = this.deleteDocument.bind(this);
     this.searchDocument = this.searchDocument.bind(this);
+    this.handlePageClick = this.handlePageClick.bind(this);
   }
 
 
@@ -61,7 +62,7 @@ export class Documents extends React.Component {
     });
 
     // show error message when error is reported
-    if (nextProps.messageFrom === 'getDoucments') {
+    if (nextProps.messageFrom === 'getDocuments') {
       toaster.info(nextProps.message);
       this.setState({
         message: nextProps.message
@@ -162,7 +163,7 @@ export class Documents extends React.Component {
    */
   handlePageClick(page) {
     const curPage = page.selected;
-    const offset = Math.ceil(curPage * 7);
+    const offset = Math.ceil(curPage * 6);
     const searchHint = this.state.searchHint;
     const category = this.state.category;
     this.props.getDocuments(category, searchHint, offset, 6);

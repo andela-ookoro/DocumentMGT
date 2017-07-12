@@ -1,5 +1,6 @@
 import { sendError, sendData } from './helpers/utilities';
 import model from '../models/index';
+
 const Role = model.role;
 const User = model.user;
 

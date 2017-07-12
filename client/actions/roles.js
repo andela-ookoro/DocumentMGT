@@ -21,7 +21,7 @@ export const getRoleFailed = (roleLooadError) => {
  * @param {*} roles - list of role
  */
 export const getRoles = () =>
-  axios.get('/roles')
+  axios.get('/api/v1/roles')
   .then(response => {
     if (response.data.status === 'success') {
       return sendRoles(response.data.data);

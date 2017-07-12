@@ -40,10 +40,10 @@ class Auth extends React.Component {
           <div className="col s12">
             <ul className="tabs">
               <li className="tab col s3">
-                <a className="active" href="#signin">Sign in</a>
+                <a className="active" href="#signin" id="signintab">Sign in</a>
               </li>
               <li className="tab col s3">
-                <a href="#signup">Create a account</a>
+                <a href="#signup" id="signuptab">Create a account</a>
               </li>
             </ul>
           </div>
