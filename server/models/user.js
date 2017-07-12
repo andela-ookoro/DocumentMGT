@@ -65,6 +65,7 @@ module.exports = (sequelize, DataTypes) => {
         model: 'role',
         key: 'id',
         as: 'roleId',
+        deferrable: sequelize.Deferrable.INITIALLY_IMMEDIATE
       },
     },
   }, {
@@ -135,6 +136,22 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
   });
+
+  // Class Method
+  user.associate = (models) => {
+    user.belongsTo(models.role, {
+      foriegnKey: 'roleId',
+      onDelete: 'CASCADE',
+    });
+
+    // user can have many documents
+    user.hasMany(models.document, {
+      foriegnKey: 'userId',
+      as: 'documents',
+      onDelete: 'CASCADE',
+    });
+  };
+
 
   /**
      * get user fullname

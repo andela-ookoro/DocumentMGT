@@ -3,6 +3,9 @@ import Utilities from './helpers/utilities';
 
 const User = model.user;
 const Document = model.document;
+const attributes = [
+  'id', 'title', 'synopsis', 'body', 'role', 'accessRight',
+  'owner', 'author', 'createdAt', 'updatedAt'];
 
 module.exports = {
    /**
@@ -19,6 +22,7 @@ module.exports = {
     }
     // get all documents
     Document.findAndCountAll({
+      attributes,
       order: [['title', 'ASC']],
       ...hint
     })
@@ -70,6 +74,7 @@ module.exports = {
   getDocument(req, res) {
     // get document with this id
     Document.findOne({
+      attributes,
       where: {
         $or: [
           {
@@ -113,6 +118,7 @@ module.exports = {
   deleteDocument(req, res) {
     // get document with this id
     Document.findOne({
+      attributes,
       where: { id: req.params.id, owner: req.user.id }
     })
     .then((document) => {
@@ -206,6 +212,7 @@ module.exports = {
       }
       query = req.query;
       documentQuery = Document.findAndCountAll({
+        attributes,
         where: { ...query },
         offset,
         limit,
@@ -215,6 +222,7 @@ module.exports = {
 
     if (title !== '') {
       documentQuery = Document.findAndCountAll({
+        attributes,
         where: {
           $or: [
             {
@@ -238,6 +246,31 @@ module.exports = {
         order: [['title', 'ASC']],
       });
     }
+
+    // if title and accessright where not specified
+    if (title === '' && accessRight === '') {
+      documentQuery = Document.findAndCountAll({
+        attributes,
+        where: {
+          $or: [
+            {
+              accessRight: 'role',
+              role: req.user.role
+            },
+            {
+              accessRight: 'private',
+              owner: req.user.id
+            },
+            {
+              accessRight: 'public',
+            }
+          ],
+        },
+        offset,
+        limit,
+        order: [['title', 'ASC']],
+      });
+    }
     // get the documents
     documentQuery
     .then((documents) => {
@@ -246,6 +279,6 @@ module.exports = {
       }
       return Utilities.sendData(res, documents, 200);
     })
-    .catch(error => Utilities.sendError(res, error.message, 400));
+    .catch(error => Utilities.sendError(res, error.message, 500));
   },
 };

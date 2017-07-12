@@ -9,7 +9,7 @@ export const signupSuccess = () => (
 );
 
 export const signup = credentials =>
-  axios.post('/users', credentials)
+  axios.post('/api/v1/users', credentials)
   .then((response) => {
     localStorage.setItem('jwt', JSON.stringify(response.data.jwtToken));
     localStorage.setItem('userInfo', JSON.stringify(response.data.userInfo));

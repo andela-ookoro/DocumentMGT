@@ -4,7 +4,7 @@ import sendMessage from './message';
 
 
 const updateProfile = credentials =>
-  axios.put(`/users/${credentials.userid}`, credentials)
+  axios.put(`/api/v1/users/${credentials.userid}`, credentials)
   .then((response) => {
     // if jwt was returned
     if (response.data.jwtToken) {

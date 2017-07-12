@@ -77,10 +77,16 @@ export class CreateDocument extends React.Component {
         }
       }
     }
+
     if (nextProps.messageFrom === 'upsertDocument') {
-      toaster.info(nextProps.message);
+      let message = this.props.message;
+      if (this.props.message === 'successs') {
+        message = 'Document has been saved successfully';
+        tinymce.get('content').setContent('');
+      }
+      toaster.info(message);
       this.setState({
-        message: nextProps.message
+        message
       });
     }
   }
@@ -206,7 +212,6 @@ export class CreateDocument extends React.Component {
     }
   }
 
-
   /**
    * @returns {object} - html DOM
    * @memberof CreateDocument
@@ -225,10 +230,6 @@ export class CreateDocument extends React.Component {
         e.target.setContent(body);
       });
     });
-    if (this.props.createDocStatus === 'successs') {
-      message = 'Document has been saved successfully';
-      tinymce.get('content').setContent('');
-    }
 
     return (
       <div className="container">
@@ -243,6 +244,7 @@ export class CreateDocument extends React.Component {
                 type="text"
                 name="title"
                 className="validate"
+                onChange={this.onChange}
                 ref={(input) => { this.title = input; }}
                 required
               />
@@ -254,6 +256,7 @@ export class CreateDocument extends React.Component {
                 id="content"
                 type="text"
                 name="body"
+                onChange={this.onChange}
                 className="materialize-textarea"
               />
             </div>
@@ -262,15 +265,30 @@ export class CreateDocument extends React.Component {
               <i className="material-icons prefix">lock</i>
             </div>
             <div className="input-field col l2 s4">
-              <input name="accessRight" type="radio" id="private" />
+              <input
+                name="accessRight"
+                type="radio"
+                id="private"
+                onChange={this.onChange}
+              />
               <label htmlFor="private">Private</label>
             </div>
             <div className="input-field col l2 s4">
-              <input name="accessRight" type="radio" id="public" />
+              <input
+                name="accessRight"
+                type="radio"
+                id="public"
+                onChange={this.onChange}
+              />
               <label htmlFor="public">Public</label>
             </div>
             <div className="input-field col l2 s4">
-              <input name="accessRight" type="radio" id="role" />
+              <input
+                name="accessRight"
+                type="radio"
+                id="role"
+                onChange={this.onChange}
+              />
               <label htmlFor="role">Role</label>
             </div>
             <div className="input-field col s12" >
@@ -314,9 +332,14 @@ CreateDocument.propTypes = {
   getDocument: PropTypes.func.isRequired,
   messageFrom: PropTypes.string,
   message: PropTypes.string,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      documentId: PropTypes.number
+    })
+  }),
   document: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
+    id: PropTypes.number,
+    title: PropTypes.string,
     body: PropTypes.string,
     author: PropTypes.string,
     accessRight: PropTypes.string,
@@ -328,7 +351,8 @@ CreateDocument.propTypes = {
 CreateDocument.defaultProps = {
   message: '',
   messageFrom: '',
-  document: {}
+  document: {},
+  match: {}
 };
 // Use connect to put them together
 

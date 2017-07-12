@@ -46,15 +46,16 @@ export class Document extends React.Component {
    * @returns {null} - null
    */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.status === 'success') {
-      this.setState({
-        document: nextProps.document
-      });
-    } else {
+    if (nextProps.messageFrom === 'getDocument') {
+      toaster.info(nextProps.message);
       this.setState({
         message: nextProps.message
       });
-      toaster.error(nextProps.message);
+    }
+    if (nextProps.document !== {}) {
+      this.setState({
+        document: nextProps.document
+      });
     }
   }
 
@@ -149,14 +150,20 @@ Document.propTypes = {
     owner: PropTypes.number,
     createdAt: PropTypes.string
   }),
-  status: PropTypes.string,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      documentId: PropTypes.number
+    })
+  }),
   message: PropTypes.string,
+  messageFrom: PropTypes.string
 };
 
 Document.defaultProps = {
-  status: '',
   document: {},
-  message: ''
+  message: '',
+  messageFrom: '',
+  match: {}
 };
 
 // Use connect to put them together

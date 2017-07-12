@@ -11,7 +11,6 @@
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"/> 
   <link rel="stylesheet" type="text/css" href="./style.css">
   <script src='/lib/jquery/dist/jquery.min.js'></script>
-  <script src="/lib/jquery.validate.js"></script>
   <script src="/lib/materialize/bin/materialize.js"></script>
   <script src='/lib/tinymce/tinymce.min.js'></script>
   <script src="/lib/toastr/toastr.js"></script>
@@ -20,14 +19,6 @@
        // initialize  materailise tab and side nav
       $(".button-collapse").sideNav();
       $('ul.tabs').tabs();
-    });
-  </script>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    var socket = io.connect('http://localhost:1142');
-    socket.on('news', function (data) {
-      console.log(data);
-      socket.emit('my other event', { my: 'data' });
     });
   </script>
     <script src="/lib/FileSaver.min.js"></script>

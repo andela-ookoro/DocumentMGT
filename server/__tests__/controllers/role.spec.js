@@ -1,39 +1,37 @@
+
+
 // Require the dev-dependencies
-import chai from 'chai';
+import  chai from 'chai';
 import chaiHttp from 'chai-http';
-import supertest from 'supertest';
+const should = chai.should();
 
 import app from '../../../server';
-import mockdata from '../mockData';
 
-
-
+import supertest from 'supertest';
 const request = supertest.agent(app);
 chai.use(chaiHttp);
 
 
 // import mockdata
-const document = mockdata.document;
+import mockdata from '../mockData';
+const role = mockdata.role;
 let mockUser = mockdata.user;
-const registeredDocument = {};
+const roleWithoutTitle = mockdata.roleWithoutTitle;
+const registeredRole = {};
 
-describe('/document ', () => {
+describe('/api/v1/document ', () => {
   // cache jwt and userinfo
   let jwt;
   let testUser;
 
   // create user to own the request
   before((done) => {
-    console.log('should run first');
     request
-    .post('/users')
+    .post('/api/v1/users')
     .send(mockUser)
     .end((err, res) => {
       if (!err) {
         jwt = res.body.jwtToken;
-        testUser = res.body.userInfo;
-        // set document owner to testUser
-        document.owner = testUser.id;
         done();
       }
     });
@@ -42,7 +40,7 @@ describe('/document ', () => {
   // delete user after test
   after((done) => {
     request
-    .delete('/users/1')
+    .delete('/api/v1/users/1')
     .set('Authorization', jwt)
     .end((err, res) => {
       if (!err) {
@@ -51,77 +49,62 @@ describe('/document ', () => {
     });
   });
 
-  describe('POST /document ', () => {
-    it('As a user , I should be able to create a document', (done) => {
+  describe('POST /api/v1/document ', () => {
+    it('As a user , I should be able to create a role', (done) => {
       request
-        .post('/documents')
+        .post('/api/v1/roles')
+        .send(role)
         .set('Authorization', jwt)
-        .send(document)
         .end((err, res) => {
           if (!err) {
-            // store new document for futher testing
-            registeredDocument.title = res.body.data.title;
-            registeredDocument.id = res.body.data.id;
+            // store new Role for futher testing
+            registeredRole.title = res.body.data.title;
+            registeredRole.id = res.body.data.id;
             res.should.have.status(201);
-            res.body.data.title.should.be.eql(document.title);
+            res.body.data.title.should.be.eql(role.title);
             res.body.status.should.be.eql('success');
           }
           done();
         });
     });
-
-    it('A user must provide the  document title and body', (done) => {
-      document.title = '';
+    it('A user should recieve a message when compulsory fields are not provided',
+    (done) => {
       request
-        .post('/documents')
+        .post('/api/v1/roles')
         .set('Authorization', jwt)
-        .send(document)
+        .send(roleWithoutTitle)
         .end((err, res) => {
           if (res) {
             res.should.have.status(500);
             res.body.status.should.be.eql('fail');
-            res.body.message.should.be.eql('Document\'s title and body ' +
-            'are compulsory.');
+            res.body.message.should.be.eql('Role title is compulsory.');
           }
           done();
         });
     });
   });
 
-  describe('GET /documents ', () => {
-    it('A user should recieve a list of all documents',
+  describe('GET /api/v1/roles ', () => {
+    it('A user should recieve a list of roles',
     (done) => {
       request
-        .get('/documents')
+        .get('/api/v1/roles')
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
             res.body.status.should.be.eql('success');
+            res.body.data.should.be.an('array');
           }
           done();
         });
     });
-
-    it('A user should recieve a list of documents starting from an index',
-   (done) => {
-     request
-        .get('/documents?offset=2&limit=2')
-        .set('Authorization', jwt)
-        .end((err, res) => {
-          if (!err) {
-            res.should.have.status(200);
-            res.body.status.should.be.eql('success');
-          }
-          done();
-        });
-   });
   });
 
-  describe('GET /documents/:id ', () => {
-    it('A user should get a document by id \'when id exist\'', (done) => {
+  describe('GET /api/v1/roles/:id ', () => {
+    it('A user should get a role by id \'when id exist\'', (done) => {
       request
-        .get(`/documents/${registeredDocument.id}`)
+        .get(`/api/v1/roles/${registeredRole.id}`)
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -130,72 +113,74 @@ describe('/document ', () => {
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
-              res.body.message.should.be.eql('Document not found.');
+              res.body.message.should.be.eql('Role not found.');
             }
           }
           done();
         });
     });
 
-    it('A user should recieve \'Document not found\' for unknown documentid ',
+    it('A user should recieve \'Role not found\' for unknown roleid ',
     (done) => {
       request
-      .get('/documents/-2')
+      .get('/api/v1/roles/-2')
       .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
-          res.body.message.should.be.eql('Document not found.');
+          res.body.message.should.be.eql('Role not found.');
         }
         done();
       });
     });
   });
 
-  describe('PUT /documents/:id ', () => {
-    it('A user should update a document by id \'when documents exist\'',
+  describe('PUT /api/v1/documents/:id ', () => {
+    const updateRole = mockdata.updateRole;
+
+    it('A user should update a role by id \'when role exist\'',
     (done) => {
       request
-        .put('/documents/10')
-        .send(mockdata.updatedocument)
+        .put(`/api/v1/roles/${registeredRole.id}`)
         .set('Authorization', jwt)
+        .send(updateRole)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data;
+              // res.body.data;
             } else {
-              res.body.message.should.be.eql('Document not found.');
+              res.body.message.should.be.eql('Role not found.');
             }
           }
           done();
         });
     });
 
-    it('A user should recieve \'Document not found\' for unknown documentid ',
+    it('A user should recieve \'Role not found\' for unknown roleid ',
     (done) => {
       request
-      .put('/documents/-2')
+      .put('/api/v1/roles/-2')
+      .set('Authorization', jwt)
       .send(mockdata.updatedocument)
-      .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
-          res.body.message.should.be.eql('Document not found.');
+          res.body.message.should.be.eql('Role not found.');
         }
         done();
       });
     });
   });
 
-  describe('DETELE /documents/:id ', () => {
-    it('A user can delete a document by id \'when id exist\'', (done) => {
+  describe('DETELE /api/v1/roles/:id ', () => {
+    it('A user can delete a role by id \'when id exist\'', (done) => {
       request
-        .delete(`/documents/${registeredDocument.id}`)
+        .delete(`/api/v1/roles/${registeredRole.id}`)
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -204,33 +189,34 @@ describe('/document ', () => {
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
-              res.body.message.should.be.eql('Document not found.');
+              res.body.message.should.be.eql('Role not found.');
             }
           }
           done();
         });
     });
 
-    it('A user should recieve \'Document not found\' for unknown documentid',
+    it('A user should recieve \'Role not found\' for unknown userid ',
     (done) => {
       request
-      .delete('/documents/-2')
+      .delete('/api/v1/roles/-2')
       .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
-          res.body.message.should.be.eql('Document not found.');
+          res.body.message.should.be.eql('Role not found.');
         }
         done();
       });
     });
   });
 
-  describe('GET /search/documents/?q={} ', () => {
-    it('A user should get list of  user with a list of attributes', (done) => {
+  describe('GET /api/v1/roles/:id/users ', () => {
+    it('A user should get list of users belonging to a role by roleid ' +
+      '\'when id exist\'', (done) => {
       request
-        .get('/search/documents?role=1')
+        .get('/api/v1/roles/3/users')
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -238,13 +224,27 @@ describe('/document ', () => {
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data.rows.should.be.an('array');
             } else {
-              res.body.message.should.be.eql('No document found.');
+              res.body.message.should.be.eql('Role not found.');
             }
           }
           done();
         });
+    });
+
+    it('A user should recieve \'Role not found\' for unknown roleid ',
+    (done) => {
+      request
+      .get('/api/v1/roles/-2/users')
+      .set('Authorization', jwt)
+      .end((err, res) => {
+        if (!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('Role not found.');
+        }
+        done();
+      });
     });
   });
 });

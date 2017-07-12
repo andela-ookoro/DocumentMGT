@@ -16,11 +16,11 @@ const sendReponse = (status, document = {}, message = '') => {
  * @return {null} - sendReponse
  */
 const deleteDocument = documentId =>
-  axios.delete(`/documents/${documentId}`)
+  axios.delete(`/api/v1/documents/${documentId}`)
   .then(response =>
       sendReponse('success', response, '')
   )
-  .catch(error => {
+  .catch((error) => {
     if (error.response) {
       return sendReponse('failed', {}, error.response.data.message);
     }

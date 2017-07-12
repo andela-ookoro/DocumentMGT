@@ -12,20 +12,18 @@ const getDocStatus = (status, documents = []) => (
 );
 
 
-const getDocuments = (accessRight = '', title = '', offset = 0, limit = 7) =>
+const getDocByTitle = (title, owner) =>
   axios.get(
-    `/api/v1/search/documents?accessRight=${accessRight}&title=${title}&offset=${offset}&limit=${limit}`
+    `/api/v1/search/documents?`
   )
   .then(response =>
     getDocStatus('success', response.data.data, '')
   )
   .catch((error) => {
-    let message = 'An internal error occurred, please try again';
-    if (error.response.status !== 500) {
-      message = error.response.data.message;
+    if (error.response) {
+      return sendMessage('getDoucments', error.response.data.message);
     }
-    return sendMessage('getDocuments', message);
   });
 
-export default getDocuments;
+export default getDocByTitle;
 

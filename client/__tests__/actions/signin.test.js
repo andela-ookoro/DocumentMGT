@@ -37,7 +37,7 @@ const mockError = new Promise((resolve, reject) => {
   throw error;
 });
 
-// mock axios methods 
+// mock axios methods
 axios.post = jest.fn((url) => mockResponse);
 
 describe('getRoles action', () => {
@@ -46,10 +46,10 @@ describe('getRoles action', () => {
     expect(axios.post).toBeCalledWith('/users/login', mockUser);
   });
 
-  it(`should return an action with type "LOG_IN_SUCCESS" on successfull signin`,
+  it('should return an action with type "LOG_IN_SUCCESS" on successfull signin',
   () => {
     logIn(mockUser)
-    .then(response => 
+    .then(response =>
       expect(response).toEqual(expectedAction)
     );
   });
@@ -58,7 +58,7 @@ describe('getRoles action', () => {
   () => {
     axios.post = jest.fn((url) => mockError);
     logIn(mockUser)
-    .then(response => {
+    .then((response) => {
       // update "expectedAction" value to reflect new expected action
       expectedAction = {
         type: types.LOG_FAILED,

@@ -1,5 +1,7 @@
+
 const seleniumServer = require('selenium-server');
 const chromedriver = require('chromedriver');
+require('babel-polyfill');
 
 require('nightwatch-cucumber')({
   cucumberArgs: [
@@ -12,14 +14,13 @@ require('nightwatch-cucumber')({
   ]
 });
 
-
 module.exports = {
   output_folder: 'reports',
   custom_assertions_path: '',
   live_output: false,
   disable_colors: false,
   selenium: {
-    start_process: false,
+    start_process: true,
     server_path: seleniumServer.path,
     log_path: '',
     host: '127.0.0.1',
@@ -33,7 +34,12 @@ module.exports = {
       desiredCapabilities: {
         browserName: 'chrome',
         javascriptEnabled: true,
-        acceptSslCerts: true
+        acceptSslCerts: true,
+        selenium: {
+          cli_args: {
+            'webdriver.chrome.driver': chromedriver.path
+          }
+        }
       }
     },
     chrome: {
