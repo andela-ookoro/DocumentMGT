@@ -27,7 +27,8 @@ export class CreateDocument extends React.Component {
       title: '',
       curDocument: {},
       body: '',
-      docId: 0
+      docId: 0,
+      editor: null
     };
     this.saveDocument = this.saveDocument.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -46,6 +47,35 @@ export class CreateDocument extends React.Component {
     }
   }
 
+   /**
+   * @returns {null} - null
+   * @memberof CreateDocument
+   */
+  componentDidMount() {
+    tinymce.init({
+      selector: '#content',
+      plugins: 'autolink link image lists' +
+                ' print preview textcolor table emoticons codesample',
+      toolbar: 'undo redo | bold italic | ' +
+      'fontsizeselect fontselect | ' +
+      'alignleft aligncenter alignright | forecolor backcolor' +
+      '| table | numlist bullist | emoticons | codesample',
+      table_toolbar: 'tableprops tabledelete ' +
+      '| tableinsertrowbefore ' +
+      'tableinsertrowafter tabledeleterow | tableinsertcolbefore ' +
+      'tableinsertcolafter tabledeletecol',
+      fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
+      height: 300,
+      width: '100%',
+      browser_spellcheck: true,
+      setup: (editor) => {
+        this.setState({ editor });
+        setTimeout(() => {
+          editor.setContent(this.state.body);
+        }, 1000);
+      }
+    });
+  }
 
   /**
    * - runs when component recieve new props
@@ -89,6 +119,10 @@ export class CreateDocument extends React.Component {
         message
       });
     }
+  }
+
+  componentWillUnmount() {
+    tinymce.remove(this.state.editor);
   }
   /**
    * set the value of the control to the respective state node
@@ -217,20 +251,10 @@ export class CreateDocument extends React.Component {
    * @memberof CreateDocument
    */
   render() {
-    const body = this.state.body;
-    let message;
-    $(document).ready(() => {
-      tinymce.init({
-        selector: '#content',
-        height: 300,
-        width: '100%',
-        browser_spellcheck: true,
-      });
-      tinymce.get('content').on('init', (e) => {
-        e.target.setContent(body);
-      });
-    });
-
+  //   // const body = this.state.body;
+  //   $(() => {
+  //     tinymce.get('content').setContent('Helllo');
+  //   });
     return (
       <div className="container">
         <div className="body row">
@@ -298,7 +322,7 @@ export class CreateDocument extends React.Component {
                 name="action"
                 onClick={this.saveDocument}
               >
-                {(body === '') ? 'Submit' : 'Update' }
+                {(this.state.body === '') ? 'Submit' : 'Update' }
                 <i className="material-icons right">send</i>
               </button>
             </div>
@@ -334,7 +358,7 @@ CreateDocument.propTypes = {
   message: PropTypes.string,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      documentId: PropTypes.number
+      documentId: PropTypes.string
     })
   }),
   document: PropTypes.shape({
