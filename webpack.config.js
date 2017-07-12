@@ -2,6 +2,7 @@ import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import Dotenv from 'dotenv-webpack';
+import 'dotenv';
 
 
 const debug = process.env.NODE_ENV !== 'production';

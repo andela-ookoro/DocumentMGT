@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "babel-node  -- server.js",
-    "dev": "nodemon --watch server --exec babel-node  -- server.js",
+    "dev": " NODE_ENV=production nodemon --watch server --exec babel-node  -- server.js",
     "start:dev": "nodemon ./bin/www",
     "test-client": "jest  --config jest.config.js -u ",
     "test-e2e": "nightwatch",
@@ -104,6 +104,7 @@
     "nightwatch": "^0.9.16",
     "nightwatch-cucumber": "^7.1.10",
     "node-sass": "^4.5.3",
+    "nodemon": "^1.11.0",
     "nyc": "^11.0.2",
     "opn": "^5.1.0",
     "redux-mock-store": "^1.2.3",
