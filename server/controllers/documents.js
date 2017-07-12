@@ -73,6 +73,10 @@ module.exports = {
    */
   getDocument(req, res) {
     // get document with this id
+    const docID = parseInt(req.params.id, 10);
+    if (isNaN(docID)) {
+      return Utilities.sendError(res, 'Invalid document ID', 400);
+    }
     Document.findOne({
       attributes,
       where: {
@@ -89,7 +93,7 @@ module.exports = {
             accessRight: 'public',
           }
         ],
-        id: req.params.id
+        id: docID
       }
     })
     .then((document) => {
@@ -117,9 +121,13 @@ module.exports = {
    */
   deleteDocument(req, res) {
     // get document with this id
+    const docID = parseInt(req.params.id, 10);
+    if (isNaN(docID)) {
+      return Utilities.sendError(res, 'Invalid document ID', 400);
+    }
     Document.findOne({
       attributes,
-      where: { id: req.params.id, owner: req.user.id }
+      where: { id: docID, owner: req.user.id }
     })
     .then((document) => {
       if (!document) {
@@ -142,9 +150,13 @@ module.exports = {
   updateDocument(req, res) {
     // get new user info
     const changes = req.body;
-    // get user with this id
+    const docID = parseInt(req.params.id, 10);
+    if (isNaN(docID)) {
+      return Utilities.sendError(res, 'Invalid document ID', 400);
+    }
+
     Document.findOne({
-      where: { id: req.params.id, owner: req.user.id }
+      where: { id: docID, owner: req.user.id }
     })
     .then((document) => {
       if (!document) {
@@ -175,8 +187,8 @@ module.exports = {
      */
     const owner = req.query.owner || undefined;
     const title = req.query.title || '';
-    const offset = req.query.offset || 0;
-    const limit = req.query.limit || 7;
+    const offset = parseInt(req.query.offset, 10) || 0;
+    const limit = parseInt(req.query.limit, 10) || 7;
     const accessRight = req.query.accessRight || '';
 
     // ensure that a user does not access another user's document

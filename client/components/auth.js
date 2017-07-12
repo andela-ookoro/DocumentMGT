@@ -19,14 +19,19 @@ class Auth extends React.Component {
     }
   }
 
+   /**
+   * set the default view to 'myDocument'
+   * @memberof Documents
+   *  @returns {null} -
+   */
+  componentDidMount() {
+    $('ul.tabs').tabs();
+  }
   /**
    * @returns {object} - html doc
    * @memberof Auth
    */
   render() {
-    $(document).ready(() => {
-      $('ul.tabs').tabs();
-    });
     return (
       <div className="container">
         <div className="welcomeDiv">

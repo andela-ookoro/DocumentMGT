@@ -47,6 +47,14 @@ export class Documents extends React.Component {
     this.props.getDocuments('myDocument', '', 0, 6);
   }
 
+  /**
+   * set the default view to 'myDocument'
+   * @memberof Documents
+   *  @returns {null} -
+   */
+  componentDidMount() {
+    $('ul.tabs').tabs();
+  }
 
   /**
    * @param {any} nextProps -

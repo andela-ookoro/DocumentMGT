@@ -81,7 +81,9 @@ module.exports = {
       role: user.roleId,
       id: user.id
     };
-    const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET);
+    const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET, {
+      expiresIn: '1 day'
+    });
     // send response to client
     return res.status(statusCode).send({
       status: 'success',

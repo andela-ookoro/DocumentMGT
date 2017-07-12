@@ -6,7 +6,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const debug = process.env.NODE_ENV !== 'production';
 const basePlugins = [
   new webpack.ProvidePlugin({
-    $: 'jquery',
     jQuery: 'jquery',
     'window.$': 'jquery',
     'window.jQuery': 'jquery',
@@ -26,7 +25,6 @@ const basePlugins = [
 ];
 const debugPlugins = [new ExtractTextPlugin('style.css')];
 const productionPlugins = [
-  new webpack.optimize.DedupePlugin(),
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
   new ExtractTextPlugin({
