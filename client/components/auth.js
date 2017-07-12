@@ -1,7 +1,6 @@
 import React from 'react';
 import Login from './Login';
 import Signup from './Signup';
-import generateDocument from '../helpers/exportDoc';
 
 /**
  * @class Auth
@@ -18,7 +17,6 @@ class Auth extends React.Component {
     if (localStorage.getItem('jwt')) {
       window.location = '/#/dashboard';
     }
-    // generateDocument('hello', 'loved', 'loving');
   }
 
   /**
