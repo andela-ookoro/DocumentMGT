@@ -16,14 +16,11 @@ import webpackHotMiddleware from 'webpack-hot-middleware';
 // import the webpack config ftile
 import webpackConfig from './webpack.config';
 
+import routes from './server/routes';
+
 // initiate dotenv
 dotenv.config();
 
-
-
-
-
-import routes from './server/routes';
 // create new express app
 const app = express();
 const router = express.Router();
@@ -45,7 +42,7 @@ app.use(webpackHotMiddleware(webpackCompiler));
 // Log requests to the console.
 app.use(logger('dev'));
 
-// Parse incoming requests data (https://github.com/expressjs/body-parser)
+// Parse incoming requests data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -53,9 +50,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const publicPath = path.join(__dirname, 'public/');
 app.use(express.static(publicPath));
 
-// Require our routes into the application.
-// require('./server/routes')(app, express, path, passport);
-// get all routes
+// Require all routes into the application.
 routes(router);
 
 app.use('/api/v1', router);
