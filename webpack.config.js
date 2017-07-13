@@ -1,13 +1,11 @@
-import path from 'path';
-import webpack from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import Dotenv from 'dotenv-webpack';
-
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const debug = process.env.NODE_ENV !== 'production';
 const basePlugins = [
   new webpack.ProvidePlugin({
-    $: 'jquery',
     jQuery: 'jquery',
     'window.$': 'jquery',
     'window.jQuery': 'jquery',
@@ -23,20 +21,22 @@ const basePlugins = [
   new ExtractTextPlugin({
     filename: path.join(__dirname, 'public/style.css'),
     allChunks: true
-  }),
-  new Dotenv({
-    path: '.env',
-    safe: true,
   })
 ];
 const debugPlugins = [new ExtractTextPlugin('style.css')];
 const productionPlugins = [
-  new webpack.optimize.DedupePlugin(),
   new webpack.optimize.OccurrenceOrderPlugin(),
-  new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
+  new webpack.optimize.UglifyJsPlugin(),
   new ExtractTextPlugin({
     filename: path.join(__dirname, 'public/style.css'),
     allChunks: true
+  }),
+  new CompressionPlugin({
+    asset: '[path].gz[query]',
+    algorithm: 'gzip',
+    test: /\.js$|\.css$|\.html$/,
+    threshold: 10240,
+    minRatio: 0.8
   })
 ];
 

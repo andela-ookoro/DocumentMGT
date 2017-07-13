@@ -12,11 +12,9 @@ module.exports = {
    * @return {null} -
    */
   getRoles(req, res) {
-    let hint;
-    // check it limit and offset where passed
-    if (req.query.offset && req.query.limit) {
-      hint = { offset: req.query.offset, limit: req.query.limit };
-    }
+    const offset = parseInt(req.query.offset, 10) || 0;
+    const limit = parseInt(req.query.limit, 10);
+    const hint = { offset, limit };
 
     // get all users
     Role.findAll({
@@ -54,8 +52,12 @@ module.exports = {
    */
   getRole(req, res) {
     // get user with this id
+    const roleId = parseInt(req.params.id, 10);
+    if (isNaN(roleId)) {
+      return sendError(res, 'Invalid role ID', 400);
+    }
     Role.findOne({
-      where: { id: req.params.id }
+      where: { id: roleId }
     })
     .then((role) => {
       if (!role) {
@@ -74,9 +76,12 @@ module.exports = {
   updateRole(req, res) {
     // get new user info
     const changes = req.body;
-    // get user with this id
+    const roleId = parseInt(req.params.id, 10);
+    if (isNaN(roleId)) {
+      return sendError(res, 'Invalid role ID', 400);
+    }
     Role.findOne({
-      where: { id: req.params.id }
+      where: { id: roleId }
     })
     .then((role) => {
       if (!role) {
@@ -97,8 +102,12 @@ module.exports = {
    */
   deleteRole(req, res) {
     // get document with this id
+    const roleId = parseInt(req.params.id, 10);
+    if (isNaN(roleId)) {
+      return sendError(res, 'Invalid role ID', 400);
+    }
     Role.findOne({
-      where: { id: req.params.id }
+      where: { id: roleId }
     })
     .then((role) => {
       if (!role) {
@@ -120,8 +129,12 @@ module.exports = {
    */
   getUsers(req, res) {
     // get role with this id
+    const roleId = parseInt(req.params.id, 10);
+    if (isNaN(roleId)) {
+      return sendError(res, 'Invalid role ID', 400);
+    }
     Role.findOne({
-      where: { id: req.params.id }
+      where: { id: roleId }
     })
     .then((role) => {
       if (!role) {

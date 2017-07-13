@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       title: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(100),
         allowNull: false,
         validate: {
           is: {
@@ -17,17 +17,17 @@ module.exports = {
             msg: 'should contain only  alphabets'
           },
           len: {
-            arg: [2, 20],
-            msg: 'should contain between 2 to 20 letters'
+            arg: [2, 100],
+            msg: 'should contain between 2 to 100 letters'
           }
         }
       },
       synopsis: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(1000),
         allowNull: true
       },
       body: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(5000),
         allowNull: false
       },
       accessRight: {

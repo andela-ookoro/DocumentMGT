@@ -27,6 +27,12 @@ module.exports = {
         .then((foundUser) => {
           if (foundUser) {
             const userPassword = foundUser.password;
+             // check if user is disabled
+            if (foundUser.status === 'disabled') {
+              return sendError(res,
+              'This account is blocked, Please account admin',
+              401);
+            }
             // compare password
             const pass = bcrypt.compareSync(user.password, userPassword);
             if (pass) {
@@ -36,7 +42,7 @@ module.exports = {
           }
           return sendError(res, 'Wrong email or password.', 401);
         })
-        .catch(err => sendError(res, err.message));
+        .catch(err => sendError(res, err.message, 401));
     } else {
       return sendError(res, 'Email and password are compulsory.',
       500);
@@ -59,11 +65,11 @@ module.exports = {
    * @return {object} - users
    */
   getUsers(req, res) {
-    let hint;
     // check it limit and offset where passed
-    if (req.query.offset && req.query.limit) {
-      hint = { offset: req.query.offset, limit: req.query.limit };
-    }
+    const offset = parseInt(req.query.offset, 10) || 0;
+    const limit = parseInt(req.query.limit, 10) || 7;
+    const hint = { offset, limit };
+
 
     // get all users
     User.findAll({
@@ -129,7 +135,10 @@ module.exports = {
    * @return {object} - user
    */
   getUser(req, res) {
-    const userId = req.params.id;
+    const userId = parseInt(req.params.id, 10);
+    if (isNaN(userId)) {
+      return sendError(res, 'Invalid user ID', 400);
+    }
     // get user with this id
     User.findOne({
       where: { id: userId },
@@ -150,7 +159,10 @@ module.exports = {
    * @return {string } - user fullname
    */
   deleteUser(req, res) {
-    const userId = req.params.id;
+    const userId = parseInt(req.params.id, 10);
+    if (isNaN(userId)) {
+      return sendError(res, 'Invalid user ID', 400);
+    }
     // get user with this id
     User.findOne({
       where: { id: userId }
@@ -160,9 +172,8 @@ module.exports = {
         return sendError(res, 'User not found.', 200);
       }
       return user
-      .destroy()
-      .then(() => sendData(res,
-      `${user.fname} ${user.mname} ${user.lname}`, 200))
+       .update({ status: 'disabled' })
+      .then(() => sendData(res, '', 200))
       .catch(error => sendError(res, error.message, 400));
     })
     .catch(error => sendError(res, error.message, 400));
@@ -174,8 +185,10 @@ module.exports = {
    * @return {object} - user
    */
   updateUser(req, res) {
-    const userId = req.user.id;
-
+    const userId = parseInt(req.params.id, 10);
+    if (isNaN(userId)) {
+      return sendError(res, 'Invalid user ID', 400);
+    }
     // check if user wants to update his role
     if (req.body.role) {
       return sendError(res, 'Invalid operation', 403);
@@ -183,6 +196,7 @@ module.exports = {
 
     // check if old password was provide
     const curPassword = req.body.curPassword;
+    // check if user changed her email
     if (curPassword) {
       // find user
       User.findOne({
@@ -249,7 +263,10 @@ module.exports = {
    */
   getUserDocument(req, res) {
     // get user with this id
-    const userId = req.params.userId;
+    const userId = parseInt(req.params.id, 10);
+    if (isNaN(userId)) {
+      return sendError(res, 'Invalid user ID', 400);
+    }
     if (userId !== req.user.id) {
       return sendError(res, 'User not found.', 200);
     }

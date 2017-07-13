@@ -7,3 +7,4 @@ learn
 lcov.info
 bower_components
 reports
+.nyc_ouput

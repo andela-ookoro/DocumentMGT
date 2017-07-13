@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import model from '../../models/index';
 
 const User = model.user;
-const Document = model.document;
 
 module.exports = {
   /**
@@ -55,15 +54,39 @@ module.exports = {
             message: 'Failed to authenticate token.'
           });
         }
-        // attach user info to the request object
-        req.user = decoded;
-        next();
+        // check if user is disable
+        User
+        .find({
+          where: {
+            email: decoded.email
+          },
+        })
+        .then((foundUser) => {
+          if (foundUser) {
+             // check if user is disabled
+            if (foundUser.status === 'disabled') {
+              return res.status(401).send({
+                message: 'This account is blocked, Please account admin'
+              });
+            }
+             // attach user info to the request object
+            req.user = decoded;
+            next();
+          } else {
+            return res.status(401).send({
+              message: 'Wrong authentication credentials, ' +
+              'please signin/signup again'
+            });
+          }
+        })
+        .catch(err => res.status(500).send({
+          message: `Error occurred, please try again: ${err.message}`
+        })
+        );
       });
     } else {
       // if there is no token available return a message
-      return res.status(401).send({
-        message: 'No token provided.'
-      });
+      return res.status(401).send({ message: 'No token provided.' });
     }
   },
   /**
@@ -98,8 +121,8 @@ module.exports = {
    * @returns {object} - next route or error message
    */
   adminOnly(req, res, next) {
-    if (res.user.role === 'admin') {
-      return next();
+    if (res.user.role === 3) {
+      next();
     }
     return res.status(403).send({
       status: 'fail',

@@ -88,11 +88,12 @@ const mockData = {
   },
   document: {
     title: faker.lorem.words(2),
-    synopsis: faker.lorem.sentences(),
+    synopsis: faker.lorem.sentences(100),
     body: faker.lorem.sentences(),
     owner: 4,
     accessRight: 'private',
-    role: 1
+    role: 1,
+    author: 'cele'
   },
   updatedocument: {
     title: faker.lorem.words(2),
