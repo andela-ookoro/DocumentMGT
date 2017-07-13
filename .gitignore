@@ -8,3 +8,16 @@ lcov.info
 bower_components
 reports
 .nyc_ouput
+bin
+client
+coverage 
+.editorconfig
+.eslintrc
+.hound.yml
+.nycrcjkbjhb
+.travis.yml
+jest.config.js
+nightwatch.config.js
+package-lock.json
+swagger.yml
+selenium-debug.log
