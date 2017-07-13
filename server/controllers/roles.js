@@ -23,6 +23,11 @@ module.exports = {
     Role.findAll({
       attributes: ['id', 'title', 'description'],
       order: [['title', 'ASC']],
+      where: {
+        id: {
+          $ne: 3
+        }
+      },
       ...hint
     })
     .then(roles => sendData(res, roles, 200))

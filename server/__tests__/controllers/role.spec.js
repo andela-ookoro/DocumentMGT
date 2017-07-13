@@ -32,6 +32,7 @@ describe('/api/v1/document ', () => {
     .end((err, res) => {
       if (!err) {
         jwt = res.body.jwtToken;
+        console.log(',,,,,,,,,,,,,,,,,,,,', res.body);
         done();
       } else {
         console.log('.................,', err);
