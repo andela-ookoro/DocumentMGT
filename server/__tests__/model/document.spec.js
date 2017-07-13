@@ -7,28 +7,27 @@ import mockData from '../mockData';
 const Document = model.document;
 const User = model.user;
 
+
 // mock data
-let mockUser = model.user;
+let mockUser = mockData.user;
 const mockDocument = mockData.document;
 
 describe('Document Model', () => {
   let document;
    // create user to own the request
-    before((done) => {
-      User.create(mockUser)
-      .then((newuser) => {
-        mockUser = newuser;
-        // set document author and owner
-        mockDocument.owner = newuser.id;
-        mockDocument.author = newuser.fname;
-        console.log(mockDocument);
-        done();
-      })
-      .catch((error) => {
-        console.log('error....................', error);
-        done();
-      });
+  before((done) => {
+    User.create(mockUser)
+    .then((newuser) => {
+      mockUser = newuser;
+      // set document author and owner
+      mockDocument.owner = newuser.id;
+      mockDocument.author = newuser.fname;
+      done();
+    })
+    .catch(() => {
+      done();
     });
+  });
 
   describe('Create document', () => {
     it('should create new dcument', (done) => {
@@ -36,6 +35,10 @@ describe('Document Model', () => {
         .then((newDocument) => {
           document = newDocument;
           expect(document).toExist('title');
+          done();
+        })
+        .catch((error) => {
+          console.log('....................', error);
           done();
         });
     });

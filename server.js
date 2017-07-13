@@ -28,8 +28,8 @@ const router = express.Router();
 const webpackCompiler = webpack(webpackConfig);
 
 // use hemlet to disable settings that would leak security
-// app.use(helmet());
-// app.use(compression());
+app.use(helmet());
+app.use(compression());
 // use the webpack middleware in the server
 app.use(webpackMiddleware(webpackCompiler, {
   hot: true,
@@ -54,6 +54,12 @@ app.use(express.static(publicPath));
 routes(router);
 
 app.use('/api/v1', router);
+// server compressed javascript file
+app.get('*.js', (req, res, next) => {
+  req.url = `${req.url}.gz`;
+  res.set('Content-Encoding', 'gzip');
+  next();
+});
 app.all('/', (req, res) =>
   res.sendFile(`${publicPath}index.html`)
 );
@@ -62,6 +68,11 @@ app.all('/', (req, res) =>
 app.all('*', (req, res) => res.status(404).send({
   message: 'Route was not found.'
 }));
+
+// catch errors
+app.use((err, req, res) =>
+   res.send(500, { message: err.message })
+);
 
 app.listen(process.env.PORT || 1142);
 export default app;

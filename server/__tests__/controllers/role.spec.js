@@ -1,28 +1,28 @@
-
-
-// Require the dev-dependencies
-import  chai from 'chai';
+import chai from 'chai';
 import chaiHttp from 'chai-http';
-const should = chai.should();
+import supertest from 'supertest';
+
 
 import app from '../../../server';
+// import mockdata
+import mockdata from '../mockData';
 
-import supertest from 'supertest';
+const should = chai.should();
+
+
 const request = supertest.agent(app);
 chai.use(chaiHttp);
 
 
-// import mockdata
-import mockdata from '../mockData';
+
 const role = mockdata.role;
-let mockUser = mockdata.user;
+const mockUser = mockdata.user;
 const roleWithoutTitle = mockdata.roleWithoutTitle;
 const registeredRole = {};
 
 describe('/api/v1/document ', () => {
   // cache jwt and userinfo
   let jwt;
-  let testUser;
 
   // create user to own the request
   before((done) => {
@@ -32,6 +32,9 @@ describe('/api/v1/document ', () => {
     .end((err, res) => {
       if (!err) {
         jwt = res.body.jwtToken;
+        done();
+      } else {
+        console.log('.................,', err);
         done();
       }
     });
@@ -46,6 +49,10 @@ describe('/api/v1/document ', () => {
       if (!err) {
         done();
       }
+    })
+    .catch((error) => {
+      console.log('.................,', error);
+      done();
     });
   });
 
@@ -67,7 +74,8 @@ describe('/api/v1/document ', () => {
           done();
         });
     });
-    it('A user should recieve a message when compulsory fields are not provided',
+    it('A user should recieve a message when compulsory' +
+      'fields are not provided',
     (done) => {
       request
         .post('/api/v1/roles')

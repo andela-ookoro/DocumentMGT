@@ -23,7 +23,7 @@ module.exports = {
         }
       },
       synopsis: {
-        type: Sequelize.STRING(500),
+        type: Sequelize.STRING(1000),
         allowNull: true
       },
       body: {

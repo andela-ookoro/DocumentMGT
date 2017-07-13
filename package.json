@@ -11,14 +11,15 @@
     "type": "public"
   },
   "scripts": {
-    "start": "babel-node  -- server.js",
-    "dev": "  nodemon --watch server --exec babel-node  -- server.js",
+    "start": "npm run build && node server.js",
+    "build": "webpack --config webpack.config.js",
+    "dev": "nodemon --watch server --exec babel-node  -- server.js",
     "start:dev": "nodemon ./bin/www",
     "test-client": "jest  --config jest.config.js -u ",
     "test-e2e": "nightwatch",
     "acceptaneTest": "run-p -r start  test-e2e",
     "pretest": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test sequelize db:migrate",
-    "test": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test PORT=3000 nyc --reporter=html --reporter=text mocha --timeout 90000 --compilers js:babel-register -- ./server/__tests__/model/document.spec.js"
+    "test": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test PORT=3000 nyc --reporter=html --reporter=text mocha --timeout 900000 --compilers js:babel-register -- ./server/__tests__/controllers/role.spec.js"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -91,6 +92,7 @@
     "chai": "^4.0.2",
     "chai-http": "^3.0.0",
     "codecov": "^2.2.0",
+    "compression-webpack-plugin": "^0.4.0",
     "coveralls": "^2.13.1",
     "cross-env": "^5.0.1",
     "cucumber": "^2.3.1",

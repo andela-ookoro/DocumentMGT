@@ -5,17 +5,35 @@ import model from '../../models';
 import mockData from '../mockData';
 
 const User = model.user;
+const Role = model.role;
 const badUser = mockData.badUser;
-const mockUser = mockData.user;
+const mockUser = mockData.updateuser;
+const mockRole = mockData.role;
 
 describe('User Model', () => {
   let user;
+   // create role
+  before((done) => {
+    Role.create(mockRole)
+    .then((newRole) => {
+      // set user's role
+      mockUser.roleId = newRole.id;
+      done();
+    })
+    .catch(() => {
+      done();
+    });
+  });
   describe('Create User', () => {
     it('should create new user', (done) => {
       User.create(mockUser)
         .then((newuser) => {
           user = newuser;
           expect(user).toExist('fname');
+          done();
+        })
+        .catch((error) => {
+          console.log('.................,', error);
           done();
         });
     });

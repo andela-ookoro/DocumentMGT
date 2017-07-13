@@ -300,3 +300,28 @@ input[type=text].invalid {
 .errorMessage {
   color: #BD2F10;
 }
+.progress {
+    position: relative;
+    height: 4px;
+    display: block;
+    width: 100%;
+    background-color: #a1887f;
+    border-radius: 2px;
+    margin-top: -15px;
+    overflow: hidden;
+}
+
+.progress .indeterminate {
+    background-color: #ffffff;
+}
+.progress .indeterminate:before {
+    content: '';
+    position: absolute;
+    background-color: inherit;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    will-change: left, right;
+    -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+    animation: indeterminate 3.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
+}

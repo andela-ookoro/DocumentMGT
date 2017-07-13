@@ -30,7 +30,8 @@ export class Profile extends React.Component {
       password: '',
       curPassword: '',
       userid: 0,
-      validControls: {}
+      validControls: {},
+      isloading: false
     };
     this.onChange = this.onChange.bind(this);
     this.onSave = this.onSave.bind(this);
@@ -57,7 +58,8 @@ export class Profile extends React.Component {
         mname: userNames[1],
         lname: userNames[2],
         email: user.email,
-        userid: user.id
+        userid: user.id,
+        isloading: false
       });
     }
   }
@@ -77,6 +79,9 @@ export class Profile extends React.Component {
     if (nextProps.messageFrom === 'profile') {
       toaster.info(nextProps.message);
     }
+    this.setState({
+      isloading: false
+    });
   }
 
   /**
@@ -138,8 +143,14 @@ export class Profile extends React.Component {
   onSave(event) {
     event.preventDefault();
     const user = this.state;
-    // delete validControls from the user object
+    // delete validControls and message from the user object
     delete user.validControls;
+    delete user.message;
+    delete user.isloading;
+    // show preloader
+    this.setState({
+      isloading: true
+    });
     this.props.updateProfile(user);
   }
 
@@ -185,6 +196,14 @@ export class Profile extends React.Component {
     return (
       <div className="container">
         <div className="body row" >
+          {(this.state.isloading)
+            ?
+              <div className="progress">
+                <div className="indeterminate" />
+              </div>
+            :
+            ''
+          }
           <form className="col s12">
             <h6>
              Update your profile and provide your  password.
