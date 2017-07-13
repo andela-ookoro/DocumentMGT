@@ -12,14 +12,22 @@ module.exports = {
    * @return {null} -
    */
   getRoles(req, res) {
+    let hint = {}
     const offset = parseInt(req.query.offset, 10) || 0;
-    const limit = parseInt(req.query.limit, 10);
-    const hint = { offset, limit };
+    const limit = parseInt(req.query.limit, 6);
+    if (req.query.offset || req.query.limit) {
+      hint = { offset, limit };
+    }
 
     // get all users
     Role.findAll({
       attributes: ['id', 'title', 'description'],
       order: [['title', 'ASC']],
+      where: {
+        id: {
+          $ne: 3
+        }
+      },
       ...hint
     })
     .then(roles => sendData(res, roles, 200))
@@ -38,7 +46,9 @@ module.exports = {
     // check for required fields
     if (role.title) {
       Role.create(role)
-      .then(newRole => sendData(res, newRole, 201))
+      .then(newRole => {
+        return sendData(res, newRole, 201)}
+      )
       .catch(err => sendError(res, err.message, 500));
     } else {
       sendError(res, 'Role title is compulsory.', 500);

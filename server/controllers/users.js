@@ -66,10 +66,12 @@ module.exports = {
    */
   getUsers(req, res) {
     // check it limit and offset where passed
+    let hint = {}
     const offset = parseInt(req.query.offset, 10) || 0;
-    const limit = parseInt(req.query.limit, 10) || 7;
-    const hint = { offset, limit };
-
+    const limit = parseInt(req.query.limit, 6);
+    if (req.query.offset || req.query.limit) {
+      hint = { offset, limit };
+    }
 
     // get all users
     User.findAll({
@@ -97,7 +99,7 @@ module.exports = {
     // create object from request
     const user = req.body;
     // check for required fields
-    if (user.fname && user.lname && user.email && user.password) {
+    if (user.fname && user.lname && user.email && user.password && user.roleId) {
       // check if  user already exist
       User
         .find({
