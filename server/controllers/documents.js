@@ -1,5 +1,5 @@
 import model from '../models/index';
-import Utilities from './helpers/utilities';
+import {sendError,sendData } from './helpers/utilities';
 
 const User = model.user;
 const Document = model.document;
@@ -31,7 +31,7 @@ module.exports = {
       documents
     })
     )
-    .catch(error => Utilities.sendError(res, error.message, 500));
+    .catch(error => sendError(res, error.message, 500));
   },
    /**
    * - create a document
@@ -53,15 +53,15 @@ module.exports = {
         document.author = `${user.fname} ${user.mname} ${user.lname}`;
         Document.create(document)
         .then((newdocument) => {
-          Utilities.sendData(res, newdocument, 201);
+         sendData(res, newdocument, 201);
         })
         .catch((err) => {
-          Utilities.sendError(res, err.message, 500);
+          sendError(res, err.message, 500);
         });
       })
-      .catch(error => Utilities.sendError(res, error.message, 400));
+      .catch(error => sendError(res, error.message, 400));
     } else {
-      Utilities.sendError(res, 'Document\'s title and body are compulsory.',
+      sendError(res, 'Document\'s title and body are compulsory.',
       500);
     }
   },
@@ -75,7 +75,7 @@ module.exports = {
     // get document with this id
     const docID = parseInt(req.params.id, 10);
     if (isNaN(docID)) {
-      return Utilities.sendError(res, 'Invalid document ID', 400);
+      return sendError(res, 'Invalid document ID', 400);
     }
     Document.findOne({
       attributes,
@@ -98,20 +98,20 @@ module.exports = {
     })
     .then((document) => {
       if (!document) {
-        return Utilities.sendError(res, 'Document not found.', 200);
+        return sendError(res, 'Document not found.', 200);
       } else if (document.accessRight === 'private'
        && document.owner !== req.user.id) {
-        return Utilities.sendError(res, 'Document not found.', 200);
+        return sendError(res, 'Document not found.', 200);
       } else if (document.accessRight === 'role') {
         if (document.role !== req.user.role
              && document.owner !== req.user.id) {
-          return Utilities.sendError(res, 'Document not found.', 200);
+          return sendError(res, 'Document not found.', 200);
         }
-        return Utilities.sendData(res, document, 200);
+        return sendData(res, document, 200);
       }
-      return Utilities.sendData(res, document, 200);
+      return sendData(res, document, 200);
     })
-    .catch(error => Utilities.sendError(res, error.message, 400));
+    .catch(error => sendError(res, error.message, 400));
   },
    /**
    * - delete a document by id
@@ -123,7 +123,7 @@ module.exports = {
     // get document with this id
     const docID = parseInt(req.params.id, 10);
     if (isNaN(docID)) {
-      return Utilities.sendError(res, 'Invalid document ID', 400);
+      return sendError(res, 'Invalid document ID', 400);
     }
     Document.findOne({
       attributes,
@@ -131,15 +131,15 @@ module.exports = {
     })
     .then((document) => {
       if (!document) {
-        return Utilities.sendError(res, 'Document not found.', 200);
+        return sendError(res, 'Document not found.', 200);
       }
 
       return document
       .destroy()
-      .then(() => Utilities.sendData(res, document, 200))
-      .catch(error => Utilities.sendError(res, error.message, 400));
+      .then(() => sendData(res, document, 200))
+      .catch(error => sendError(res, error.message, 400));
     })
-    .catch(error => Utilities.sendError(res, error.message, 400));
+    .catch(error => sendError(res, error.message, 400));
   },
    /**
    * - update a document by id
@@ -152,7 +152,7 @@ module.exports = {
     const changes = req.body;
     const docID = parseInt(req.params.id, 10);
     if (isNaN(docID)) {
-      return Utilities.sendError(res, 'Invalid document ID', 400);
+      return sendError(res, 'Invalid document ID', 400);
     }
 
     Document.findOne({
@@ -160,16 +160,16 @@ module.exports = {
     })
     .then((document) => {
       if (!document) {
-        return Utilities.sendError(res, 'Document not found.', 200);
+        return sendError(res, 'Document not found.', 200);
       }
       return document
       .update(changes)
       .then(() =>
-         Utilities.sendData(res, document, 200)
+         sendData(res, document, 200)
       )
-      .catch(error => Utilities.sendError(res, error.message, 400));
+      .catch(error => sendError(res, error.message, 400));
     })
-    .catch(error => Utilities.sendError(res, error.message, 400));
+    .catch(error => sendError(res, error.message, 400));
   },
    /**
    * - get documents that has a list of attributes
@@ -193,7 +193,7 @@ module.exports = {
 
     // ensure that a user does not access another user's document
     if (owner && owner !== req.user.id) {
-      return Utilities.sendError(res, 'No document was found.', 401);
+      return sendError(res, 'No document was found.', 401);
     }
 
     // remove offset and limit from query
@@ -217,7 +217,7 @@ module.exports = {
           delete req.query.accessRight;
           break;
         default :
-          return Utilities.sendError(res, 'No document was found.', 401);
+          return sendError(res, 'No document was found.', 401);
       }
       if (req.query.title === '') {
         delete req.query.title;
@@ -286,11 +286,13 @@ module.exports = {
     // get the documents
     documentQuery
     .then((documents) => {
-      if (!documents) {
-        return Utilities.sendError(res, 'No document was found.', 200);
+      if (documents.length < 1) {
+        return sendError(res, 'No document was found.', 200);
+        console.log('came here with....jbjbjjbjbjjj..............', documents);
       }
-      return Utilities.sendData(res, documents, 200);
+      return sendData(res, documents, 200);
+      console.log('came here with..................', documents);
     })
-    .catch(error => Utilities.sendError(res, error.message, 500));
+    .catch(error => sendError(res, error.message, 500));
   },
 };

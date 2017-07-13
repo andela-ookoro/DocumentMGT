@@ -72,28 +72,23 @@ export class Documents extends React.Component {
       documents: nextProps.documents,
       pageCount: nextProps.pageCount
     });
-
+    const message = nextProps.message;
     // show error message when error is reported
-    if (nextProps.messageFrom === 'getDocuments') {
+    if (nextProps.messageFrom === 'getDocuments'
+      || nextProps.messageFrom === 'deleteDocument' || nextProps.documents) {
+      // show message only when message exists
+      if (message !== '') {
+        toaster.info(nextProps.message);
+      }
       this.setState({
+        message,
         isloading: false
-      });
-      toaster.info(nextProps.message);
-      this.setState({
-        message: nextProps.message
-      });
-    } else if (nextProps.messageFrom === 'deleteDocument') {
-      this.setState({
-        isloading: false
-      });
-      toaster.info(nextProps.message);
-      this.setState({
-        message: nextProps.message
       });
     } else {
       // reset message state
       this.setState({
-        message: ''
+        message: '',
+        isloading: false
       });
     }
   }
@@ -181,12 +176,12 @@ export class Documents extends React.Component {
             :
             ''
           }
-          <div className="col s12 m8 l6" id="searchDiv">
+          <div className="col s12 m8 l10" id="searchDiv">
             <div className="row">
               <form>
-                <p className="errorMessage col s12 m12 l3 ">
+                <p className="errorMessage col s12 m12 l5 ">
                   {this.state.message} </p>
-                <div className="col s9 m8 l7">
+                <div className="col s9 m8 l5">
                   <input
                     placeholder="Search for documents"
                     type="text"

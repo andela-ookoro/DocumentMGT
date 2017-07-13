@@ -42,7 +42,7 @@ module.exports = {
           }
           return sendError(res, 'Wrong email or password.', 401);
         })
-        .catch(err => sendError(res, err.message));
+        .catch(err => sendError(res, err.message, 401));
     } else {
       return sendError(res, 'Email and password are compulsory.',
       500);

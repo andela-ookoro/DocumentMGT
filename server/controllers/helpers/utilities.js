@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import model from '../../models/index';
 
 const User = model.user;
-const Document = model.document;
 
 module.exports = {
   /**
@@ -70,25 +69,24 @@ module.exports = {
                 message: 'This account is blocked, Please account admin'
               });
             }
+             // attach user info to the request object
+            req.user = decoded;
+            next();
+          } else {
+            return res.status(401).send({
+              message: 'Wrong authentication credentials, ' +
+              'please signin/signup again'
+            });
           }
-          return res.status(401).send({
-            message: 'Wrong authentication credentials, ' +
-            'please signin/signup again'
-          });
         })
         .catch(err => res.status(500).send({
           message: `Error occurred, please try again: ${err.message}`
         })
         );
-        // attach user info to the request object
-        req.user = decoded;
-        next();
       });
     } else {
       // if there is no token available return a message
-      return res.status(401).send({
-        message: 'No token provided.'
-      });
+      return res.status(401).send({ message: 'No token provided.' });
     }
   },
   /**
@@ -106,9 +104,7 @@ module.exports = {
       role: user.roleId,
       id: user.id
     };
-    const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET, {
-      expiresIn: '1 day'
-    });
+    const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET);
     // send response to client
     return res.status(statusCode).send({
       status: 'success',
@@ -126,7 +122,7 @@ module.exports = {
    */
   adminOnly(req, res, next) {
     if (res.user.role === 3) {
-      return next();
+      next();
     }
     return res.status(403).send({
       status: 'fail',

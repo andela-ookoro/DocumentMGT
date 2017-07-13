@@ -325,3 +325,8 @@ input[type=text].invalid {
     -webkit-animation: indeterminate 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
     animation: indeterminate 3.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite;
 }
+
+.toast-info {
+    background-color: #a1887f;
+    color: #f9f8f2 !important;
+}

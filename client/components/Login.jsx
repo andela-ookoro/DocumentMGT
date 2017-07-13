@@ -97,7 +97,7 @@ export class Login extends React.Component {
       validControls
     });
     // enable button when every control is valid
-    if (Object.keys(validControls).length === 1) {
+    if (Object.keys(validControls).length === 2) {
       document.getElementById('signinSubmit').disabled = false;
     } else {
       document.getElementById('signinSubmit').disabled = true;
