@@ -55,6 +55,31 @@ module.exports = {
             message: 'Failed to authenticate token.'
           });
         }
+        // check if user is disable
+        User
+        .find({
+          where: {
+            email: decoded.email
+          },
+        })
+        .then((foundUser) => {
+          if (foundUser) {
+             // check if user is disabled
+            if (foundUser.status === 'disabled') {
+              return res.status(401).send({
+                message: 'This account is blocked, Please account admin'
+              });
+            }
+          }
+          return res.status(401).send({
+            message: 'Wrong authentication credentials, ' +
+            'please signin/signup again'
+          });
+        })
+        .catch(err => res.status(500).send({
+          message: `Error occurred, please try again: ${err.message}`
+        })
+        );
         // attach user info to the request object
         req.user = decoded;
         next();
@@ -100,7 +125,7 @@ module.exports = {
    * @returns {object} - next route or error message
    */
   adminOnly(req, res, next) {
-    if (res.user.role === 'admin') {
+    if (res.user.role === 3) {
       return next();
     }
     return res.status(403).send({

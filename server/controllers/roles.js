@@ -13,7 +13,7 @@ module.exports = {
    */
   getRoles(req, res) {
     const offset = parseInt(req.query.offset, 10) || 0;
-    const limit = parseInt(req.query.limit, 10) || 7;
+    const limit = parseInt(req.query.limit, 10);
     const hint = { offset, limit };
 
     // get all users

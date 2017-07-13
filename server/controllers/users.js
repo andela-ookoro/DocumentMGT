@@ -27,6 +27,12 @@ module.exports = {
         .then((foundUser) => {
           if (foundUser) {
             const userPassword = foundUser.password;
+             // check if user is disabled
+            if (foundUser.status === 'disabled') {
+              return sendError(res,
+              'This account is blocked, Please account admin',
+              401);
+            }
             // compare password
             const pass = bcrypt.compareSync(user.password, userPassword);
             if (pass) {
@@ -166,9 +172,8 @@ module.exports = {
         return sendError(res, 'User not found.', 200);
       }
       return user
-      .destroy()
-      .then(() => sendData(res,
-      `${user.fname} ${user.mname} ${user.lname}`, 200))
+       .update({ status: 'disabled' })
+      .then(() => sendData(res, '', 200))
       .catch(error => sendError(res, error.message, 400));
     })
     .catch(error => sendError(res, error.message, 400));

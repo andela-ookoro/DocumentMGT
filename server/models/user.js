@@ -68,6 +68,10 @@ module.exports = (sequelize, DataTypes) => {
         deferrable: sequelize.Deferrable.INITIALLY_IMMEDIATE
       },
     },
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: 'active',
+    }
   }, {
     classMethods: {
       associate: (models) => {

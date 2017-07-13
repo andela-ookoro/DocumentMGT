@@ -11,7 +11,7 @@
     "type": "public"
   },
   "scripts": {
-    "start": "npm run build && node server.js",
+    "start": "babel-node server.js",
     "build": "webpack --config webpack.config.js",
     "dev": "nodemon --watch server --exec babel-node  -- server.js",
     "start:dev": "nodemon ./bin/www",
@@ -86,13 +86,13 @@
     "toastr": "^2.1.2",
     "webpack": "^2.6.1",
     "webpack-dev-middleware": "^1.10.2",
-    "webpack-hot-middleware": "^2.18.0"
+    "webpack-hot-middleware": "^2.18.0",
+    "compression-webpack-plugin": "^0.4.0"
   },
   "devDependencies": {
     "chai": "^4.0.2",
     "chai-http": "^3.0.0",
     "codecov": "^2.2.0",
-    "compression-webpack-plugin": "^0.4.0",
     "coveralls": "^2.13.1",
     "cross-env": "^5.0.1",
     "cucumber": "^2.3.1",
