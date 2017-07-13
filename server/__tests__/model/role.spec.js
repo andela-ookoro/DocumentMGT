@@ -16,7 +16,7 @@ describe('Role Model', () => {
           role = createdRole;
           expect(role).toExist('title');
           done();
-        })
+        });
     });
 
     it('created role should exist', () => {

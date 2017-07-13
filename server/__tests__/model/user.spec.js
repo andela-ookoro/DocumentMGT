@@ -17,7 +17,7 @@ describe('User Model', () => {
           user = newuser;
           expect(user).toExist('fname');
           done();
-        })
+        });
     });
 
     it('created role should exist', () => {

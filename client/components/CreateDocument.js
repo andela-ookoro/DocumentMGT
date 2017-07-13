@@ -85,7 +85,7 @@ export class CreateDocument extends React.Component {
    */
   componentWillReceiveProps(nextProps) {
     // show the document for update
-    if (nextProps.document) {
+    if (nextProps.document !== {}) {
       const curDocument = nextProps.document;
       this.setState({
         title: curDocument.title,

@@ -1,6 +1,9 @@
 {
   "name": "documentmgt",
   "version": "1.0.0",
+  "engines": {
+    "node": "8.0.0"
+  },
   "description": "document management system ",
   "main": ".eslintrc.js",
   "repository": {
@@ -15,7 +18,7 @@
     "test-e2e": "nightwatch",
     "acceptaneTest": "run-p -r start  test-e2e",
     "pretest": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test sequelize db:migrate",
-    "test": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test PORT=3000 nyc --reporter=html --reporter=text mocha --timeout 90000 --compilers js:babel-register -- ./server/__tests__/**/*.spec.js"
+    "test": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test PORT=3000 nyc --reporter=html --reporter=text mocha --timeout 90000 --compilers js:babel-register -- ./server/__tests__/model/document.spec.js"
   },
   "dependencies": {
     "axios": "^0.16.2",

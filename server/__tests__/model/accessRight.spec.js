@@ -16,7 +16,7 @@ describe('AccessRight Model', () => {
           accessRight = newAccessRight;
           expect(accessRight).toExist('title');
           done();
-        })
+        });
     });
 
     it('created accessRight should exist', () => {

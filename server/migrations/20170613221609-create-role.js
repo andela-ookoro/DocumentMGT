@@ -24,7 +24,7 @@ module.exports = {
         }
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(200),
         allowNull: true
       },
       status: {

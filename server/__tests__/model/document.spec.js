@@ -5,26 +5,39 @@ import model from '../../models';
 import mockData from '../mockData';
 
 const Document = model.document;
-const AccessRight = model.accessRight;
 const User = model.user;
 
 // mock data
-const mockUser = mockData.user;
-const mockAccessRight = mockData.accessRight;
+let mockUser = model.user;
 const mockDocument = mockData.document;
 
 describe('Document Model', () => {
   let document;
+   // create user to own the request
+    before((done) => {
+      User.create(mockUser)
+      .then((newuser) => {
+        mockUser = newuser;
+        // set document author and owner
+        mockDocument.owner = newuser.id;
+        mockDocument.author = newuser.fname;
+        console.log(mockDocument);
+        done();
+      })
+      .catch((error) => {
+        console.log('error....................', error);
+        done();
+      });
+    });
 
   describe('Create document', () => {
-    expect(2).toBe(2);
     it('should create new dcument', (done) => {
       Document.create(mockDocument)
         .then((newDocument) => {
           document = newDocument;
           expect(document).toExist('title');
           done();
-        })
+        });
     });
 
     it('created document should exist', () => {
