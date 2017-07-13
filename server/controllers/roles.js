@@ -46,7 +46,9 @@ module.exports = {
     // check for required fields
     if (role.title) {
       Role.create(role)
-      .then(newRole => sendData(res, newRole, 201))
+      .then(newRole => {
+        return sendData(res, newRole, 201)}
+      )
       .catch(err => sendError(res, err.message, 500));
     } else {
       sendError(res, 'Role title is compulsory.', 500);

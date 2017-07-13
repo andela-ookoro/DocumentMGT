@@ -121,8 +121,8 @@ module.exports = {
    * @returns {object} - next route or error message
    */
   adminOnly(req, res, next) {
-    if (res.user.role === 3) {
-      next();
+    if (req.user.role === 3) {
+      return next();
     }
     return res.status(403).send({
       status: 'fail',

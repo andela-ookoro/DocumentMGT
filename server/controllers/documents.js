@@ -288,10 +288,8 @@ module.exports = {
     .then((documents) => {
       if (documents.length < 1) {
         return sendError(res, 'No document was found.', 200);
-        console.log('came here with....jbjbjjbjbjjj..............', documents);
       }
       return sendData(res, documents, 200);
-      console.log('came here with..................', documents);
     })
     .catch(error => sendError(res, error.message, 500));
   },

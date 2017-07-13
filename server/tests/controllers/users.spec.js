@@ -34,6 +34,8 @@ describe('/api/v1/users ', () => {
         // store registered user for futher testing
         registeredUser.email = user.email;
         registeredUser.password = user.password;
+        registeredUser.id = res.body.id;
+        console.log('registeredUser.........................',res.body, registeredUser);
         done();
       }
     });
@@ -65,10 +67,10 @@ describe('/api/v1/users ', () => {
         .send(user)
         .end((err, res) => {
           if (res) {
-            res.should.have.status(500);
+            res.should.have.status(400);
             res.body.status.should.be.eql('fail');
-            res.body.message.should.be.eql('First name, last name, ' +
-            'email and password are compulsory.');
+            res.body.message.should.be.eql('First name, last name, email, role'
+             + '  and password are compulsory.');
           }
           done();
         });
@@ -160,7 +162,7 @@ describe('/api/v1/users ', () => {
   describe('GET /api/v1/users/:id ', () => {
     it('A user should get a user by id \'when id exist\'', (done) => {
       request
-        .get('/api/v1/users/1')
+        .get(`/api/v1/users/${registeredUser.id}`)
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -196,7 +198,7 @@ describe('/api/v1/users ', () => {
   describe('PUT /api/v1/users/:id ', () => {
     it('A user should update a user by id \'when id exist\'', (done) => {
       request
-        .put('/api/v1/users/1')
+        .put(`/api/v1/users/${registeredUser.id}`)
         .set('Authorization', jwt)
         .send(mockdata.updateuser)
         .end((err, res) => {
@@ -230,40 +232,6 @@ describe('/api/v1/users ', () => {
     });
   });
 
-  describe('DETELE /api/v1/users/:id ', () => {
-    it('A user can delete a user by id \'when id exist\'', (done) => {
-      request
-        .delete('/api/v1/users/1')
-        .set('Authorization', jwt)
-        .end((err, res) => {
-          if (!err) {
-            res.should.have.status(200);
-            // if there is no error, that is user exist
-            if (!res.body.message) {
-              res.body.status.should.be.eql('success');
-            } else {
-              res.body.message.should.be.eql('User not found.');
-            }
-          }
-          done();
-        });
-    });
-
-    it('A user should recieve \'User not found\' for unknown userid ',
-    (done) => {
-      request
-      .delete('/api/v1/users/-2')
-      .set('Authorization', jwt)
-      .end((err, res) => {
-        if (!err) {
-          res.should.have.status(200);
-          res.body.status.should.be.eql('fail');
-          res.body.message.should.be.eql('User not found.');
-        }
-        done();
-      });
-    });
-  });
 
   describe('GET /api/v1/search/users/?q={} ', () => {
     it('A user should get list of  user with a list of attributes', (done) => {
@@ -290,7 +258,7 @@ describe('/api/v1/users ', () => {
     it('A user should get a documents belonging to a user by userid ' +
       '\'when id exist\'', (done) => {
       request
-        .get('/api/v1/users/4/documents')
+        .get(`/api/v1/users/${registeredUser.id}/documents`)
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -310,6 +278,41 @@ describe('/api/v1/users ', () => {
     (done) => {
       request
       .get('/api/v1/users/-2/documents')
+      .set('Authorization', jwt)
+      .end((err, res) => {
+        if (!err) {
+          res.should.have.status(200);
+          res.body.status.should.be.eql('fail');
+          res.body.message.should.be.eql('User not found.');
+        }
+        done();
+      });
+    });
+  });
+
+  describe('DETELE /api/v1/users/:id ', () => {
+    it('A user can delete a user by id \'when id exist\'', (done) => {
+      request
+        .delete(`/api/v1/users/${registeredUser.id}`)
+        .set('Authorization', jwt)
+        .end((err, res) => {
+          if (!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist
+            if (!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('User not found.');
+            }
+          }
+          done();
+        });
+    });
+
+    it('A user should recieve \'User not found\' for unknown userid ',
+    (done) => {
+      request
+      .delete(`/api/v1/users/${registeredUser.id}`)
       .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {

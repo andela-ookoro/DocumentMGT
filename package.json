@@ -19,7 +19,7 @@
     "test-e2e": "nightwatch",
     "acceptaneTest": "run-p -r start  test-e2e",
     "pretest": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test sequelize db:migrate",
-    "test": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test PORT=3000 nyc --reporter=html --reporter=text mocha --timeout 900000 --compilers js:babel-register -- ./server/__tests__/controllers/role.spec.js"
+    "test": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test PORT=3000 nyc --reporter=html --reporter=text mocha --timeout 900000 --compilers js:babel-register -- ./server/tests/controllers/users.spec.js"
   },
   "dependencies": {
     "axios": "^0.16.2",

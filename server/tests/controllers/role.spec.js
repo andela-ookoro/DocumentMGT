@@ -20,7 +20,7 @@ const mockUser = mockdata.user;
 const roleWithoutTitle = mockdata.roleWithoutTitle;
 const registeredRole = {};
 
-describe('/api/v1/document ', () => {
+describe('/api/v1/role ', () => {
   // cache jwt and userinfo
   let jwt;
 
@@ -32,10 +32,8 @@ describe('/api/v1/document ', () => {
     .end((err, res) => {
       if (!err) {
         jwt = res.body.jwtToken;
-        console.log(',,,,,,,,,,,,,,,,,,,,', res.body);
         done();
       } else {
-        console.log('.................,', err);
         done();
       }
     });
@@ -49,15 +47,13 @@ describe('/api/v1/document ', () => {
     .end((err, res) => {
       if (!err) {
         done();
+      } else {
+        done();
       }
-    })
-    .catch((error) => {
-      console.log('.................,', error);
-      done();
     });
   });
 
-  describe('POST /api/v1/document ', () => {
+  describe('POST /api/v1/roles ', () => {
     it('As a user , I should be able to create a role', (done) => {
       request
         .post('/api/v1/roles')
@@ -145,7 +141,7 @@ describe('/api/v1/document ', () => {
     });
   });
 
-  describe('PUT /api/v1/documents/:id ', () => {
+  describe('PUT /api/v1/roles/:id ', () => {
     const updateRole = mockdata.updateRole;
 
     it('A user should update a role by id \'when role exist\'',

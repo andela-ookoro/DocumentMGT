@@ -70,9 +70,9 @@ app.all('*', (req, res) => res.status(404).send({
 }));
 
 // catch errors
-app.use((err, req, res) =>
-   res.send(500, { message: err.message })
-);
+app.use((err, req, res) => {
+  res.send(500, { message: err.message })
+});
 
 app.listen(process.env.PORT || 1142);
 export default app;
