@@ -234,28 +234,6 @@ export class CreateDocument extends React.Component {
       };
       // call upsertDocument action
       this.props.upsertDocument(document, this.state.docId);
-    //   .then(response => {
-    //     message = 'Document has been saved successfully';
-    //     // reset  state
-    //     this.setState({
-    //       message,
-    //       title: '',
-    //       curDocument: {},
-    //       body: ''
-    //     });
-    //     if (message) {
-    //       Materialize.toast(message, 3000, 'rounded')
-    //     }
-    //   },
-    //   (error) => {
-    //     message = error.data.message;
-    //     this.setState({
-    //       message
-    //     });
-    //     if (message) {
-    //       Materialize.toast(message, 3000, 'rounded')
-    //     }
-    //  })
     }
   }
 

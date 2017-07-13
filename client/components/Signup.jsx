@@ -189,66 +189,6 @@ export class Signup extends React.Component {
    * @memberof Signup
    */
   render() {
-    // materailze form validation
-   /**
-    $(document).ready(() => {
-      $('form').validate({
-        rules: {
-          fname: {
-            required: true,
-            minlength: 2
-          },
-          lname: {
-            required: true,
-            minlength: 2
-          },
-          email: {
-            required: true,
-            email: true
-          },
-          password: {
-            required: true,
-            minlength: 8
-          },
-          confirm_password: {
-            required: true,
-            minlength: 8,
-            equalTo: '#password'
-          },
-          roleId: {
-            required: true,
-          }
-        },
-        // For custom messages
-        messages: {
-          fname: {
-            required: 'Please enter your first name.',
-            minlength: 'You sure you\'re named with one letter?'
-          },
-          lname: {
-            required: 'Please enter your last name.',
-            minlength: 'You sure you\'re named with one letter?'
-          },
-          email: {
-            required: 'Please enter your email address.',
-            email: 'Please enter a valid email address.'
-          },
-          password: {
-            required: 'Please enter a password.',
-            minlength: 'Password must be atleast 8 characters.'
-          },
-          confirm_pass: {
-            required: 'Please confirm your password.',
-            minlength: 'Password must be atleast 8 characters.',
-            equalTo: 'Password does not match.'
-          },
-          roleID: {
-            required: 'Please select  your role.',
-          }
-        }
-      });
-    });
-    */
     return (
       <div className="body row" id="signup">
         {(this.state.isloading)
