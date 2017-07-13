@@ -12,9 +12,12 @@ module.exports = {
    * @return {null} -
    */
   getRoles(req, res) {
+    let hint = {}
     const offset = parseInt(req.query.offset, 10) || 0;
-    const limit = parseInt(req.query.limit, 10);
-    const hint = { offset, limit };
+    const limit = parseInt(req.query.limit, 6);
+    if (req.query.offset || req.query.limit) {
+      hint = { offset, limit };
+    }
 
     // get all users
     Role.findAll({
