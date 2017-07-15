@@ -35,17 +35,13 @@ Document Hub uses [React](https://facebook.github.io/react/) and [Materialize cs
 * Install the app's backend dependencies.Open node.js, navigate to the directory that contains the application code base,then enter the command below:
    >npm install
    #### Create a .env file in the root folder with the variables in the .env.example file; ensure that your change the values to real values.The variable includes JWT secret token and database remote URl.
-* The project test includes unit test and end to end test.It uses jest and nightmare for testing.
-  #### To run test on the project, enter the command below
-  > npm test
-
 * To start the application enter the command below in the terminal:
    >npm run dev
 * If the command run successfully, node.js would display the text below.
 
   ```
   ----------------------------------------------------------------------
-  Completenews running at  http://localhost:1142
+  Dochub running at  http://localhost:1142
 
   ```
 * Open the  **[link](http://localhost:1142)** on a browser to view the application.
@@ -56,7 +52,7 @@ Document Hub uses [React](https://facebook.github.io/react/) and [Materialize cs
 * API server files are stored in `server` folder
 * Test scripts are stored in the `(client|server)/__tests__` folder
 
-##Contribution
+## Contribution
  ### To contribute to this project, follow the steps below:
   * Clone the repository as described in the section 'Installation and setup' above
   * Create a branch using the format, branch name => `Feature_<few words about your contribution>` 

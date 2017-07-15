@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { CreateDocument } from '../../components/CreateDocument';
-import mockData from '../../../server/__test__/mockData';
+import mockData from '../../../server/tests/mockData';
 
 let mockDocument = mockData.document;
 mockDocument.createdAt = new Date();

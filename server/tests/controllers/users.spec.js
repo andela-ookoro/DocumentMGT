@@ -1,20 +1,25 @@
-
-
 // Require the dev-dependencies
 import  chai from 'chai';
 import chaiHttp from 'chai-http';
-const should = chai.should();
-
+import supertest from 'supertest'
+import faker from 'faker';
 import app from '../../../server';
 
-import supertest from 'supertest';
+const should = chai.should();
 const request = supertest.agent(app);
 chai.use(chaiHttp);
 
 
 // import mockdata
 import mockdata from '../mockData';
-let user = mockdata.user;
+let user = {
+  fname: faker.name.firstName(),
+  lname: faker.name.lastName(),
+  mname: faker.name.firstName(),
+  password: '!smilesh2o',
+  email: faker.internet.email(),
+  roleId: 3
+};;
 let secondUser = mockdata.user;
 const registeredUser = {};
 
@@ -34,8 +39,7 @@ describe('/api/v1/users ', () => {
         // store registered user for futher testing
         registeredUser.email = user.email;
         registeredUser.password = user.password;
-        registeredUser.id = res.body.id;
-        console.log('registeredUser.........................',res.body, registeredUser);
+        registeredUser.id = res.body.userInfo.id;
         done();
       }
     });
@@ -131,7 +135,7 @@ describe('/api/v1/users ', () => {
     it('A user should recieve a list of all users when no query is passed',
     (done) => {
       request
-        .get('/users')
+        .get('/api/v1//users')
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -143,9 +147,9 @@ describe('/api/v1/users ', () => {
         });
     });
 
-    it('A user should recieve a limited list of users starting from an index',
-   (done) => {
-     request
+   it('A user should recieve a limited list of users starting from an index',
+    (done) => {
+      request
         .get('/api/v1/users?offset=2&limit=5')
         .set('Authorization', jwt)
         .end((err, res) => {
@@ -156,7 +160,7 @@ describe('/api/v1/users ', () => {
           }
           done();
         });
-   });
+    });
   });
 
   describe('GET /api/v1/users/:id ', () => {
@@ -171,14 +175,14 @@ describe('/api/v1/users ', () => {
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
-              res.body.message.should.be.eql('User not found.');
+              res.body.message.should.be.eql('User was not found.');
             }
           }
           done();
         });
     });
 
-    it('A user should recieve \'User not found\' for unknown userid ',
+    it('A user should recieve \'User was not found\' for unknown userid ',
     (done) => {
       request
       .get('/api/v1/users/-2')
@@ -186,52 +190,14 @@ describe('/api/v1/users ', () => {
       .end((err, res) => {
         if (!err) {
           // test response
-          res.should.have.status(200);
+          res.should.have.status(404);
           res.body.status.should.be.eql('fail');
-          res.body.message.should.be.eql('User not found.');
+          res.body.message.should.be.eql('User was not found.');
         }
         done();
       });
     });
   });
-
-  describe('PUT /api/v1/users/:id ', () => {
-    it('A user should update a user by id \'when id exist\'', (done) => {
-      request
-        .put(`/api/v1/users/${registeredUser.id}`)
-        .set('Authorization', jwt)
-        .send(mockdata.updateuser)
-        .end((err, res) => {
-          if (!err) {
-            res.should.have.status(200);
-            // if there is no error, that is user exist
-            if (!res.body.message) {
-              res.body.status.should.be.eql('success');
-            } else {
-              res.body.message.should.be.eql('User not found.');
-            }
-          }
-          done();
-        });
-    });
-
-    it('A user should recieve \'User not found\' for unknown userid ',
-    (done) => {
-      request
-      .put('/api/v1/users/-2')
-      .set('Authorization', jwt)
-      .send(mockdata.user)
-      .end((err, res) => {
-        if (!err) {
-          res.should.have.status(200);
-          res.body.status.should.be.eql('fail');
-          res.body.message.should.be.eql('User not found.');
-        }
-        done();
-      });
-    });
-  });
-
 
   describe('GET /api/v1/search/users/?q={} ', () => {
     it('A user should get list of  user with a list of attributes', (done) => {
@@ -267,14 +233,14 @@ describe('/api/v1/users ', () => {
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
-              res.body.message.should.be.eql('User not found.');
+              res.body.message.should.be.eql('User was not found.');
             }
           }
           done();
         });
     });
 
-    it('A user should recieve \'User not found\' for unknown userid ',
+    it('A user should recieve \'User was not found\' for unknown userid ',
     (done) => {
       request
       .get('/api/v1/users/-2/documents')
@@ -283,15 +249,86 @@ describe('/api/v1/users ', () => {
         if (!err) {
           res.should.have.status(200);
           res.body.status.should.be.eql('fail');
-          res.body.message.should.be.eql('User not found.');
+          res.body.message.should.be.eql('User was not found.');
         }
         done();
       });
     });
   });
 
+ describe('PUT /api/v1/users/:id ', () => {
+  let update = {
+      curPassword: '!smilesh2o',
+      fname: 'testinknknkkng'
+    }
+  it('A user should update a user by id \'when id exist\'', (done) => {
+    request
+      .put(`/api/v1/users/${registeredUser.id}`)
+      .set('Authorization', jwt)
+      .send(update)
+      .end((err, res) => {
+        if (!err) {
+          res.should.have.status(200);
+          // if there is no error, that is user exist
+          if (!res.body.message) {
+            res.body.status.should.be.eql('success');
+          } else {
+            res.body.message.should.be.eql('User was not found.');
+          }
+        }
+        done();
+      });
+  });
+
+  it('A user should recieve \'user was not found\' for unknown userid ',
+  (done) => {
+    request
+    .put('/api/v1/users/-2')
+    .set('Authorization', jwt)
+    .send(update)
+    .end((err, res) => {
+      if (!err) {
+        res.should.have.status(200);
+        res.body.status.should.be.eql('fail');
+        res.body.message.should.be.eql('User was not found');
+      }
+      done();
+    });
+  });
+});
+
   describe('DETELE /api/v1/users/:id ', () => {
-    it('A user can delete a user by id \'when id exist\'', (done) => {
+    const message = 'This account is blocked, Please account the admin';
+
+    it('An admin should recieve \'User was not found\' for unknown userid ',
+    (done) => {
+      request
+      .delete(`/api/v1/users/-2`)
+      .set('Authorization', jwt)
+      .end((err, res) => {
+        if (!err) {
+          res.should.have.status(200);
+          res.body.message.should.be.eql('User was not found.');
+        }
+        done();
+      });
+    });
+
+    it('An admin should recieve \'Invalid user ID\' for non numeric userid',
+     (done) => {
+      request
+      .delete(`/api/v1/users/a`)
+      .set('Authorization', jwt)
+      .end((err, res) => {
+        if (!err) {
+          res.should.have.status(400);
+          res.body.message.should.be.eql('Invalid user ID');
+        }
+        done();
+      });
+    });
+
+    it('A admin can delete a user by id \'when id exist\'', (done) => {
       request
         .delete(`/api/v1/users/${registeredUser.id}`)
         .set('Authorization', jwt)
@@ -302,23 +339,22 @@ describe('/api/v1/users ', () => {
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
-              res.body.message.should.be.eql('User not found.');
+              res.body.message.should.be.eql('User was not found.');
             }
           }
           done();
         });
     });
 
-    it('A user should recieve \'User not found\' for unknown userid ',
-    (done) => {
+    it(`A blocked user should recieve text ${message}`, (done) => {
       request
       .delete(`/api/v1/users/${registeredUser.id}`)
       .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
-          res.should.have.status(200);
-          res.body.status.should.be.eql('fail');
-          res.body.message.should.be.eql('User not found.');
+          res.should.have.status(401);
+          res.body.message
+          .should.be.eql('This account is blocked, Please contact the admin');
         }
         done();
       });

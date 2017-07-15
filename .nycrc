@@ -3,14 +3,16 @@
     "babel-register"
   ],
   "include": [
-    "server/model/*.js",
-    "server/controllers/*.js"
+    "server/**/*.js"
+  ],
+  "exclude": [
+    "**/tests/",
+    "**/seeders/",
+    "**/migrations/"
   ],
   "all": true,
-  "exclude": [
-    "**/test/"
-  ],
   "reporter": [
+    "html",
     "text",
     "lcov"
   ],

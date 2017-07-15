@@ -2,12 +2,11 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import supertest from 'supertest';
-
+import expect from 'expect';
 import app from '../../../server';
 import mockdata from '../mockData';
 
-
-
+const should = chai.should();
 const request = supertest.agent(app);
 chai.use(chaiHttp);
 
@@ -17,14 +16,13 @@ const document = mockdata.document;
 let mockUser = mockdata.user;
 const registeredDocument = {};
 
-describe('/api/v1/document ', () => {
+describe('/api/v1/document', () => {
   // cache jwt and userinfo
   let jwt;
   let testUser;
 
   // create user to own the request
   before((done) => {
-    console.log('should run first');
     request
     .post('/api/v1/users')
     .send(mockUser)
@@ -60,11 +58,15 @@ describe('/api/v1/document ', () => {
         .end((err, res) => {
           if (!err) {
             // store new document for futher testing
-            registeredDocument.title = res.body.data.title;
-            registeredDocument.id = res.body.data.id;
-            res.should.have.status(201);
-            res.body.data.title.should.be.eql(document.title);
-            res.body.status.should.be.eql('success');
+            if (res.body.status === 'success') {
+              registeredDocument.title = res.body.data.title;
+              registeredDocument.id = res.body.data.id;
+              res.should.have.status(201);
+              res.body.data.title.should.be.eql(document.title);
+              res.body.status.should.be.eql('success');
+            } else {
+              expect(res.body).toExist('message');
+            }
           }
           done();
         });
@@ -86,6 +88,7 @@ describe('/api/v1/document ', () => {
           done();
         });
     });
+
   });
 
   describe('GET /documents ', () => {
@@ -116,6 +119,19 @@ describe('/api/v1/document ', () => {
           done();
         });
    });
+
+   it('As a user, I recieve an error message when an error occurs', (done) => {
+      request
+        .get('/api/v1/documents?limit=a&offset=4')
+        .set('Authorization', jwt)
+        .send(document)
+        .end((err, res) => {
+          expect(res.body).toExist('message');
+          res.should.have.status(500);
+          res.body.status.should.be.eql('fail'); 
+          done();
+        });
+    });
   });
 
   describe('GET /documents/:id ', () => {
@@ -154,11 +170,15 @@ describe('/api/v1/document ', () => {
   });
 
   describe('PUT /documents/:id ', () => {
+    // changes to be made
+    const changes = {
+      title: 'new title from test'
+    };
     it('A user should update a document by id \'when documents exist\'',
     (done) => {
       request
-        .put('/api/v1/documents/10')
-        .send(mockdata.updatedocument)
+        .put(`/api/v1/documents/${registeredDocument.id}`)
+        .send(changes)
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -166,7 +186,6 @@ describe('/api/v1/document ', () => {
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data;
             } else {
               res.body.message.should.be.eql('Document not found.');
             }
@@ -179,7 +198,7 @@ describe('/api/v1/document ', () => {
     (done) => {
       request
       .put('/api/v1/documents/-2')
-      .send(mockdata.updatedocument)
+      .send(changes)
       .set('Authorization', jwt)
       .end((err, res) => {
         if (!err) {
@@ -189,6 +208,22 @@ describe('/api/v1/document ', () => {
         }
         done();
       });
+    });
+
+    it('A user should not update the author or owner of a document', (done) => {
+      changes.owner = 3;
+      request
+        .put(`/api/v1/documents/${registeredDocument.id}`)
+        .send(changes)
+        .set('Authorization', jwt)
+        .end((err, res) => {
+          if (!err) {
+            res.should.have.status(400);
+            res.body.message
+            .should.be.eql('Invalid operation, you can not change author');
+          }
+          done();
+        });
     });
   });
 
@@ -228,9 +263,9 @@ describe('/api/v1/document ', () => {
   });
 
   describe('GET /search/documents/?q={} ', () => {
-    it('A user should get list of  user with a list of attributes', (done) => {
+    it('A user should get list of the documents', (done) => {
       request
-        .get('/api/v1/search/documents?role=1')
+        .get('/api/v1/search/documents')
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -240,7 +275,104 @@ describe('/api/v1/document ', () => {
               res.body.status.should.be.eql('success');
               res.body.data.rows.should.be.an('array');
             } else {
-              res.body.message.should.be.eql('No document found.');
+              res.body.message.should.be.eql('No document was found.');
+            }
+          }
+          done();
+        });
+    });
+
+    it('A user should get list of the documents I created', (done) => {
+      request
+        .get('/api/v1/search/documents?accessRight=myDocument')
+        .set('Authorization', jwt)
+        .end((err, res) => {
+          if (!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist
+            if (!res.body.message) {
+              res.body.status.should.be.eql('success');
+              res.body.data.rows.should.be.an('array');
+            } else {
+              res.body.message.should.be.eql('No document was found.');
+            }
+          }
+          done();
+        });
+    });
+
+    it('A user should get list of the documents shared in my role', (done) => {
+      request
+        .get('/api/v1/search/documents?accessRight=role')
+        .set('Authorization', jwt)
+        .end((err, res) => {
+          if (!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist
+            if (!res.body.message) {
+              res.body.status.should.be.eql('success');
+              res.body.data.rows.should.be.an('array');
+            } else {
+              res.body.message.should.be.eql('No document was found.');
+            }
+          }
+          done();
+        });
+    });
+
+    it('A user should get list my private documents', (done) => {
+      request
+        .get('/api/v1/search/documents?accessRight=private')
+        .set('Authorization', jwt)
+        .end((err, res) => {
+          if (!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist
+            if (!res.body.message) {
+              res.body.status.should.be.eql('success');
+              res.body.data.rows.should.be.an('array');
+            } else {
+              res.body.message.should.be.eql('No document was found.');
+            }
+          }
+          done();
+        });
+    });
+
+    it('A user should search for documents by title', (done) => {
+      request
+        .get('/api/v1/search/documents?title=e')
+        .set('Authorization', jwt)
+        .end((err, res) => {
+          if (!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist
+            if (!res.body.message) {
+              res.body.status.should.be.eql('success');
+              res.body.data.rows.should.be.an('array');
+            } else {
+              res.body.message.should.be.eql('No document was found.');
+            }
+          }
+          done();
+        });
+    });
+
+    const noDoc = 'No document was found.';
+    it(`A user should recieve a text ${noDoc}' when no document was found`,
+    (done) => {
+      request
+        .get('/api/v1/search/documents?title=zzzzdddddpzkpzpkzpkpkpke')
+        .set('Authorization', jwt)
+        .end((err, res) => {
+          if (!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist
+            if (!res.body.message) {
+              res.body.status.should.be.eql('success');
+              res.body.data.rows.should.be.an('array');
+            } else {
+              res.body.message.should.be.eql('No document was found.');
             }
           }
           done();

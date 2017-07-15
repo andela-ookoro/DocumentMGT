@@ -21,7 +21,7 @@ const getDocByTitle = (title, owner) =>
   )
   .catch((error) => {
     if (error.response) {
-      return sendMessage('getDoucments', error.response.data.message);
+      return sendMessage('getDocuments', error.response.data.message);
     }
   });
 

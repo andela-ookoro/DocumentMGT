@@ -92,127 +92,14 @@ module.exports = (sequelize, DataTypes) => {
     instanceMethods: {},
     hooks: {
       beforeCreate(newuser) {
-        /**
-         * create random string
-         * with base 36, and collected the last 10 characters
-         */
-          // const randomWord = Math.random().toString(36).substring(2);
-          // let password, hashPassword;
-
-          // hash the random string
         newuser.password = bcrypt
         .hashSync(newuser.password, bcrypt.genSaltSync(10));
-        // return bcrypt.hash(newuser.password, bcrypt.genSaltSync(10), null,
-        // (err, hash) => {
-        //   if (hash) {
-        //     return newuser.password = hash;
-        //   } else {
-        //     throw (err);
-        //   }
-        //  console.log('...........................', newuser.password, hash);
-          
-        // }); 
-        // return bcrypt.hash(newuser.password, 10).then((randomWordHash) => {
-        //   newuser.password = randomWordHash;
-          //   password = randomWordHash;
-
-          //    //create hashpassword = hash(password)+ password
-          //  return bcrypt.hash(newuser.password, 10).then((passwordHash) => {
-          //     hashPassword = passwordHash + password;
-          //     newuser.password = password;
-          //     newuser.hashPassword = hashPassword;
-          //   });
-        // });
       },
       beforeUpdate(newuser) {
-        /**
-         * create random string
-         * with base 36, and collected the last 10 characters
-         */
-        // const randomWord = Math.random().toString(36).substring(2);
-        // let password, hashPassword;
-        // hash the random string
-        // return bcrypt.hash(user.password, 10).then((randomWordHash) => {
-        //   newuser.password = randomWordHash;
-        // });
         newuser.password = bcrypt
         .hashSync(newuser.password, bcrypt.genSaltSync(10));
       }
     }
   });
-
-  // Class Method
-  user.associate = (models) => {
-    user.belongsTo(models.role, {
-      foriegnKey: 'roleId',
-      onDelete: 'CASCADE',
-    });
-
-    // user can have many documents
-    user.hasMany(models.document, {
-      foriegnKey: 'userId',
-      as: 'documents',
-      onDelete: 'CASCADE',
-    });
-  };
-
-
-  /**
-     * get user fullname
-     * @method
-     * @returns {String} user fullname
-  */
-  user.prototype.getFullname = () => (
-    `${this.fname} ${this.mname} ${this.lname}`
-  );
-
-   /**
-   * verify plain password against user's hashed password
-   * @method
-   * @param {String} inputPassword - recieved password
-   * @returns {Boolean} Validity of password
-   */
-  user.prototype.verifyPassword = (inputPassword) => {
-    const userPassword = this.password;
-
-    // create hashpassword and compare
-
-    return bcrypt.hash(inputPassword, 10).then((hash) => {
-      const hashPassword = hash + userPassword;
-        // verify hashpassword
-      if (user.hashPassword === hashPassword) {
-        return user;
-      }
-      return false;
-    }).catch(() =>
-       false
-    );
-  };
-
-
-  /**
-     * generate user password and hashpassword
-     * @method
-     * @returns {String} user fullname
-  */
-  user.prototype.generatePassword = () => {
-     /**
-      * create random string
-      * with base 36, and collected the last 10 characters
-      */
-    const randomWord = Math.random().toString(36).substring(2);
-    let password, hashPassword;
-
-      // hash the random string
-    bcrypt.hash(randomWord, 10).then((randomWordhash) => {
-      password = randomWordhash;
-        // create hashpassword = hash(password)+ password
-      bcrypt.hash(this.password, 10).then((hash) => {
-        hashPassword = hash + password;
-        this.password = password;
-        this.hashPassword = hashPassword;
-      });
-    });
-  };
   return user;
 };

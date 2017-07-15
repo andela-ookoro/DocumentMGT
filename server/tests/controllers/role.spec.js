@@ -1,7 +1,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import supertest from 'supertest';
-
+import faker from 'faker';
 
 import app from '../../../server';
 // import mockdata
@@ -16,7 +16,14 @@ chai.use(chaiHttp);
 
 
 const role = mockdata.role;
-const mockUser = mockdata.user;
+const mockUser = {
+  fname: faker.name.firstName(),
+  lname: faker.name.lastName(),
+  mname: faker.name.firstName(),
+  password: '!smilesh2o',
+  email: faker.internet.email(),
+  roleId: 3
+};
 const roleWithoutTitle = mockdata.roleWithoutTitle;
 const registeredRole = {};
 
