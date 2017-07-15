@@ -1,10 +1,11 @@
-node_modules
+node_modules/
 .Ds_Store
 .env
 lcov-report/
 coverage/
 learn
 lcov.info
-bower_components
+bower_components/
 reports
-.nyc_ouput
+.nyc_output/
+.vscode/

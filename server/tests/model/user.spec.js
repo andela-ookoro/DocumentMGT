@@ -33,7 +33,6 @@ describe('User Model', () => {
           done();
         })
         .catch((error) => {
-          console.log('.................,', error);
           done();
         });
     });

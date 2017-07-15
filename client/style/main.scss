@@ -330,3 +330,10 @@ input[type=text].invalid {
     background-color: #a1887f;
     color: #f9f8f2 !important;
 }
+.gsc-control-cse {
+    border-color: #f9f8f2 !important;
+    background-color: #f9f8f2 !important;
+}
+.gsc-control-cse input {
+  width: 20px !important;
+}

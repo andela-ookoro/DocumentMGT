@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import tinymce from 'tinymce';
+// import tinymce from 'tinymce';
 import toaster from 'toastr';
 import upsertDocument from '../actions/createDocument';
 import getDocument from '../actions/getDocument';
@@ -234,28 +234,6 @@ export class CreateDocument extends React.Component {
       };
       // call upsertDocument action
       this.props.upsertDocument(document, this.state.docId);
-    //   .then(response => {
-    //     message = 'Document has been saved successfully';
-    //     // reset  state
-    //     this.setState({
-    //       message,
-    //       title: '',
-    //       curDocument: {},
-    //       body: ''
-    //     });
-    //     if (message) {
-    //       Materialize.toast(message, 3000, 'rounded')
-    //     }
-    //   },
-    //   (error) => {
-    //     message = error.data.message;
-    //     this.setState({
-    //       message
-    //     });
-    //     if (message) {
-    //       Materialize.toast(message, 3000, 'rounded')
-    //     }
-    //  })
     }
   }
 
@@ -264,10 +242,6 @@ export class CreateDocument extends React.Component {
    * @memberof CreateDocument
    */
   render() {
-  //   // const body = this.state.body;
-  //   $(() => {
-  //     tinymce.get('content').setContent('Helllo');
-  //   });
     return (
       <div className="container">
         <div className="body row">
@@ -379,7 +353,7 @@ CreateDocument.propTypes = {
   message: PropTypes.string,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      documentId: PropTypes.string
+      documentId: PropTypes.number
     })
   }),
   document: PropTypes.shape({

@@ -16,9 +16,18 @@ module.exports = {
    */
   getDocuments(req, res) {
     let hint;
+    let limit;
+    let offset;
     // check it limit and offset where passed
     if (req.query.offset && req.query.limit) {
-      hint = { offset: req.query.offset, limit: req.query.limit };
+      offset = parseInt(req.query.offset, 10);
+      limit = parseInt(req.query.limit, 10);
+      hint = { limit, offset };
+    } else {
+      hint = {
+        limit: 7,
+        offset: 0
+      };
     }
     // get all documents
     Document.findAndCountAll({
@@ -53,15 +62,15 @@ module.exports = {
         document.author = `${user.fname} ${user.mname} ${user.lname}`;
         Document.create(document)
         .then((newdocument) => {
-         sendData(res, newdocument, 201);
+         return sendData(res, newdocument, 201);
         })
         .catch((err) => {
-          sendError(res, err.message, 500);
+          return sendError(res, err.message, 500);
         });
       })
       .catch(error => sendError(res, error.message, 400));
     } else {
-      sendError(res, 'Document\'s title and body are compulsory.',
+     return  sendError(res, 'Document\'s title and body are compulsory.',
       500);
     }
   },
@@ -99,16 +108,7 @@ module.exports = {
     .then((document) => {
       if (!document) {
         return sendError(res, 'Document not found.', 200);
-      } else if (document.accessRight === 'private'
-       && document.owner !== req.user.id) {
-        return sendError(res, 'Document not found.', 200);
-      } else if (document.accessRight === 'role') {
-        if (document.role !== req.user.role
-             && document.owner !== req.user.id) {
-          return sendError(res, 'Document not found.', 200);
-        }
-        return sendData(res, document, 200);
-      }
+      } 
       return sendData(res, document, 200);
     })
     .catch(error => sendError(res, error.message, 400));
@@ -150,13 +150,18 @@ module.exports = {
   updateDocument(req, res) {
     // get new user info
     const changes = req.body;
+    // disallow user form changing ownership
+    if (changes.owner || changes.author) {
+      return sendError(res, 'Invalid operation, you can not change author', 400);
+    }
     const docID = parseInt(req.params.id, 10);
     if (isNaN(docID)) {
       return sendError(res, 'Invalid document ID', 400);
     }
 
     Document.findOne({
-      where: { id: docID, owner: req.user.id }
+      where: { id: docID, owner: req.user.id },
+      attributes
     })
     .then((document) => {
       if (!document) {

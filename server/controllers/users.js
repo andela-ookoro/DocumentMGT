@@ -4,7 +4,9 @@ import { sendError, returnJWt, sendData } from './helpers/utilities';
 
 const User = model.user;
 const Document = model.document;
-
+const docAttributes = [
+  'id', 'title', 'synopsis', 'body', 'role', 'accessRight',
+  'owner', 'author', 'createdAt', 'updatedAt']
 module.exports = {
    /**
    * - login registered users
@@ -18,7 +20,7 @@ module.exports = {
     // check for required fields
     if (user.email && user.password) {
       // get user with this email
-      User
+      return User
         .find({
           where: {
             email: user.email
@@ -36,7 +38,7 @@ module.exports = {
             // compare password
             const pass = bcrypt.compareSync(user.password, userPassword);
             if (pass) {
-              return returnJWt(res, foundUser, 200);
+              return returnJWt(res, foundUser.dataValues, 200);
             }
             return sendError(res, 'Wrong email or password.', 401);
           }
@@ -74,7 +76,7 @@ module.exports = {
     }
 
     // get all users
-    User.findAll({
+    return User.findAll({
       order: [['fname', 'ASC']],
       attributes: [
         'fname', 'lname', 'mname', 'email', 'roleId'
@@ -85,7 +87,7 @@ module.exports = {
       if (users.length > 0) {
         return sendData(res, users, 200);
       }
-      return sendError(res, 'No user found', 404);
+      return sendError(res, 'No user was found', 404);
     })
     .catch(error => sendError(res, error.message, 500));
   },
@@ -101,8 +103,7 @@ module.exports = {
     // check for required fields
     if (user.fname && user.lname && user.email && user.password && user.roleId) {
       // check if  user already exist
-      User
-        .find({
+     return  User.find({
           where: {
             email: user.email
           },
@@ -110,18 +111,14 @@ module.exports = {
         .then((foundUser) => {
           // if user exist exist return error
           if (foundUser) {
-            return sendError(res, 'Email already exist', 409);
+            sendError(res, 'Email already exist', 409);
           }
-          User.create(user)
-          .then(newuser =>
-            returnJWt(res, newuser, 201)
-          )
-          .catch(err =>
-            sendError(res, err.message, 500)
-          );
+          return User.create(user)
+            .then(newuser => returnJWt(res, newuser.dataValues, 201))
+            .catch(err => sendError(res, err.message, 500));
         })
         .catch(err =>
-          sendError(res, err.message, 500)
+          (sendError(res, err.message, 500))
         );
     } else {
       sendError(res,
@@ -139,20 +136,20 @@ module.exports = {
   getUser(req, res) {
     const userId = parseInt(req.params.id, 10);
     if (isNaN(userId)) {
-      return sendError(res, 'Invalid user ID', 400);
+      sendError(res, 'Invalid user ID', 400);
     }
     // get user with this id
-    User.findOne({
-      where: { id: userId },
-      attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
-    })
-    .then((user) => {
-      if (!user) {
-        return sendError(res, 'User not found.', 404);
-      }
-      return sendData(res, user, 200);
-    })
-    .catch(error => sendError(res, error.message, 500));
+    return User.findOne({
+        where: { id: userId },
+        attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
+      })
+      .then((user) => {
+        if (!user) {
+          sendError(res, 'User was not found.', 404);
+        }
+        sendData(res, user, 200);
+      })
+      .catch(error => sendError(res, error.message, 500));
   },
   /**
    * detele user by id
@@ -161,24 +158,27 @@ module.exports = {
    * @return {string } - user fullname
    */
   deleteUser(req, res) {
+    // convert param to int
     const userId = parseInt(req.params.id, 10);
     if (isNaN(userId)) {
       return sendError(res, 'Invalid user ID', 400);
     }
+
     // get user with this id
-    User.findOne({
-      where: { id: userId }
-    })
-    .then((user) => {
-      if (!user) {
-        return sendError(res, 'User not found.', 200);
-      }
-      return user
-       .update({ status: 'disabled' })
-      .then(() => sendData(res, '', 200))
+    return User.findOne({
+        where: { id: userId }
+      })
+      .then((user) => {
+        if (!user) {
+          sendError(res, 'User was not found.', 200);
+        }
+
+        return user
+        .update({ status: 'disabled' })
+        .then(() => sendData(res, 'User has been blocked successfully', 200))
+        .catch(error => sendError(res, error.message, 400));
+      })
       .catch(error => sendError(res, error.message, 400));
-    })
-    .catch(error => sendError(res, error.message, 400));
   },
    /**
    * - update registered users
@@ -189,48 +189,52 @@ module.exports = {
   updateUser(req, res) {
     const userId = parseInt(req.params.id, 10);
     if (isNaN(userId)) {
-      return sendError(res, 'Invalid user ID', 400);
+      sendError(res, 'Invalid user ID', 400);
     }
-    // check if user wants to update his role
-    if (req.body.role) {
+    // only an admin can update a user's role
+    if (req.body.role && req.user.role !== 3) {
+      return sendError(res, 'Invalid operation', 403);
+    } // only an admin update another user's profile
+    else if (req.user.role !== 3 && userId !== req.user.id ) {
       return sendError(res, 'Invalid operation', 403);
     }
 
     // check if old password was provide
     const curPassword = req.body.curPassword;
-    // check if user changed her email
     if (curPassword) {
       // find user
-      User.findOne({
-        where: { id: userId }
-      })
-      .then((foundUser) => {
-        if (!foundUser) {
-          return sendError(res,
-         'Unauthorized operation, check the credential provided', 403);
-        }
-        const pass = bcrypt.compareSync(curPassword, foundUser.password);
-        if (pass) {
-          // create changes
-          const changes = {
-            fname: req.body.fname,
-            lname: req.body.lname,
-            mname: req.body.mname,
-            email: req.body.email
-          };
-          // check if the user wants to change her password
-          if (req.body.password !== '') {
-            changes.password = req.body.password;
+      return User.findOne({
+          where: { id: userId }
+        })
+        .then((foundUser) => {
+          if (!foundUser) {
+           sendError(res, 'User was not found', 200);
           }
-          return foundUser
-            .update({ ...changes })
-            .then(() => returnJWt(res, foundUser, 200))
-            .catch(error => sendError(res, error.message, 500));
-        }
-        return sendError(res,
-         'Unauthorized operation, check the credential provided', 403);
-      });
-      // .catch(error => sendError(res, error.message, 500));
+          // verify user's password
+          const pass = bcrypt.compareSync(curPassword, foundUser.password);
+          if (pass) {
+            // create changes
+            const changes = {
+              fname: req.body.fname || foundUser.fname,
+              lname: req.body.lname || foundUser.lname,
+              mname: req.body.mname || foundUser.mname,
+              email: req.body.email || foundUser.email,
+              roleId: req.body.roleId || foundUser.roleId
+            };
+            // check if the user wants to change her password
+            if (req.body.password) {
+              changes.password = req.body.password;
+            }
+            return foundUser
+              .update({ ...changes })
+              .then(updateUser => sendData(res, updateUser.dataValues, 200))
+              .catch(error => sendError(res, error.message, 500));
+          }
+          return sendError(res,
+          'Unauthorized operation, check the credential provided',
+          403);
+        })
+        .catch(error => sendError(res, error.message, 500));
     }
     return sendError(res,
     'Unauthorized operation, check the credential provided', 403);
@@ -245,17 +249,17 @@ module.exports = {
     // get new user info
     const query = req.query;
     // get user with this id
-    User.findAll({
-      where: { ...query },
-      attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
-    })
-    .then((users) => {
-      if (!users) {
-        return sendError(res, 'No user was found.', 200);
-      }
-      return sendData(res, users, 200);
-    })
-    .catch(error => sendError(res, error.message, 400));
+    return User.findAll({
+        where: { ...query },
+        attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
+      })
+      .then((users) => {
+        if (!users) {
+          sendError(res, 'No user was found.', 200);
+        }
+         sendData(res, users, 200);
+      })
+      .catch(error => sendError(res, error.message, 400));
   },
    /**
    * - get a list of registered user's documents
@@ -270,27 +274,28 @@ module.exports = {
       return sendError(res, 'Invalid user ID', 400);
     }
     if (userId !== req.user.id) {
-      return sendError(res, 'User not found.', 200);
+      return sendError(res, 'User was not found.', 200);
     }
-    User.findOne({
-      where: { id: userId }
-    })
-    .then((user) => {
-      if (!user) {
-        return sendError(res, 'User not found.', 200);
-      }
-      // return user's documents
-      return Document.findAll({
-        where: { owner: userId },
+    return User.findOne({
+        where: { id: userId }
       })
-      .then((documents) => {
-        if (!documents) {
-          return sendError(res, 'Document not found.', 200);
+      .then((user) => {
+        if (!user) {
+          return sendError(res, 'User was not found.', 200);
         }
-        return sendData(res, documents, 200);
+        // return user's documents
+       return  Document.findAll({
+          where: { owner: userId },
+          attributes: docAttributes
+        })
+        .then((documents) => {
+          if (!documents) {
+           return sendError(res, 'Document was not found.', 200);
+          }
+          return sendData(res, documents, 200);
+        })
+        .catch(error => sendError(res, error.message, 500));
       })
       .catch(error => sendError(res, error.message, 500));
-    })
-    .catch(error => sendError(res, error.message, 500));
   }
 };

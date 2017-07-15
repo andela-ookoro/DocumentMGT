@@ -12,7 +12,7 @@ module.exports = {
    * @returns {object} -
    */
   sendError(res, message, statusCode) {
-    return res.status(statusCode).send({
+   res.status(statusCode).send({
       status: 'fail',
       message
     });
@@ -25,7 +25,7 @@ module.exports = {
    * @returns {object} -
    */
   sendData(res, data, statusCode) {
-    return res.status(statusCode).send({
+    res.status(statusCode).send({
       status: 'success',
       data
     });
@@ -40,7 +40,7 @@ module.exports = {
   validateUser(req, res, next) {
     if (!req.headers && !req.body && !req.query) {
       // if there is no data to process
-      return res.status(401).send({
+      res.status(401).send({
         message: 'No token provided.'
       });
     }
@@ -50,7 +50,7 @@ module.exports = {
     if (token) {
       jwt.verify(token, process.env.TOKENSECRET, (error, decoded) => {
         if (error) {
-          return res.status(401).send({
+          res.status(401).send({
             message: 'Failed to authenticate token.'
           });
         }
@@ -65,15 +65,15 @@ module.exports = {
           if (foundUser) {
              // check if user is disabled
             if (foundUser.status === 'disabled') {
-              return res.status(401).send({
-                message: 'This account is blocked, Please account admin'
+              res.status(401).send({
+                message: 'This account is blocked, Please contact the admin'
               });
             }
              // attach user info to the request object
             req.user = decoded;
             next();
           } else {
-            return res.status(401).send({
+            res.status(401).send({
               message: 'Wrong authentication credentials, ' +
               'please signin/signup again'
             });
@@ -86,7 +86,7 @@ module.exports = {
       });
     } else {
       // if there is no token available return a message
-      return res.status(401).send({ message: 'No token provided.' });
+      res.status(401).send({ message: 'No token provided.' });
     }
   },
   /**
@@ -106,7 +106,7 @@ module.exports = {
     };
     const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET);
     // send response to client
-    return res.status(statusCode).send({
+    res.status(statusCode).send({
       status: 'success',
       userInfo,
       jwtToken
@@ -114,7 +114,7 @@ module.exports = {
   },
 
   /**
-   * check if user is an admon
+   * check if user is an admin
    * @param {*} req - client request
    * @param {*} res - server response
    * @param {*} next - call the next route
@@ -122,11 +122,13 @@ module.exports = {
    */
   adminOnly(req, res, next) {
     if (req.user.role === 3) {
-      return next();
+      next();
+      return;
+    console.log('..................', req.user);
     }
-    return res.status(403).send({
+    res.status(403).send({
       status: 'fail',
-      message: 'Invalid Operation'
+      message: 'Invalid Oeeeeeeperation'
     });
   }
 };
