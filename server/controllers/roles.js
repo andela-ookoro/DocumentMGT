@@ -1,4 +1,4 @@
-import { sendError, sendData } from './helpers/utilities';
+import { sendMessage, sendData } from './helpers/utilities';
 import model from '../models/index';
 
 const Role = model.role;
@@ -31,7 +31,7 @@ module.exports = {
       ...hint
     })
     .then(roles => sendData(res, roles, 200))
-    .catch(error => sendError(res, error.message, 500));
+    .catch(error => sendMessage(res, error.message, 500));
   },
   /**
    * - create Role
@@ -49,9 +49,9 @@ module.exports = {
       .then(newRole => {
         return sendData(res, newRole, 201)}
       )
-      .catch(err => sendError(res, err.message, 500));
+      .catch(err => sendMessage(res, err.message, 500));
     } else {
-      sendError(res, 'Role title is compulsory.', 500);
+      sendMessage(res, 'Role title is compulsory.', 500);
     }
   },
   /**
@@ -64,18 +64,18 @@ module.exports = {
     // get user with this id
     const roleId = parseInt(req.params.id, 10);
     if (isNaN(roleId)) {
-      return sendError(res, 'Invalid role ID', 400);
+      return sendMessage(res, 'Invalid role ID', 400);
     }
     Role.findOne({
       where: { id: roleId }
     })
     .then((role) => {
       if (!role) {
-        return sendError(res, 'Role not found.', 200);
+        return sendMessage(res, 'Role not found.', 200);
       }
       return sendData(res, role, 200);
     })
-    .catch(error => sendError(res, error.message, 400));
+    .catch(error => sendMessage(res, error.message, 400));
   },
   /**
    * - update role with id
@@ -88,21 +88,21 @@ module.exports = {
     const changes = req.body;
     const roleId = parseInt(req.params.id, 10);
     if (isNaN(roleId)) {
-      return sendError(res, 'Invalid role ID', 400);
+      return sendMessage(res, 'Invalid role ID', 400);
     }
     Role.findOne({
       where: { id: roleId }
     })
     .then((role) => {
       if (!role) {
-        return sendError(res, 'Role not found.', 200);
+        return sendMessage(res, 'Role not found.', 200);
       }
       return role
       .update({ ...changes })
       .then(() => sendData(res, role, 200))
-      .catch(error => sendError(res, error.message, 400));
+      .catch(error => sendMessage(res, error.message, 400));
     })
-    .catch(error => sendError(res, error.message, 400));
+    .catch(error => sendMessage(res, error.message, 400));
   },
   /**
    * - delete role with id
@@ -114,22 +114,22 @@ module.exports = {
     // get document with this id
     const roleId = parseInt(req.params.id, 10);
     if (isNaN(roleId)) {
-      return sendError(res, 'Invalid role ID', 400);
+      return sendMessage(res, 'Invalid role ID', 400);
     }
     Role.findOne({
       where: { id: roleId }
     })
     .then((role) => {
       if (!role) {
-        return sendError(res, 'Role not found.', 200);
+        return sendMessage(res, 'Role not found.', 200);
       }
 
       return role
       .destroy()
       .then(() => sendData(res, role, 200))
-      .catch(error => sendError(res, error.message, 400));
+      .catch(error => sendMessage(res, error.message, 400));
     })
-    .catch(error => sendError(res, error.message, 400));
+    .catch(error => sendMessage(res, error.message, 400));
   },
    /**
    * - get user in a  role with id
@@ -141,14 +141,14 @@ module.exports = {
     // get role with this id
     const roleId = parseInt(req.params.id, 10);
     if (isNaN(roleId)) {
-      return sendError(res, 'Invalid role ID', 400);
+      return sendMessage(res, 'Invalid role ID', 400);
     }
     Role.findOne({
       where: { id: roleId }
     })
     .then((role) => {
       if (!role) {
-        return sendError(res, 'Role not found.', 200);
+        return sendMessage(res, 'Role not found.', 200);
       }
       // return user's documents
       return User.findAll({
@@ -156,13 +156,13 @@ module.exports = {
       })
       .then((users) => {
         if (!users) {
-          return sendError(res, 'Users not found.', 200);
+          return sendMessage(res, 'Users not found.', 200);
         }
         return sendData(res, users, 200);
       })
-      .catch(error => sendError(res, error.message, 400));
+      .catch(error => sendMessage(res, error.message, 400));
     })
-    .catch(error => sendError(res, error.message, 400));
+    .catch(error => sendMessage(res, error.message, 400));
   }
 };
 

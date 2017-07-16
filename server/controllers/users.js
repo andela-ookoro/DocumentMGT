@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt-nodejs';
 import model from '../models/index';
-import { sendError, returnJWt, sendData } from './helpers/utilities';
+import sequelize from ''
+import { sendMessage, returnJWt, sendData } from './helpers/utilities';
 
 const User = model.user;
 const Document = model.document;
@@ -31,7 +32,7 @@ module.exports = {
             const userPassword = foundUser.password;
              // check if user is disabled
             if (foundUser.status === 'disabled') {
-              return sendError(res,
+              return sendMessage(res,
               'This account is blocked, Please account admin',
               401);
             }
@@ -40,13 +41,13 @@ module.exports = {
             if (pass) {
               return returnJWt(res, foundUser.dataValues, 200);
             }
-            return sendError(res, 'Wrong email or password.', 401);
+            return sendMessage(res, 'Wrong email or password.', 401);
           }
-          return sendError(res, 'Wrong email or password.', 401);
+          return sendMessage(res, 'Wrong email or password.', 401);
         })
-        .catch(err => sendError(res, err.message, 401));
+        .catch(err => sendMessage(res, err.message, 401));
     } else {
-      return sendError(res, 'Email and password are compulsory.',
+      return sendMessage(res, 'Email and password are compulsory.',
       500);
     }
   },
@@ -87,9 +88,9 @@ module.exports = {
       if (users.length > 0) {
         return sendData(res, users, 200);
       }
-      return sendError(res, 'No user was found', 404);
+      return sendMessage(res, 'No user was found', 404);
     })
-    .catch(error => sendError(res, error.message, 500));
+    .catch(error => sendMessage(res, error.message, 500));
   },
   /**
    * create a user and return jwt and user name and email
@@ -111,17 +112,17 @@ module.exports = {
         .then((foundUser) => {
           // if user exist exist return error
           if (foundUser) {
-            sendError(res, 'Email already exist', 409);
+            sendMessage(res, 'Email already exist', 409);
           }
           return User.create(user)
             .then(newuser => returnJWt(res, newuser.dataValues, 201))
-            .catch(err => sendError(res, err.message, 500));
+            .catch(err => sendMessage(res, err.message, 500));
         })
         .catch(err =>
-          (sendError(res, err.message, 500))
+          (sendMessage(res, err.message, 500))
         );
     } else {
-      sendError(res,
+      sendMessage(res,
        'First name, last name, email, role  and password are compulsory.',
        400)
       ;
@@ -136,7 +137,7 @@ module.exports = {
   getUser(req, res) {
     const userId = parseInt(req.params.id, 10);
     if (isNaN(userId)) {
-      sendError(res, 'Invalid user ID', 400);
+      sendMessage(res, 'Invalid user ID', 400);
     }
     // get user with this id
     return User.findOne({
@@ -145,11 +146,11 @@ module.exports = {
       })
       .then((user) => {
         if (!user) {
-          sendError(res, 'User was not found.', 404);
+          sendMessage(res, 'User was not found.', 404);
         }
         sendData(res, user, 200);
       })
-      .catch(error => sendError(res, error.message, 500));
+      .catch(error => sendMessage(res, error.message, 500));
   },
   /**
    * detele user by id
@@ -161,7 +162,7 @@ module.exports = {
     // convert param to int
     const userId = parseInt(req.params.id, 10);
     if (isNaN(userId)) {
-      return sendError(res, 'Invalid user ID', 400);
+      return sendMessage(res, 'Invalid user ID', 400);
     }
 
     // get user with this id
@@ -170,15 +171,15 @@ module.exports = {
       })
       .then((user) => {
         if (!user) {
-          sendError(res, 'User was not found.', 200);
+          sendMessage(res, 'User was not found.', 200);
         }
 
         return user
         .update({ status: 'disabled' })
         .then(() => sendData(res, 'User has been blocked successfully', 200))
-        .catch(error => sendError(res, error.message, 400));
+        .catch(error => sendMessage(res, error.message, 400));
       })
-      .catch(error => sendError(res, error.message, 400));
+      .catch(error => sendMessage(res, error.message, 400));
   },
    /**
    * - update registered users
@@ -189,14 +190,14 @@ module.exports = {
   updateUser(req, res) {
     const userId = parseInt(req.params.id, 10);
     if (isNaN(userId)) {
-      sendError(res, 'Invalid user ID', 400);
+      sendMessage(res, 'Invalid user ID', 400);
     }
     // only an admin can update a user's role
     if (req.body.role && req.user.role !== 3) {
-      return sendError(res, 'Invalid operation', 403);
+      return sendMessage(res, 'Invalid operation', 403);
     } // only an admin update another user's profile
     else if (req.user.role !== 3 && userId !== req.user.id ) {
-      return sendError(res, 'Invalid operation', 403);
+      return sendMessage(res, 'Invalid operation', 403);
     }
 
     // check if old password was provide
@@ -208,10 +209,13 @@ module.exports = {
         })
         .then((foundUser) => {
           if (!foundUser) {
-           sendError(res, 'User was not found', 200);
+           sendMessage(res, 'User was not found', 200);
           }
           // verify user's password
           const pass = bcrypt.compareSync(curPassword, foundUser.password);
+          const test =  bcrypt.hashSync(curPassword, bcrypt.genSaltSync(10));
+          const test1 =  bcrypt.hashSync(curPassword);
+          console.log(foundUser.dataValues, curPassword,pass, test, test1)
           if (pass) {
             // create changes
             const changes = {
@@ -227,17 +231,24 @@ module.exports = {
             }
             return foundUser
               .update({ ...changes })
-              .then(updateUser => sendData(res, updateUser.dataValues, 200))
-              .catch(error => sendError(res, error.message, 500));
+              .then(updateUser => returnJWt(res, updateUser.dataValues, 200))
+              .catch(error => {
+                console.log(error);
+                return sendMessage(res, error.message, 500)
+              });
           }
-          return sendError(res,
-          'Unauthorized operation, check the credential provided',
+          return sendMessage(res,
+          'Unauthorized operation, check the credential provided1',
           403);
         })
-        .catch(error => sendError(res, error.message, 500));
+        .catch(error => {
+          const message = error.message || error.toString()
+          console.log(error);
+          return sendMessage(res, message, 500)
+        });
     }
-    return sendError(res,
-    'Unauthorized operation, check the credential provided', 403);
+    return sendMessage(res,
+    'Unauthorized operation, check the credential provided2', 403);
   },
    /**
    * - search for users with a list of attributes
@@ -255,11 +266,11 @@ module.exports = {
       })
       .then((users) => {
         if (!users) {
-          sendError(res, 'No user was found.', 200);
+          sendMessage(res, 'No user was found.', 200);
         }
          sendData(res, users, 200);
       })
-      .catch(error => sendError(res, error.message, 400));
+      .catch(error => sendMessage(res, error.message, 400));
   },
    /**
    * - get a list of registered user's documents
@@ -271,17 +282,17 @@ module.exports = {
     // get user with this id
     const userId = parseInt(req.params.id, 10);
     if (isNaN(userId)) {
-      return sendError(res, 'Invalid user ID', 400);
+      return sendMessage(res, 'Invalid user ID', 400);
     }
     if (userId !== req.user.id) {
-      return sendError(res, 'User was not found.', 200);
+      return sendMessage(res, 'User was not found.', 200);
     }
     return User.findOne({
         where: { id: userId }
       })
       .then((user) => {
         if (!user) {
-          return sendError(res, 'User was not found.', 200);
+          return sendMessage(res, 'User was not found.', 200);
         }
         // return user's documents
        return  Document.findAll({
@@ -290,12 +301,12 @@ module.exports = {
         })
         .then((documents) => {
           if (!documents) {
-           return sendError(res, 'Document was not found.', 200);
+           return sendMessage(res, 'Document was not found.', 200);
           }
           return sendData(res, documents, 200);
         })
-        .catch(error => sendError(res, error.message, 500));
+        .catch(error => sendMessage(res, error.message, 500));
       })
-      .catch(error => sendError(res, error.message, 500));
+      .catch(error => sendMessage(res, error.message, 500));
   }
 };

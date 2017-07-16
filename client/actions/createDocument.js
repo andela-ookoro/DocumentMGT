@@ -18,10 +18,11 @@ export default (document, docId = 0) => {
     .then(() => sendMessage('upsertDocument', successMessage)
     )
     .catch((error) => {
-      if (error.response) {
-        const message = error.response.data.message || error.response;
-        return sendMessage('upsertDocument', message);
+      let message = 'An internal error occurred, please try again';
+      if (error.response.status !== 500) {
+        message = error.response.data.message;
       }
+      return sendMessage('upsertDocument', message);
     });
 };
 

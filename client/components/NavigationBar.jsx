@@ -51,7 +51,9 @@ class NavigationBar extends React.Component {
           </Link>
         </li>
         <li>
-          <a className="username">{userInfo.name}</a>
+          <Link to="/profile" className="username" id="profile">
+            {userInfo.name}
+          </Link>
         </li>
         <li>
           <a onClick={this.signout} id="signout">Sign Out</a>

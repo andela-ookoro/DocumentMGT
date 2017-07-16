@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt-nodejs';
 import model from '../../models/index';
 
 const User = model.user;
@@ -11,7 +12,7 @@ module.exports = {
    * @param {int} statusCode - response code
    * @returns {object} -
    */
-  sendError(res, message, statusCode) {
+  sendMessage(res, message, statusCode) {
    res.status(statusCode).send({
       status: 'fail',
       message
@@ -72,11 +73,13 @@ module.exports = {
              // attach user info to the request object
             req.user = decoded;
             next();
+            return;
           } else {
             res.status(401).send({
               message: 'Wrong authentication credentials, ' +
               'please signin/signup again'
             });
+           return;
           }
         })
         .catch(err => res.status(500).send({
@@ -124,11 +127,25 @@ module.exports = {
     if (req.user.role === 3) {
       next();
       return;
-    console.log('..................', req.user);
     }
     res.status(403).send({
       status: 'fail',
       message: 'Invalid Oeeeeeeperation'
+    });
+  },
+
+  /**
+   * encrypt any string
+   * @param {string} value 
+   * @returns {object} - brcpty hash function
+   */
+  encryptString(value) {
+   return  bcrypt.hash(value, null, null, (err, hash) => {
+      if (hash) {
+        return hash;
+      } else {
+        throw err;
+      }
     });
   }
 };

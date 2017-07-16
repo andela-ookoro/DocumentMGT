@@ -16,9 +16,11 @@ export const signup = credentials =>
     return signupSuccess();
   })
   .catch((error) => {
-    if (error.response) {
-      return sendMessage('signup', error.response.data.message);
+    let message = 'An internal error occurred, please try again';
+    if (error.response.status !== 500) {
+      message = error.response.data.message;
     }
+    return sendMessage('signup', message);
   });
 
 

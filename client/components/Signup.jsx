@@ -134,11 +134,15 @@ export class Signup extends React.Component {
    */
   onSave(event) {
     event.preventDefault();
-    const user = this.state;
-    // delete validControls and message from the user object
-    delete user.validControls;
-    delete user.message;
-    delete user.isloading;
+    // create request payload from state
+    const user = {
+      fname: this.state.fname,
+      lname: this.state.lname,
+      mname: this.state.mname,
+      email: this.state.email,
+      password: this.state.password,
+      roleId: this.state.roleId
+    };
     // show preloader
     this.setState({
       isloading: true
@@ -160,8 +164,10 @@ export class Signup extends React.Component {
     if (comfirmpassword === this.state.password) {
       matchStatus = 'Right password';
       match = true;
-      // enable submit button when every input is valid
-      // get validControls
+      /**
+       * enable submit button when every input is valid
+       * get validControls
+       */
       const validControls = this.state.validControls;
       // enable button when every control is valid
       if (Object.keys(validControls).length === 6) {
@@ -177,7 +183,7 @@ export class Signup extends React.Component {
     }
 
     //  set the result of the comparism
-    const matchStatusTextBox = document.getElementById('comfirmPasswordStatus');
+    const matchStatusTextBox = document.getElementById('comfirmpasswordValidator');
     matchStatusTextBox.textContent = matchStatus;
     matchStatusTextBox.style.color = fontColor;
     return match;
@@ -277,7 +283,7 @@ export class Signup extends React.Component {
                 className="validate"
               />
               <label htmlFor="first_name">First Name</label>
-              <div className="comfirmPasswordStatus">
+              <div className="validatorContainer">
                 <span id="fnameValidator" />
               </div>
             </div>
@@ -293,7 +299,7 @@ export class Signup extends React.Component {
                 onChange={this.onChange}
               />
               <label htmlFor="middle_name">Middle Name</label>
-              <div className="comfirmPasswordStatus">
+              <div className="validatorContainer">
                 <span id="mnameValidator" />
               </div>
             </div>
@@ -309,7 +315,7 @@ export class Signup extends React.Component {
                 onChange={this.onChange}
               />
               <label htmlFor="last_name">Last Name</label>
-              <div className="comfirmPasswordStatus">
+              <div className="validatorContainer">
                 <span id="lnameValidator" />
               </div>
             </div>
@@ -327,7 +333,7 @@ export class Signup extends React.Component {
                 onChange={this.onChange}
               />
               <label htmlFor="password">Password</label>
-              <div className="comfirmPasswordStatus">
+              <div className="validatorContainer">
                 <span id="passwordValidatorsignup" />
               </div>
             </div>
@@ -349,8 +355,8 @@ export class Signup extends React.Component {
               >
                 comfirm password
                 </label>
-              <div className="comfirmPasswordStatus">
-                <span id="comfirmPasswordStatus" />
+              <div className="validatorContainer">
+                <span id="comfirmpasswordValidator" />
               </div>
 
             </div>
@@ -366,7 +372,7 @@ export class Signup extends React.Component {
                 onChange={this.onChange}
               />
               <label htmlFor="email" >Email</label>
-              <div className="comfirmPasswordStatus">
+              <div className="validatorContainer">
                 <span id="emailValidatorsignup" />
               </div>
             </div>
@@ -395,7 +401,7 @@ export class Signup extends React.Component {
                   ))}
                 </select>
               }
-              <div className="comfirmPasswordStatus">
+              <div className="validatorContainer">
                 <span id="roleIdValidator" />
               </div>
             </div>
