@@ -111,12 +111,11 @@ export class Login extends React.Component {
    */
   onSave(event) {
     event.preventDefault();
-    const user = this.state;
-    // delete validControls and message from the user object
-    delete user.validControls;
-    delete user.message;
-    delete user.isloading;
-    this.props.siginin(user);
+     // create request payload from state
+    const user = {
+      email: this.state.email,
+      password: this.state.password
+    };
     // show preloader
     this.setState({
       isloading: true
@@ -154,7 +153,7 @@ export class Login extends React.Component {
               required
             />
             <label htmlFor="email">Email</label>
-            <div className="comfirmPasswordStatus">
+            <div className="validatorContainer">
               <span id="emailValidator" />
             </div>
           </div>
@@ -171,7 +170,7 @@ export class Login extends React.Component {
               required
             />
             <label htmlFor="password">Password</label>
-            <div className="comfirmPasswordStatus">
+            <div className="validatorContainer">
               <span id="passwordValidator" />
             </div>
           </div>

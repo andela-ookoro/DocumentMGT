@@ -92,12 +92,22 @@ module.exports = (sequelize, DataTypes) => {
     instanceMethods: {},
     hooks: {
       beforeCreate(newuser) {
-        newuser.password = bcrypt
-        .hashSync(newuser.password, bcrypt.genSaltSync(10));
+        return bcrypt.hash(newuser.password, null, null, (err, hash) => {
+          if (hash) {
+            newuser.password = hash;
+          } else {
+            throw err;
+          }
+        });
       },
       beforeUpdate(newuser) {
-        newuser.password = bcrypt
-        .hashSync(newuser.password, bcrypt.genSaltSync(10));
+        return bcrypt.hash(newuser.password, null, null, (err, hash) => {
+          if (hash) {
+            newuser.password = hash;
+          } else {
+            throw err;
+          }
+        });
       }
     }
   });

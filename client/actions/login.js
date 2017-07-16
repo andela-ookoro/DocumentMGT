@@ -17,8 +17,9 @@ export const logIn = credentials =>
     return loginSuccess();
   })
   .catch((error) => {
-    // check for errors from server
-    if (error.response) {
-      return sendMessage('login', error.response.data.message);
+    let message = 'An internal error occurred, please try again';
+    if (error.response.status !== 500) {
+      message = error.response.data.message;
     }
+    return sendMessage('login', message);
   });
