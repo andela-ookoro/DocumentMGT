@@ -120,6 +120,7 @@ export class Login extends React.Component {
     this.setState({
       isloading: true
     });
+    this.props.siginin(user);
   }
 
    /**
@@ -131,7 +132,7 @@ export class Login extends React.Component {
       <div>
         {(this.state.isloading)
             ?
-              <div className="progress">
+              <div className="authprogress">
                 <div className="indeterminate" />
               </div>
             :

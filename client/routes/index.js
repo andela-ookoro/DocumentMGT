@@ -9,12 +9,14 @@ import Document from '../components/Document';
 import pageNotFound from '../components/pageNotFound';
 import CreateDocument from '../components/CreateDocument';
 import Profile from '../components/Profile';
+import manageUsers from '../components/ManageUsers';
 import configureStore from '../store/configureStore';
-import { requireAuth } from '../helper';
+import { requireAuth, isAdmin } from '../helper';
 
 const store = configureStore();
 const history = createBrowserHistory();
 
+console.log('..................', isAdmin());
 const routes = () => (
   <Provider store={store}>
     <HashRouter history={history}>
@@ -30,8 +32,15 @@ const routes = () => (
           />
           <Route path="/createDocument" component={CreateDocument} />
           <Route path="/profile" component={Profile} />
+          <Route
+            path="/manageUsers"
+            render={() => (
+              isAdmin() ? ( <Route  component={manageUsers} />)
+              : (<Route component={pageNotFound} />)
+            )}
+            />
         </App>
-        <Route path="*" component={pageNotFound} />
+        <Route path="*" component={pageNotFound}  />
       </Switch>
     </HashRouter >
   </Provider>

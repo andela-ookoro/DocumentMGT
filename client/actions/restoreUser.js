@@ -6,21 +6,16 @@ import sendMessage from './message';
  * @param {int} documentId -  the id of the document
  * @return {null} - sendReponse
  */
-const successMessage = 'document has been deleted successfully';
-const deleteDocument = documentId =>
-  axios.delete(`/api/v1/documents/${documentId}`)
-  .then(response => sendMessage('deleteDocument', successMessage))
+const successMessage = 'User has been restored successfully';
+const restoreUser = userId =>
+  axios.post(`/api/v1/users/restore/${userId}`, {status: 'active'})
+  .then(() => sendMessage('restoreUser', successMessage))
   .catch((error) => {
     let message = 'An internal error occurred, please try again';
     if (error.response.status !== 500) {
       message = error.response.data.message;
     }
-    return sendMessage('deleteDocument', message);
+    return sendMessage('restoreUser', message);
   });
 
-export default deleteDocument;
-
-
-
-
-
+export default restoreUser;

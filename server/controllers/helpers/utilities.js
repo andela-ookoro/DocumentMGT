@@ -54,6 +54,7 @@ module.exports = {
           res.status(401).send({
             message: 'Failed to authenticate token.'
           });
+          return;
         }
         // check if user is disable
         User

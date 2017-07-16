@@ -1,7 +1,22 @@
 import bcrypt from 'bcrypt-nodejs';
+import Sequelize from 'sequelize';
 import model from '../models/index';
-import sequelize from ''
 import { sendMessage, returnJWt, sendData } from './helpers/utilities';
+import sequelizeConfig from '../config/config.json';
+
+// connecct to postgrres
+const env = process.env.NODE_ENV || 'development';
+const DBconfig = sequelizeConfig[env];
+
+let sequelize;
+if (DBconfig.use_env_variable) {
+  sequelize = new Sequelize(process.env[DBconfig.use_env_variable]);
+} else {
+  sequelize = new Sequelize(
+    DBconfig.database, DBconfig.username, DBconfig.password, DBconfig
+  );
+}
+
 
 const User = model.user;
 const Document = model.document;
@@ -69,28 +84,94 @@ module.exports = {
    */
   getUsers(req, res) {
     // check it limit and offset where passed
-    let hint = {}
     const offset = parseInt(req.query.offset, 10) || 0;
-    const limit = parseInt(req.query.limit, 6);
-    if (req.query.offset || req.query.limit) {
-      hint = { offset, limit };
-    }
+    const limit = parseInt(req.query.limit, 10) || 6;
 
-    // get all users
-    return User.findAll({
-      order: [['fname', 'ASC']],
-      attributes: [
-        'fname', 'lname', 'mname', 'email', 'roleId'
-      ],
-      ...hint
-    })
-    .then((users) => {
-      if (users.length > 0) {
-        return sendData(res, users, 200);
+    /**
+     * build dynamic where clause from query parameter
+     * delete offset and limit from request query
+     * loop through query parameter to build a dynamic where clause
+     */
+     let whereClause = '';
+     let criteria= req.query;
+     delete criteria.limit;
+     delete criteria.offset;
+     delete criteria.token;
+     let criterion;
+     for (let key in criteria) {
+      if (criteria.hasOwnProperty(key)) {
+        criterion = ` users.${key} iLike '%${criteria[key]}%'`;
+        if (whereClause === '') {
+          whereClause = `where  ${criterion}`;
+        } else {
+          whereClause = `${whereClause} and ${criterion}`;
+        }
       }
-      return sendMessage(res, 'No user was found', 404);
+     }
+
+    const fetchRangeQuery = `
+     select CONCAT(fname, ' ', mname, ' ', lname) AS name,
+     users.id AS id,
+     users.status AS status,
+     users.email AS email,
+     count(documents.id) AS DocCount,
+     "users"."createdAt" AS "createdAt",
+     "roles"."title" as role
+     from "roles"
+     inner join "users"
+     on "users"."roleId" = "roles"."id"
+     left join documents 
+     on users.id = documents.owner
+     ${whereClause}
+     group by documents.owner,fname,lname,
+       fname, users.id,users.status,"roles"."title"
+     order by users.fname
+     offset ${offset}
+     limit ${limit};`;
+     console.log(fetchRangeQuery);
+    // get count of users for pagnition
+    const getUsersCount = `
+      select count(id) as count from users
+      ${whereClause}
+      ;`;
+
+    return sequelize.query(fetchRangeQuery)
+    .then(result => {
+      const users = result[0];
+      if (users.length > 0) {
+        // create object to store users fecth and total number of users
+        const usersPayload = {
+          count: 0,
+          rows: users
+        };
+        // get total number of users in category
+        return sequelize.query(getUsersCount)
+        .then(countResult => {
+          const count = countResult[0][0].count;
+          console.log(countResult);
+          usersPayload.count = parseInt(count, 10);
+          return sendData(res, usersPayload, 200);
+        })
+        .catch(error => sendMessage(res, error.message, 500));
+      }
+      return sendMessage(res, 'No user was found', 200);
     })
     .catch(error => sendMessage(res, error.message, 500));
+    // // get all users
+    // return User.findAll({
+    //   order: [['fname', 'ASC']],
+    //   attributes: [
+    //     'fname', 'lname', 'mname', 'email', 'roleId'
+    //   ],
+    //   ...hint
+    // })
+    // .then((users) => {
+    //   if (users.length > 0) {
+    //     return sendData(res, users, 200);
+    //   }
+    //   return sendMessage(res, 'No user was found', 404);
+    // })
+    // .catch(error => sendMessage(res, error.message, 500));
   },
   /**
    * create a user and return jwt and user name and email
@@ -181,6 +262,93 @@ module.exports = {
       })
       .catch(error => sendMessage(res, error.message, 400));
   },
+  /**
+   * detele user by id
+   * @param {*} req - client request
+   * @param {*} res - server response
+   * @return {string } - user fullname
+   */
+  deleteUser(req, res) {
+    // convert param to int
+    const userId = parseInt(req.params.id, 10);
+    if (isNaN(userId)) {
+      return sendMessage(res, 'Invalid user ID', 400);
+    }
+
+    // get user with this id
+    return User.findOne({
+        where: { id: userId }
+      })
+      .then((user) => {
+        if (!user) {
+          sendMessage(res, 'User was not found.', 200);
+        }
+
+        return user
+        .update({ status: 'disabled' })
+        .then(() => sendData(res, 'User has been blocked successfully', 200))
+        .catch(error => sendMessage(res, error.message, 400));
+      })
+      .catch(error => sendMessage(res, error.message, 400));
+  },
+  /**
+   * block user by id
+   * @param {*} req - client request
+   * @param {*} res - server response
+   * @return {string } - user fullname
+   */
+  blockUser(req, res) {
+    // convert param to int
+    const userId = parseInt(req.params.id, 10);
+    if (isNaN(userId)) {
+      return sendMessage(res, 'Invalid user ID', 400);
+    }
+
+    // get user with this id
+    return User.findOne({
+        where: { id: userId }
+      })
+      .then((user) => {
+        if (!user) {
+          sendMessage(res, 'User was not found.', 200);
+        }
+
+        return user
+        .update({ status: 'disabled' })
+        .then(() => sendData(res, 'User has been blocked successfully', 200))
+        .catch(error => sendMessage(res, error.message, 400));
+      })
+      .catch(error => sendMessage(res, error.message, 400));
+  },
+   /**
+   * restore user by id
+   * @param {*} req - client request
+   * @param {*} res - server response
+   * @return {string } - user fullname
+   */
+  restoreUser(req, res) {
+    // convert param to int
+    const userId = parseInt(req.params.id, 10);
+    if (isNaN(userId)) {
+      return sendMessage(res, 'Invalid user ID', 400);
+    }
+
+    // get user with this id
+    return User.findOne({
+        where: { id: userId }
+      })
+      .then((user) => {
+        if (!user) {
+          sendMessage(res, 'User was not found.', 200);
+        }
+
+        return user
+        .update({ status: 'active' })
+        .then(() => sendData(res, 'User has been restored successfully', 200))
+        .catch(error => sendMessage(res, error.message, 400));
+      })
+      .catch(error => sendMessage(res, error.message, 400));
+  },
    /**
    * - update registered users
    * @param {*} req - client request
@@ -260,7 +428,7 @@ module.exports = {
     // get new user info
     const query = req.query;
     // get user with this id
-    return User.findAll({
+    return User.findAndCountAll({
         where: { ...query },
         attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
       })
@@ -295,7 +463,7 @@ module.exports = {
           return sendMessage(res, 'User was not found.', 200);
         }
         // return user's documents
-       return  Document.findAll({
+       return  Document.findAndCountAll({
           where: { owner: userId },
           attributes: docAttributes
         })

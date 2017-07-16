@@ -3,7 +3,8 @@ import * as types from '../actions/actionTypes';
 export default (state = { info: '', from: '' }, action) => {
   switch (action.type) {
     case types.MESSAGE:
-      const message = action.message;
+      let message = action.message;
+      console.log('................', message);
       // check if user account is block
       if (message.info === 'This account is blocked, Please contact the admin') {
         // logout user
@@ -13,6 +14,11 @@ export default (state = { info: '', from: '' }, action) => {
         return {
           info: message.info,
           from: 'login'
+        }
+      } else if (!message.from) {
+        message = {
+          from: 'reset',
+          info: 'reset'
         }
       }
       return message;

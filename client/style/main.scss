@@ -288,7 +288,7 @@ input[type=text].invalid {
   color: #a1887f !important;
   font-family: 'Fjalla One', sans-serif;
 }
-.validatorContainer{
+.comfirmPasswordStatus{
     display: block;
     content: "";
     position: absolute;
@@ -301,20 +301,30 @@ input[type=text].invalid {
   color: #BD2F10;
 }
 .progress {
-    position: relative;
-    height: 4px;
-    display: block;
-    width: 100%;
-    background-color: #a1887f;
-    border-radius: 2px;
-    margin-top: -15px;
-    overflow: hidden;
+  position: relative;
+  height: 4px;
+  display: block;
+  width: 100%;
+  background-color: #a1887f;
+  border-radius: 2px;
+  margin-top: -15px;
+  overflow: hidden;
 }
 
-.progress .indeterminate {
+.authprogress{
+  position: relative;
+  height: 4px;
+  display: block;
+  width: 40%;
+  background-color: #a1887f;
+  border-radius: 2px;
+  margin-top: -15px;
+  overflow: hidden;
+}
+.progress .indeterminate, .authprogress .indeterminate {
     background-color: #ffffff;
 }
-.progress .indeterminate:before {
+.progress .indeterminate:before, .authprogress .indeterminate:before {
     content: '';
     position: absolute;
     background-color: inherit;
@@ -336,4 +346,26 @@ input[type=text].invalid {
 }
 .gsc-control-cse input {
   width: 20px !important;
+}
+.searchCount {
+  color:  #a1887f;
+  font-family: 'Fjalla One', sans-serif;
+}
+#adminDashboard {
+  text-align: center !important;
+}
+.admin-Action {
+  color: #ED7810 !important;
+}
+#admin-icon{
+  display: inline;
+  color: #ED7810 !important;
+}
+
+#spanRole {
+  color: #ED7810 !important;
+  float: right;
+}
+#spanRole i {
+  display: inline !important ;
 }
