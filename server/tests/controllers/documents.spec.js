@@ -5,7 +5,10 @@ import supertest from 'supertest';
 import expect from 'expect';
 import app from '../../../server';
 import mockdata from '../mockData';
+import model from '../../models/index';
 
+const Role = model.role;
+const User = model.user;
 const should = chai.should();
 const request = supertest.agent(app);
 chai.use(chaiHttp);
@@ -15,6 +18,7 @@ chai.use(chaiHttp);
 const document = mockdata.document;
 let mockUser = mockdata.user;
 const registeredDocument = {};
+let adminUserId;
 
 describe('/api/v1/document', () => {
   // cache jwt and userinfo
@@ -23,30 +27,52 @@ describe('/api/v1/document', () => {
 
   // create user to own the request
   before((done) => {
-    request
-    .post('/api/v1/users')
-    .send(mockUser)
-    .end((err, res) => {
-      if (!err) {
-        jwt = res.body.jwtToken;
-        testUser = res.body.userInfo;
-        // set document owner to testUser
-        document.owner = testUser.id;
-        done();
-      }
-    });
+    // find or create admin role
+    let adminRoleId;
+    Role
+      .findOrCreate({
+        where: {
+          title: 'admin'
+        },
+        defaults: {
+          description: 'Admin role has full priviledges',
+          status: 'enable'
+        }
+      })
+      .spread((newrole, created) => {
+        const adminRole = newrole.get({
+          plain: true
+        });
+        adminRoleId = adminRole.id;
+        const wasCreated = created;
+         // create admin account
+        // set user role to admin
+        mockUser.roleId = adminRoleId;
+        request
+          .post('/api/v1/users')
+          .send(mockUser)
+          .end((err, res) => {
+            if (!err) {
+              jwt = res.body.jwtToken;
+              testUser = res.body.userInfo;
+              // set document owner to testUser
+              document.owner = testUser.id;
+              let adminUserId = testUser.id;
+              done();
+            }
+          });
+      });
   });
 
   // delete user after test
   after((done) => {
-    request
-    .delete('/api/v1/users/1')
-    .set('Authorization', jwt)
-    .end((err, res) => {
-      if (!err) {
-        done();
+    const id = adminUserId
+    User.destroy({ 
+      where: { 
+        id
       }
     });
+    done();
   });
 
   describe('POST /document ', () => {

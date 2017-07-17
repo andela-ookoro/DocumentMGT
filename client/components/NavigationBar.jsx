@@ -39,6 +39,7 @@ class NavigationBar extends React.Component {
     // get the user's info from localstorage
     const user = JSON.parse(localStorage.getItem('userInfo'));
     const username = user.name;
+    const role = user.title;
     const nav = () => (
       <div>
         <li>
@@ -51,7 +52,7 @@ class NavigationBar extends React.Component {
             Create Document
           </Link>
         </li>
-        {(user.role === 3)
+        {(user.title === 'admin')
           ?
             <li>
               <Link to="/manageUsers" id="manageUsers">
@@ -64,15 +65,10 @@ class NavigationBar extends React.Component {
         <li>
           <Link to="/profile" className="username" id="profile">
             {username}
-            {(user.role === 3) 
-              ?
-                 <span id="spanRole">
-                    <i className="material-icons">supervisor_account</i>
-                    &nbsp; Admin
-                  </span>
-              :
-              ''
-            }
+            <span id="spanRole">
+              <i className="material-icons">supervisor_account</i>
+              &nbsp; {role}
+            </span>
           </Link>
         </li>
         <li>
