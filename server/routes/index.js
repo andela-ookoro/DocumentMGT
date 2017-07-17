@@ -23,9 +23,10 @@ module.exports = (app) => {
 
   app.route('/users/:id')
   .get(usersController.getUser)
-  .delete(usersController.deleteUser)
+  .delete(usersController.blockUser)
   .put(usersController.updateUser);
 
+  app.post('/users/restore/:id', adminOnly, usersController.restoreUser);
   app.get('/users', adminOnly, usersController.getUsers);
 
   app.route('/documents/:id')

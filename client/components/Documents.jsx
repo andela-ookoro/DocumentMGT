@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import toaster from 'toastr';
+import _ from 'lodash/array'
 import getDocuments from '../actions/getDocuments';
 import { toServertime } from '../helper';
 import deleteDocument from '../actions/deleteDocument';
+import sendMessage from '../actions/message';
 
 /**
  * @class Documents
@@ -27,7 +29,8 @@ export class Documents extends React.Component {
       category: 'myDocument',
       searchHint: '',
       pageCount: 0,
-      isloading: false
+      isloading: false,
+      curDocID: 0
     };
 
     // this.onChange = this.onChange.bind(this);
@@ -66,31 +69,41 @@ export class Documents extends React.Component {
    *  @returns {null} -
    */
   componentWillReceiveProps(nextProps) {
-    // set state to reflect the props dispatched
-    this.setState({
-      status: nextProps.status,
-      documents: nextProps.documents,
-      pageCount: nextProps.pageCount
-    });
-    const message = nextProps.message;
+    let message = '';
+    const sender = nextProps.messageFrom;
     // show error message when error is reported
-    if (nextProps.messageFrom === 'getDocuments'
-      || nextProps.messageFrom === 'deleteDocument' || nextProps.documents) {
+    if (sender === 'getDocuments' || sender === 'deleteDocument' 
+      || nextProps.documents) {
+        message = nextProps.message;
+        if (sender === 'deleteDocument') {
+          // remove document from table
+          if (message.toString().includes('success')) {
+            // remove row from table when opertion was successfully
+            const curDocId = this.state.curDocID;
+            newUsers = _.remove(this.state.documents, (document) => {
+              return (document.id === parseInt(curDocId, 10));
+            });
+            this.props.sendMessage('reset', 'reset');
+          } 
+        }
+
       // show message only when message exists
       if (message !== '') {
         toaster.info(nextProps.message);
       }
-      this.setState({
-        message,
-        isloading: false
-      });
-    } else {
-      // reset message state
-      this.setState({
-        message: '',
-        isloading: false
-      });
     }
+    // set state to reflect the props dispatched
+    const pageCount = nextProps.pageCount;
+    this.setState({
+      message: '',
+      isloading: false,
+      noFound: `${pageCount} document${(pageCount<2) ? '' : 's'} found`,
+      curDocID: 0,
+      status: nextProps.status,
+      pageCount,
+      documents: nextProps.documents,
+    });
+
   }
 
   /**
@@ -120,7 +133,8 @@ export class Documents extends React.Component {
     const documentID = e.target.id;
     this.props.deleteDocument(documentID);
     this.setState({
-      isloading: true
+      isloading: true,
+      curDocID: documentID
     });
   }
 
@@ -179,8 +193,14 @@ export class Documents extends React.Component {
           <div className="col s12 m8 l10" id="searchDiv">
             <div className="row">
               <form>
-                <p className="errorMessage col s12 m12 l5 ">
-                  {this.state.message} </p>
+               <div className="col s12 m12 l5 ">
+                {(this.state.message !== '')
+                  ?
+                    <h6 className="errorMessage">{this.state.message} </h6>
+                  :
+                    <h6 className="searchCount">{this.state.noFound} </h6>
+                }
+                </div>
                 <div className="col s9 m8 l5">
                   <input
                     placeholder="Search for documents"
@@ -311,12 +331,12 @@ export class Documents extends React.Component {
                                 <i
                                   className="material-icons"
                                   id={document.id}
-                                  onClick={this.deleteDocument}
+                                  onDoubleClick={this.deleteDocument}
                                 >
                                   delete
                                   </i>
                                 <span className="tooltiptext">
-                                  Delete document
+                                  double click to Delete document
                                 </span>
                               </botton>
                             </td>
@@ -384,13 +404,15 @@ const mapDispatchToProps = dispatch => (
     getDocuments: (accessRight, title, offset, limit) => {
       dispatch(getDocuments(accessRight, title, offset, limit));
     },
-    deleteDocument: documentID => dispatch(deleteDocument(documentID))
+    deleteDocument: documentID => dispatch(deleteDocument(documentID)),
+    sendMessage: () => dispatch(sendMessage())
   }
 );
 
 Documents.propTypes = {
   getDocuments: PropTypes.func.isRequired,
   deleteDocument: PropTypes.func.isRequired,
+  sendMessage: PropTypes.func.isRequired,
   documents: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

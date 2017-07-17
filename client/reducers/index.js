@@ -4,9 +4,10 @@ import session from './session';
 import SignupMessage from './signup';
 import roles from './role';
 import createDocStatus from './createDoc';
-import Documents from './documents';
+import Documents from './getDocuments';
 import deleteDocument from './deleteDocument';
 import document from './getDocument';
+import Users from './getUsers';
 /**
  * contains every reducers
  */
@@ -18,5 +19,6 @@ export default combineReducers({
   createDocStatus,
   Documents,
   deleteDocument,
-  document
+  document,
+  Users
 });

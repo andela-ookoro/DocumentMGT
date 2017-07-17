@@ -46,6 +46,8 @@ class Layout extends React.Component {
         $('a[href$="#/createDocument"]').addClass('activelink');
       } else if (url.includes('#/profile')) {
         $('a[href$="#/profile"]').addClass('activelink');
+      } else if (url.includes('#/manageUsers')) {
+         $('a[href$="#/manageUsers"]').addClass('activelink');
       }
     });
     return (

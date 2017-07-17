@@ -39,8 +39,6 @@ describe('components', () => {
     describe('When a document exist', () => {
       const renderedDoc = Wrapper.props().document;
       it('should render the title of the document', () => {
-        // const title = Wrapper.find('#title').props();
-        // console.log('title', title);
         expect(renderedDoc.title).toEqual(mockDocument.title);
       });
 

@@ -7,7 +7,6 @@
 //     });
 //     // respond to document update
 //     socket.on('documentUpdate', (documentID) => {
-//       console.log('................', documentID);
 //       socket.emit('ReloadDocument', { documentID });
 //     });
 //   });

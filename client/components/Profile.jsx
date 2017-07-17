@@ -91,12 +91,10 @@ export class Profile extends React.Component {
   * @returns {null} -
   */
   componentWillReceiveProps(nextProps) {
-    console.log('state',this.state);
     if (nextProps.messageFrom === 'profile') {
       const message = nextProps.message;
       const formeValidControls = this.state.validControls;
       toaster.info(message);
-    console.log('state',this.state);
       this.setState({
         isloading: false,
         message,
