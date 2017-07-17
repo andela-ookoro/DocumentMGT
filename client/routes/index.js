@@ -16,7 +16,6 @@ import { requireAuth, isAdmin } from '../helper';
 const store = configureStore();
 const history = createBrowserHistory();
 
-console.log('..................', isAdmin());
 const routes = () => (
   <Provider store={store}>
     <HashRouter history={history}>
@@ -39,6 +38,7 @@ const routes = () => (
               : (<Route component={pageNotFound} />)
             )}
             />
+          <Route path="*" component={pageNotFound}  />
         </App>
         <Route path="*" component={pageNotFound}  />
       </Switch>

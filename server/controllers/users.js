@@ -128,7 +128,7 @@ module.exports = {
      order by users.fname
      offset ${offset}
      limit ${limit};`;
-     console.log(fetchRangeQuery);
+
     // get count of users for pagnition
     const getUsersCount = `
       select count(id) as count from users
@@ -148,7 +148,6 @@ module.exports = {
         return sequelize.query(getUsersCount)
         .then(countResult => {
           const count = countResult[0][0].count;
-          console.log(countResult);
           usersPayload.count = parseInt(count, 10);
           return sendData(res, usersPayload, 200);
         })
@@ -383,7 +382,6 @@ module.exports = {
           const pass = bcrypt.compareSync(curPassword, foundUser.password);
           const test =  bcrypt.hashSync(curPassword, bcrypt.genSaltSync(10));
           const test1 =  bcrypt.hashSync(curPassword);
-          console.log(foundUser.dataValues, curPassword,pass, test, test1)
           if (pass) {
             // create changes
             const changes = {
@@ -401,7 +399,6 @@ module.exports = {
               .update({ ...changes })
               .then(updateUser => returnJWt(res, updateUser.dataValues, 200))
               .catch(error => {
-                console.log(error);
                 return sendMessage(res, error.message, 500)
               });
           }
@@ -411,7 +408,6 @@ module.exports = {
         })
         .catch(error => {
           const message = error.message || error.toString()
-          console.log(error);
           return sendMessage(res, message, 500)
         });
     }

@@ -64,10 +64,15 @@ class NavigationBar extends React.Component {
         <li>
           <Link to="/profile" className="username" id="profile">
             {username}
-            <span id="spanRole">
-               <i className="material-icons">supervisor_account</i>
-               &nbsp; Admin
-            </span>
+            {(user.role === 3) 
+              ?
+                 <span id="spanRole">
+                    <i className="material-icons">supervisor_account</i>
+                    &nbsp; Admin
+                  </span>
+              :
+              ''
+            }
           </Link>
         </li>
         <li>

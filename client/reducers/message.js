@@ -4,7 +4,6 @@ export default (state = { info: '', from: '' }, action) => {
   switch (action.type) {
     case types.MESSAGE:
       let message = action.message;
-      console.log('................', message);
       // check if user account is block
       if (message.info === 'This account is blocked, Please contact the admin') {
         // logout user

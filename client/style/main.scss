@@ -89,7 +89,7 @@ button {
   bottom: 0px
 }
 .extraDiv {
-  padding: 50px
+  padding: 60px
 }
 .welcomeDiv {
   color:#a1887f;
@@ -365,6 +365,9 @@ input[type=text].invalid {
 #spanRole {
   color: #ED7810 !important;
   float: right;
+  margin-top: 20px;
+  margin-left: -200px;
+  font-size: 10px;
 }
 #spanRole i {
   display: inline !important ;

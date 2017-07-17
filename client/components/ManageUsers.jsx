@@ -76,7 +76,6 @@ export class ManageUsers extends React.Component {
     const pageCount = nextProps.pageCount;
     let message = '';
     let newUsers;
-    console.log(nextProps.messageFrom);
     // show error message when error is reported
     if (nextProps.messageFrom === 'getUsers'
       || nextProps.messageFrom === 'blockUser' 
@@ -181,7 +180,6 @@ export class ManageUsers extends React.Component {
     const offset = Math.ceil(curPage * 6);
     const searchHint = this.state.searchHint;
     const category = this.state.category;
-    console.log(category,'............', offset);
     this.props.getUsers(category, searchHint, offset, 6);
   }
 
