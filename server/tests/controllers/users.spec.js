@@ -4,6 +4,10 @@ import chaiHttp from 'chai-http';
 import supertest from 'supertest'
 import faker from 'faker';
 import app from '../../../server';
+import model from '../../models/index';
+
+const Role = model.role;
+const User = model.user;
 
 const should = chai.should();
 const request = supertest.agent(app);
@@ -13,36 +17,69 @@ chai.use(chaiHttp);
 // import mockdata
 import mockdata from '../mockData';
 let user = {
-  fname: faker.name.firstName(),
-  lname: faker.name.lastName(),
-  mname: faker.name.firstName(),
+  fname: 'Dele',
+  lname: 'Musa',
+  mname: 'Ngozi',
   password: '!smilesh2o',
   email: faker.internet.email(),
   roleId: 3
-};;
+};
 let secondUser = mockdata.user;
-const registeredUser = {};
+let regulerUser = {};
+let adminUser = {};
 
 describe('/api/v1/users ', () => {
   // cache jwt and userinfo
   let jwt;
   let testUser;
 
-  // create user to own the request
   before((done) => {
-    request
-    .post('/api/v1/users')
-    .send(user)
-    .end((err, res) => {
-      if (!err) {
-        jwt = res.body.jwtToken;
-        // store registered user for futher testing
-        registeredUser.email = user.email;
-        registeredUser.password = user.password;
-        registeredUser.id = res.body.userInfo.id;
-        done();
+    // find or create admin role
+    let adminRoleId;
+    Role
+      .findOrCreate({
+        where: {
+          title: 'admin'
+        },
+        defaults: {
+          description: 'Admin role has full priviledges',
+          status: 'enable'
+        }
+      })
+      .spread((newrole, created) => {
+        const adminRole = newrole.get({
+          plain: true
+        });
+        adminRoleId = adminRole.id;
+        const wasCreated = created;
+         // create admin account
+        // set user role to admin
+        user.roleId = adminRoleId;
+        request
+          .post('/api/v1/users')
+          .send(user)
+          .end((err, res) => {
+            if (!err) {
+              jwt = res.body.jwtToken;
+              // store registered user for futher testing
+              adminUser.email = user.email;
+              adminUser.password = user.password;
+              adminUser.id = res.body.userInfo.id;
+              done();
+            }
+          });
+      });
+  });
+ 
+  // delete user after test
+  after((done) => {
+    const id = [adminUser.id, regulerUser.id]
+    User.destroy({ 
+      where: { 
+        id 
       }
     });
+    done();
   });
 
   describe('POST /api/v1/users ', () => {
@@ -50,6 +87,7 @@ describe('/api/v1/users ', () => {
     'after successful signup',
     (done) => {
       secondUser.email = `u${secondUser.email}`;
+      secondUser.roleId = 1;
       request
         .post('/api/v1/users')
         .send(secondUser)
@@ -58,6 +96,13 @@ describe('/api/v1/users ', () => {
             res.should.have.status(201);
             res.body.userInfo.email.should.be.eql(secondUser.email);
             res.body.status.should.be.eql('success');
+            // save regular user credentials
+            regulerUser = {
+              email: secondUser.email,
+              password: secondUser.password,
+              id: res.body.userInfo.id,
+              jwt: res.body.jwtToken
+            }
           }
           done();
         });
@@ -87,11 +132,11 @@ describe('/api/v1/users ', () => {
     (done) => {
       request
         .post('/api/v1/users/login')
-        .send(registeredUser)
+        .send(adminUser)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(200);
-            res.body.userInfo.email.should.be.eql(registeredUser.email);
+            res.body.userInfo.email.should.be.eql(adminUser.email);
             res.body.status.should.be.eql('success');
           }
           done();
@@ -100,10 +145,10 @@ describe('/api/v1/users ', () => {
 
     it('A user should recieve a message after unsuccessful login',
     (done) => {
-      registeredUser.password += 'wrong';
+      adminUser.password += 'wrong';
       request
         .post('/api/v1/users/login')
-        .send(registeredUser)
+        .send(adminUser)
         .end((err, res) => {
           if (!err) {
             res.should.have.status(401);
@@ -116,13 +161,13 @@ describe('/api/v1/users ', () => {
 
     it('A user should recieve a message when compulsory fields are not give',
     (done) => {
-      registeredUser.password = '';
+      adminUser.password = '';
       request
         .post('/api/v1/users/login')
-        .send(registeredUser)
+        .send(adminUser)
         .end((err, res) => {
           if (res) {
-            res.should.have.status(500);
+            res.should.have.status(401);
             res.body.status.should.be.eql('fail');
             res.body.message.should.be.eql('Email and password are compulsory.');
           }
@@ -166,7 +211,7 @@ describe('/api/v1/users ', () => {
   describe('GET /api/v1/users/:id ', () => {
     it('A user should get a user by id \'when id exist\'', (done) => {
       request
-        .get(`/api/v1/users/${registeredUser.id}`)
+        .get(`/api/v1/users/${adminUser.id}`)
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -210,7 +255,7 @@ describe('/api/v1/users ', () => {
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data.should.be.an('array');
+              res.body.data.rows.should.be.an('array');
             } else {
               res.body.status.should.be.eql('No user found.');
             }
@@ -224,7 +269,7 @@ describe('/api/v1/users ', () => {
     it('A user should get a documents belonging to a user by userid ' +
       '\'when id exist\'', (done) => {
       request
-        .get(`/api/v1/users/${registeredUser.id}/documents`)
+        .get(`/api/v1/users/${adminUser.id}/documents`)
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -263,7 +308,7 @@ describe('/api/v1/users ', () => {
     }
   it('A user should update a user by id \'when id exist\'', (done) => {
     request
-      .put(`/api/v1/users/${registeredUser.id}`)
+      .put(`/api/v1/users/${adminUser.id}`)
       .set('Authorization', jwt)
       .send(update)
       .end((err, res) => {
@@ -328,9 +373,9 @@ describe('/api/v1/users ', () => {
       });
     });
 
-    it('A admin can delete a user by id \'when id exist\'', (done) => {
+    it('An admin can delete a user by id \'when id exist\'', (done) => {
       request
-        .delete(`/api/v1/users/${registeredUser.id}`)
+        .delete(`/api/v1/users/${regulerUser.id}`)
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -348,8 +393,8 @@ describe('/api/v1/users ', () => {
 
     it(`A blocked user should recieve text ${message}`, (done) => {
       request
-      .delete(`/api/v1/users/${registeredUser.id}`)
-      .set('Authorization', jwt)
+      .delete(`/api/v1/users/${regulerUser.id}`)
+      .set('Authorization', regulerUser.jwt)
       .end((err, res) => {
         if (!err) {
           res.should.have.status(401);
@@ -358,6 +403,56 @@ describe('/api/v1/users ', () => {
         }
         done();
       });
+    });
+  });
+
+  describe('POST /users/restore/:id ', () => {
+    const message = 'This account is blocked, Please account the admin';
+
+    it('An admin should recieve \'User was not found\' for unknown userid ',
+    (done) => {
+      request
+      .post(`/api/v1/users/restore/-2`)
+      .set('Authorization', jwt)
+      .end((err, res) => {
+        if (!err) {
+          res.should.have.status(200);
+          res.body.message.should.be.eql('User was not found.');
+        }
+        done();
+      });
+    });
+
+    it('An admin should recieve \'Invalid user ID\' for non numeric userid',
+     (done) => {
+      request
+      .post(`/api/v1/users/restore/a`)
+      .set('Authorization', jwt)
+      .end((err, res) => {
+        if (!err) {
+          res.should.have.status(400);
+          res.body.message.should.be.eql('Invalid user ID');
+        }
+        done();
+      });
+    });
+
+    it('An admin can restore a user by id \'when id exist\'', (done) => {
+      request
+        .post(`/api/v1/users/restore/${regulerUser.id}`)
+        .set('Authorization', jwt)
+        .end((err, res) => {
+          if (!err) {
+            res.should.have.status(200);
+            // if there is no error, that is user exist
+            if (!res.body.message) {
+              res.body.status.should.be.eql('success');
+            } else {
+              res.body.message.should.be.eql('User was not found.');
+            }
+          }
+          done();
+        });
     });
   });
 });

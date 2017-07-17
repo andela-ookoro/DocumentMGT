@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt-nodejs';
 import model from '../../models/index';
 
 const User = model.user;
-
+const Role = model.role;
 module.exports = {
   /**
    * send error message to client
@@ -101,20 +101,33 @@ module.exports = {
    * @returns {null} -
    */
   returnJWt(res, user, statusCode) {
-    // create jwt payload
-    const userInfo = {
-      email: user.email,
-      name: `${user.fname} ${user.mname} ${user.lname}`,
-      role: user.roleId,
-      id: user.id
-    };
-    const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET);
-    // send response to client
-    res.status(statusCode).send({
-      status: 'success',
-      userInfo,
-      jwtToken
-    });
+
+    // get user role title
+    Role.findOne({
+      where: { id: user.roleId }
+    })
+    .then((role) => {
+      if (!role) {
+        return sendMessage(res, 'Role not found.', 200);
+      }
+      // create jwt payload
+      const userInfo = {
+        email: user.email,
+        name: `${user.fname} ${user.mname} ${user.lname}`,
+        role: role.id,
+        title: role.title,
+        id: user.id
+      };
+      const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET);
+      // send response to client
+      res.status(statusCode).send({
+        status: 'success',
+        userInfo,
+        jwtToken
+      });
+      return;
+    })
+    .catch(error => sendMessage(res, error.message, 400));
   },
 
   /**
@@ -125,13 +138,13 @@ module.exports = {
    * @returns {object} - next route or error message
    */
   adminOnly(req, res, next) {
-    if (req.user.role === 3) {
+    if (req.user.title === 'admin') {
       next();
       return;
     }
     res.status(403).send({
       status: 'fail',
-      message: 'Invalid Oeeeeeeperation'
+      message: 'Invalid Operation'
     });
   },
 

@@ -22,25 +22,26 @@ const routes = () => (
       <Switch>
         <Route exact path="/" component={Auth} />
         <App onEnter={requireAuth}>
-          <Route path="/dashboard" component={Documents} />
-          <Route path="/document/:documentId" component={Document} />
-          <Route path="/document" component={Document} />
+          <Route exact path="/dashboard" component={Documents} />
+          <Route exact path="/document/:documentId" component={Document} />
+          <Route exact path="/document" component={Document} />
           <Route
+            exact
             path="/createDocument/:documentId"
             component={CreateDocument}
           />
-          <Route path="/createDocument" component={CreateDocument} />
-          <Route path="/profile" component={Profile} />
+          <Route exact path="/createDocument" component={CreateDocument} />
+          <Route exac path="/profile" component={Profile} />
           <Route
+            exact
             path="/manageUsers"
             render={() => (
               isAdmin() ? ( <Route  component={manageUsers} />)
               : (<Route component={pageNotFound} />)
             )}
             />
-          <Route path="*" component={pageNotFound}  />
         </App>
-        <Route path="*" component={pageNotFound}  />
+        <Route component={pageNotFound} />
       </Switch>
     </HashRouter >
   </Provider>

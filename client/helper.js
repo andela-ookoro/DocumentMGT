@@ -14,7 +14,7 @@ export const requireAuth = () => {
  */
 export const isAdmin = () => {
   const user = JSON.parse(localStorage.getItem('userInfo'));
-  return (user.role === 3);
+  return (user.title === 'admin');
 };
 export const toServertime = (time =>
  new Date(time).toDateString()

@@ -4,16 +4,14 @@ import supertest from 'supertest';
 import faker from 'faker';
 
 import app from '../../../server';
-// import mockdata
 import mockdata from '../mockData';
+import model from '../../models/index';
 
+const Role = model.role;
+const User = model.user;
 const should = chai.should();
-
-
 const request = supertest.agent(app);
 chai.use(chaiHttp);
-
-
 
 const role = mockdata.role;
 const mockUser = {
@@ -26,6 +24,7 @@ const mockUser = {
 };
 const roleWithoutTitle = mockdata.roleWithoutTitle;
 const registeredRole = {};
+let adminUserId;
 
 describe('/api/v1/role ', () => {
   // cache jwt and userinfo
@@ -33,31 +32,49 @@ describe('/api/v1/role ', () => {
 
   // create user to own the request
   before((done) => {
-    request
-    .post('/api/v1/users')
-    .send(mockUser)
-    .end((err, res) => {
-      if (!err) {
-        jwt = res.body.jwtToken;
-        done();
-      } else {
-        done();
-      }
-    });
+    // find or create admin role
+    let adminRoleId;
+    Role
+      .findOrCreate({
+        where: {
+          title: 'admin'
+        },
+        defaults: {
+          description: 'Admin role has full priviledges',
+          status: 'enable'
+        }
+      })
+      .spread((newrole, created) => {
+        const adminRole = newrole.get({
+          plain: true
+        });
+        adminRoleId = adminRole.id;
+        const wasCreated = created;
+         // create admin account
+        // set user role to admin
+        mockUser.roleId = adminRoleId;
+        request
+          .post('/api/v1/users')
+          .send(mockUser)
+          .end((err, res) => {
+            if (!err) {
+              jwt = res.body.jwtToken;
+              adminUserId = res.body.userInfo.id;
+              done();
+            }
+          });
+      });
   });
 
   // delete user after test
   after((done) => {
-    request
-    .delete('/api/v1/users/1')
-    .set('Authorization', jwt)
-    .end((err, res) => {
-      if (!err) {
-        done();
-      } else {
-        done();
+    const id = adminUserId
+    User.destroy({ 
+      where: { 
+        id
       }
     });
+    done();
   });
 
   describe('POST /api/v1/roles ', () => {

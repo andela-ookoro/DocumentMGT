@@ -24,8 +24,8 @@ module.exports = {
       attributes: ['id', 'title', 'description'],
       order: [['title', 'ASC']],
       where: {
-        id: {
-          $ne: 3
+        title: {
+          $ne: 'admin'
         }
       },
       ...hint
