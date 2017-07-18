@@ -48,6 +48,7 @@ const initialState = {
 }
 
 const store = mockStore(initialState);
+
 const mockTab = {
   preventDefault: jest.fn(),
   target: {
@@ -56,7 +57,6 @@ const mockTab = {
     value: 'test'
   }
 };
-
 
 // mock html control
 const mockEvent = mockData.mockEvent;
@@ -76,7 +76,7 @@ const props1 = {
 const setup = () => {
   const Wrapper = mount(
     <MemoryRouter>
-      <Documents {...props1} />
+      <Documents store={store} />
     </MemoryRouter>
   );
   return {
