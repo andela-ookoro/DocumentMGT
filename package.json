@@ -16,7 +16,7 @@
     "dev": "NODE_ENV=development nodemon --watch server --exec babel-node  -- server.js",
     "start:dev": "nodemon ./bin/www",
     "client-test": "jest  --config jest.config.js -u ",
-    "test-e2e": "nightwatch",
+    "e2e-test": "nightwatch",
     "acceptaneTest": "run-p -r start  test-e2e",
     "server-pretest": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=development sequelize db:migrate ",
     "server-test": "npm run server-pretest && DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=development PORT=3000 nyc  mocha --require ./server/tests/testSetup.js --timeout 900000 --compilers js:babel-register -- ./server/tests/**/*.spec.js"
@@ -107,6 +107,7 @@
     "i": "^0.3.5",
     "istanbul": "^0.4.5",
     "jest": "^20.0.4",
+    "jest-environment-jsdom": "^20.0.3",
     "mocha": "^3.4.2",
     "nightwatch": "^0.9.16",
     "nightwatch-cucumber": "^7.1.10",

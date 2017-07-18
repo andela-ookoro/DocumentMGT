@@ -1,7 +1,7 @@
 import axios from 'axios';
-import * as types from '../../actions/actionTypes'; 
+import { MESSAGE, SIGNUP_IN_SUCCESS }from '../../actions/actionTypes'; 
 import { signup } from '../../actions/signup';
-import mockData from '../../../server/__test__/mockData';
+import mockData from '../../../server/tests/mockData';
 
 // mock axios post and get methods.
 const mockUser = mockData.user;
@@ -17,7 +17,15 @@ const resolveData = {
 };
 
 let expectedAction = {
-  type: types.SIGNUP_IN_SUCCESS
+  type: SIGNUP_IN_SUCCESS
+};
+
+const errorAction = {
+  messag: {
+    from: "signup",
+    info: mockData.errorMessage
+  },
+ type: MESSAGE
 };
 
 const error = {
@@ -41,9 +49,9 @@ const mockError = new Promise((resolve, reject) => {
 axios.post = jest.fn((url) => mockResponse);
 
 describe('getRoles action', () => {
-  it('should make a "post" request to a route "/users"', () => {
+  it('should make a "post" request to a route "/api/v1/users"', () => {
     signup(mockUser);
-    expect(axios.post).toBeCalledWith('/users', mockUser);
+    expect(axios.post).toBeCalledWith('/api/v1/users', mockUser);
   });
 
   it(`should return an action with type "SIGNUP_IN_SUCCESS" on successful signup`,

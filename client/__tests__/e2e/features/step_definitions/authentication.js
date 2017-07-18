@@ -33,6 +33,17 @@ Role.find({
   }
 });
 
+// delete user account if it exist 
+User.findOne({
+  where: {
+    email: user.email
+  }
+})
+.then(founduser => {
+  if(founduser) {
+    founduser.destroy();
+  }
+});
 
 
 defineSupportCode(({ Given, Then, When, defineStep }) => {
@@ -43,12 +54,17 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
     .url('http://localhost:1142')
       .execute(() => Object.assign({}, localStorage), [], () => {
       })
-    .waitForElementVisible('body', 50000);
+    .waitForElementVisible('body', 5000);
   });
 
-  And(/^I click on the "([^"]*)" tab$/, async (tab) => {
-    await client.waitForElementVisible(`#${tab}tab`, 100000)
-    .click(`#${tab}tab`);
+  And(/^I click the "([^"]*)" tab$/, async (form) => {
+    await client.waitForElementVisible(`#${form}tab`, 5000)
+    .click(`#${form}tab`);
+  });
+
+ When(/^I click on the "([^"]*)" tab$/, async (form) => {
+    await client.waitForElementVisible(`#${form}tab`, 5000)
+    .click(`#${form}tab`);
   });
 
   When(/^I fill the signup form with invalid values$/, async () => {
@@ -65,6 +81,7 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
     .setValue('#emailsignup', user.email.substring(0, 15))
     .setValue('#roleId', user.roleID);
   });
+
   Then(/^I should recieve error message on the "([^"]*)" form$/,
    async (form) => {
      // for signup form only
@@ -76,7 +93,7 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
        .assert
         .containsText('#mnameValidator', '2 to 30 alphabets only')
        .assert
-        .containsText('#comfirmPasswordStatus', 'Password does not match')
+        .containsText('#comfirmpasswordValidator', 'Password does not match')
        .assert
         .containsText('#emailValidatorsignup', 'input a valid email address');
      } else if (form === 'signin') {
@@ -124,16 +141,14 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
 
   Then(/^the "([^"]*)" button should be enabled$/, async (form) => {
     const btnId = `#${form}Submit`;
-    // console.log(btnId);
-   //  await client.assert.not.valueContains(btnId, 'disabled');
-    // await client.assert.attributeEquals(btnId, 'disabled', null);
+    await client.elementIdEnabled(btnId);
   });
 
   Then(/^I should be Logged in and redirected to the Dashboard page$/,
   async () => {
-    await client.waitForElementVisible('.mainHeader', 50000)
+    await client.waitForElementVisible('.mainHeader', 5000)
     .assert.urlEquals('http://localhost:1142/#/dashboard')
-    .pause(50000);
+    .pause(5000);
   });
 
   And(/^I should redirected to the "([^"]*)" page$/, async (link) => {
@@ -145,7 +160,7 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
     } else {
       lookupElement = '.mainHeader';
     }
-    await client.waitForElementVisible(lookupElement, 10000)
+    await client.waitForElementVisible(lookupElement, 5000)
     .assert.urlEquals(`http://localhost:1142/#/${page}`);
   });
 
@@ -167,11 +182,11 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
     let lookupElement;
     if (page === 'authentication') {
       page = '';
-      lookupElement = '#signup';
+      lookupElement = '#signuptab';
     } else {
       lookupElement = '.mainHeader';
     }
-    await client.waitForElementVisible(lookupElement, 10000)
+    await client.waitForElementVisible(lookupElement, 5000)
     .assert.urlEquals(`http://localhost:1142/#/${page}`);
   });
 
@@ -183,7 +198,7 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
   And(/^I enter right values but with an existing email in the "([^"]*)" form$/,
   async (form) => {
     // wait to the authentiaction page to load fully
-    await client.waitForElementVisible(`#${form}tab`, 100000)
+    await client.waitForElementVisible(`#${form}tab`, 5000)
     // reefresh the page to enable marerailize style
     .refresh()
     // click the tab
@@ -218,8 +233,8 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
     .setValue('#email', user.email.substring(0, 15));
   });
 
-  Then(/^I have gone through Document Hub authentication process successfully$/,
-  async () => {
+  Then(/^I have gone through Document Hub "([^"]*)" process successfully$/,
+  async (feature) => {
     // delete user from database
     User.findOne({
       where: {

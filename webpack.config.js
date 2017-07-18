@@ -13,10 +13,6 @@ const basePlugins = [
   new webpack.NoEmitOnErrorsPlugin(),
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
-  new webpack.optimize.UglifyJsPlugin({
-    mangle: false,
-    sourcemap: true
-  }),
   new ExtractTextPlugin({
     filename: path.join(__dirname, 'public/style.css'),
     allChunks: true

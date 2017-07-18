@@ -1,9 +1,8 @@
 import axios from 'axios';
-import * as types from '../../actions/actionTypes'; 
+import { MESSAGE, LOG_IN_SUCCESS } from '../../actions/actionTypes'; 
 import { logIn } from '../../actions/login';
-import mockData from '../../../server/__test__/mockData';
+import mockData from '../../../server/tests/mockData';
 
-// mock axios post and get methods.
 const mockUser = mockData.user;
 
 const resolveData = {
@@ -17,7 +16,15 @@ const resolveData = {
 };
 
 let expectedAction = {
-  type: types.LOG_IN_SUCCESS
+  type: LOG_IN_SUCCESS
+};
+
+const errorAction = {
+  messag: {
+    from: "login",
+    info: mockData.errorMessage
+  },
+ type: MESSAGE
 };
 
 const error = {
@@ -41,9 +48,9 @@ const mockError = new Promise((resolve, reject) => {
 axios.post = jest.fn((url) => mockResponse);
 
 describe('getRoles action', () => {
-  it('should make a "post" request to a route "/users/login"', () => {
+  it('should make a "post" request to a route "/api/v1/users/login"', () => {
     logIn(mockUser);
-    expect(axios.post).toBeCalledWith('/users/login', mockUser);
+    expect(axios.post).toBeCalledWith('/api/v1/users/login', mockUser);
   });
 
   it('should return an action with type "LOG_IN_SUCCESS" on successfull signin',

@@ -1,8 +1,10 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import sinon from 'sinon'; 
-import { Documents } from '../../components/Documents';
-import mockData from '../../../server/__test__/mockData';
+import sinon from 'sinon';
+import { MemoryRouter} from 'react-router-dom';
+import configureStore from 'redux-mock-store';
+import Documents from '../../components/Documents';
+import mockData from '../../../server/tests/mockData';
 
 let mockDocument = mockData.document;
 mockDocument.createdAt = new Date();
@@ -10,6 +12,41 @@ mockDocument.id = 1;
 mockDocument.owner = 1;
 const getAttribute = value => ('test');
 
+const mockStore = configureStore();
+const initialState = {
+  message: {
+    info: '',
+    from: ''
+  },
+  login: true,
+  SignupMessage: true,
+  roles: [],
+  createDocStatus: {},
+  Documents: {
+    type: 'GET_DOCUMENTS',
+    status: 'success',
+    documents: [
+      {
+        id: 7,
+        title: 'Jesus loves me and yo',
+        synopsis: null,
+        body: 'the first person to ever care about you',
+        role: 20,
+        accessRight: 'private',
+        owner: 228,
+        author: 'nkem cele okwudiri',
+        createdAt: '2017-06-29T02:24:02.521Z',
+        updatedAt: '2017-07-09T21:12:23.677Z'
+      },
+    ],
+    pageCount: 2
+  },
+  deleteDocument: {},
+  document: {},
+  Users: {}
+}
+
+const store = mockStore(initialState);
 const mockTab = {
   preventDefault: jest.fn(),
   target: {
@@ -29,13 +66,17 @@ const props1 = {
   pageCount: 0,
   message: '',
   deleteStatus: '',
-  getDocuments: jest.fn(),
-  deleteDocument: jest.fn()
+  getDocuments: () => {},
+  deleteDocument: () => {},
+  sendMessage: () => {},
+  store
 };
 
 const setup = () => {
   const Wrapper = mount(
-    <Documents {...props1} />
+    <MemoryRouter>
+      <Documents {...props1} />
+    </MemoryRouter>
   );
   return {
     props: props1,
@@ -44,14 +85,18 @@ const setup = () => {
 };
 
 
+
+
 describe('components', () => {
   describe('Documents', () => {
     const { Wrapper, props } = setup();
-
+    
     describe('should render a search form', () => {
       describe('should render a textbox to recieve user\'s search hint', () => {
         const txtsearchHint = Wrapper.find('#searchHint').props();
         it('ID should be "txtsearchHint"', () => {
+
+console.log('.........................................',document.getElementById);
           expect(txtsearchHint.id).toEqual('searchHint');
         });
 
@@ -64,6 +109,10 @@ describe('components', () => {
 
             it('should call the action "getDocuments" with the value of the' +
             'searchHint textbox', () => {
+              console.log('txtsearchHint......................', txtsearchHint);
+              // wrapper.ref('searchHint').prop('value') = 'love';
+              // Wrapper.searchHint.value = 'love';
+              //txtsearchHint.value = 'love';
               txtsearchHint.onChange();
               expect(props.getDocuments.mock.calls.length).toBe(2);
             });

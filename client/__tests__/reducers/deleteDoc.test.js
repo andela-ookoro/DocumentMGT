@@ -1,6 +1,6 @@
 import reducer from '../../reducers/deleteDocument';
 import * as types from '../../actions/actionTypes';
-import mockData from '../../../server/__test__/mockData';
+import mockData from '../../../server/tests/mockData';
 
 const action = {
   type: types.DELETE_DOCUMENT,

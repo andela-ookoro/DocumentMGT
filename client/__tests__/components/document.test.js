@@ -1,7 +1,7 @@
 import React from 'react';
-import { mount } from 'enzyme';
+import { shallow } from 'enzyme';
 import { Document } from '../../components/Document';
-import mockData from '../../../server/__test__/mockData';
+import mockData from '../../../server/tests/mockData';
 
 let mockDocument = mockData.document;
 mockDocument.createdAt = new Date();
@@ -19,7 +19,7 @@ const setup = () => {
       }
     }
   };
-  const Wrapper = mount(
+  const Wrapper = shallow(
     <Document {...props} />
   );
   return {

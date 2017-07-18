@@ -19,7 +19,9 @@ body {
 button, i {
   cursor: pointer
 }
-
+label {
+  z-index: 9999 !important;
+}
 td  a {
   color: #ED7810;
   font-family: 'Josefin Sans', sans-serif;

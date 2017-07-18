@@ -2,6 +2,11 @@ import React from 'react';
 
 const pageNotFound = () => (
   <div className="container" >
+    <div className="welcomeDiv">
+      <img src="/logo.png" id="logoImg" alt="logo" />
+      <span className="logoName"> Doc Hub </span>
+      welcome .....
+    </div>
     <div className="row">
       <div className="col s12">
         <h5> <i className="large material-icons">visibility_off</i></h5>

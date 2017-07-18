@@ -33,9 +33,7 @@ export class Documents extends React.Component {
       curDocID: 0
     };
 
-    // this.onChange = this.onChange.bind(this);
     this.getDocuments = this.getDocuments.bind(this);
-    // this.setDocuments = this.setDocuments.bind(this);
     this.deleteDocument = this.deleteDocument.bind(this);
     this.searchDocument = this.searchDocument.bind(this);
     this.handlePageClick = this.handlePageClick.bind(this);
@@ -49,6 +47,7 @@ export class Documents extends React.Component {
    */
   componentWillMount() {
     this.props.getDocuments('myDocument', '', 0, 6);
+    console.log('..................',this.props.getDocuments('myDocument', '', 0, 6))
     this.setState({
       isloading: true
     });
@@ -145,7 +144,8 @@ export class Documents extends React.Component {
    * @returns {null} -
    */
   searchDocument() {
-    const searchHint = this.searchHint.value;
+    const searchHint = $('#searchHint').val();
+    // const searchHint = this.searchHint.value;
     // set state for pagination, to remove category all general search
     this.setState({
       searchHint,

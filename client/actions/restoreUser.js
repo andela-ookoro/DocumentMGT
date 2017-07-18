@@ -2,7 +2,7 @@ import axios from 'axios';
 import sendMessage from './message';
 
 /**
- * - delete document by id
+ * - restore document by id
  * @param {int} documentId -  the id of the document
  * @return {null} - sendReponse
  */
