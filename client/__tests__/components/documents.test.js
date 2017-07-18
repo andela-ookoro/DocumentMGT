@@ -57,7 +57,6 @@ const mockTab = {
   }
 };
 
-
 // mock html control
 const mockEvent = mockData.mockEvent;
 
