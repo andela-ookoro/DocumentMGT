@@ -3,6 +3,7 @@ import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
 import { MemoryRouter} from 'react-router-dom';
 import configureStore from 'redux-mock-store';
+import getDocuments from '../../actions/getDocuments';
 import Documents from '../../components/Documents';
 import mockData from '../../../server/tests/mockData';
 
@@ -66,7 +67,7 @@ const props1 = {
   pageCount: 0,
   message: '',
   deleteStatus: '',
-  getDocuments: () => {},
+  getDocuments,
   deleteDocument: () => {},
   sendMessage: () => {},
   store
@@ -95,8 +96,6 @@ describe('components', () => {
       describe('should render a textbox to recieve user\'s search hint', () => {
         const txtsearchHint = Wrapper.find('#searchHint').props();
         it('ID should be "txtsearchHint"', () => {
-
-console.log('.........................................',document.getElementById);
           expect(txtsearchHint.id).toEqual('searchHint');
         });
 

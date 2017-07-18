@@ -349,7 +349,7 @@ export class ManageUsers extends React.Component {
               :
               <div className="info">
                 <br />
-                <h4> No document found, try more options &uarr;. </h4>
+                <h4> No user found, try more options &uarr;. </h4>
               </div>
             }
           </div>
