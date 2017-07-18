@@ -17,15 +17,5 @@ describe('components', () => {
       // expect(imgLogo.src).toEqual('/logo.png');
       expect(3).toEqual(3);
     });
-
-    // it('should render the brand name', () => {
-    //   const lblBrandname = Wrapper.find('#brandName').props();
-    //   expect(lblBrandname.text).toEqual(' Doc Hub');
-    // });
-
-    // it('should render a link to return to the home page', () => {
-    //   const lnkHome = Wrapper.find('#lnkHome').props();
-    //   expect(lnkHome.href).toEqual(' Doc Hub');
-    // });
   });
 });

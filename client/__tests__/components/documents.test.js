@@ -150,8 +150,6 @@ console.log('.........................................',document.getElementById)
     });
 
     describe('should call componentWillReceiveProps on update', () => {
-      // const spy = jest.spyOn(Documents, 'componentWillReceiveProps');
-      // expect(spy).toHaveBeenCalled();
       // set localStorage
       const mockUser = mockData.user;
       mockUser.id = 1;
@@ -194,22 +192,8 @@ console.log('.........................................',document.getElementById)
       describe('rows', () => {
         it('should have column "Author"', () => {
           const author = Wrapper.find('#author1').props();
-          console.log(author);
           expect(author.value).toEqual(mockDocument.author);
         });
-        // it('should have column "Title"', () => {
-        //   const title = Wrapper.find('#title1').props();
-        //   console.log('title', title);
-        //  // expect(title.value).toEqual(mockDocument.title);
-        // });
-        // // it('should have column "createdAt"', () => {
-        // //   const createdAt = Wrapper.find('#createdAt1').props();
-        // //   expect(createdAt.value).toEqual(mockDocument.createdAt);
-        // // });
-        // it('should have colomn "Author"', () => {
-        //   const deleteButton = Wrapper.find('#1').props();
-        //   expect(deleteButton.value).toEqual(mockDocument.id);
-        // });
       });
     });
   });
