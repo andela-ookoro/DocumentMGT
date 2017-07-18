@@ -402,7 +402,7 @@ const mapStateToProps = state => (
 const mapDispatchToProps = dispatch => (
   {
     getDocuments: (accessRight, title, offset, limit) => {
-      dispatch(getDocuments(accessRight, title, offset, limit));
+      getDocuments(accessRight, title, offset, limit);
     },
     deleteDocument: documentID => dispatch(deleteDocument(documentID)),
     sendMessage: () => dispatch(sendMessage())

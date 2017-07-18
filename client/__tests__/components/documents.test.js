@@ -48,6 +48,7 @@ const initialState = {
 }
 
 const store = mockStore(initialState);
+
 const mockTab = {
   preventDefault: jest.fn(),
   target: {
@@ -75,7 +76,7 @@ const props1 = {
 const setup = () => {
   const Wrapper = mount(
     <MemoryRouter>
-      <Documents {...props1} />
+      <Documents store={store} />
     </MemoryRouter>
   );
   return {
