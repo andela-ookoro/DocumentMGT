@@ -1,7 +1,7 @@
 import axios from 'axios';
-import * as types from '../../actions/actionTypes'; 
+import { GET_DOCUMENTS, MESSAGE } from '../../actions/actionTypes'; 
 import getDocuments from '../../actions/getDocuments';
-import mockData from '../../../server/__test__/mockData';
+import mockData from '../../../server/tests/mockData';
 
 // mock axios post and get methods.
 const mockDocument = mockData.document;
@@ -17,13 +17,20 @@ const resolveData = {
 };
 
 const expectedAction = {
- type: types.GET_DOCUMENTS,
+ type: GET_DOCUMENTS,
  status: 'success',
  document: [mockDocument],
  message: '',
  pageCount: 1
 };
 
+const errorMessage = {
+  message: {
+    from: "getDocuments",
+    info: mockData.errorMessage
+  },
+  type: MESSAGE
+}
 const error = {
   response: {
     data: {
@@ -45,9 +52,9 @@ const mockError = new Promise((resolve, reject) => {
 axios.get = jest.fn((url) => mockResponse);
 
 describe('getDocuments action', () => {
-  it('should make a get request to a route "/documents"', () => {
+  it('should make a get request to a route "/api/v1/documents"', () => {
     getDocuments('private','love');
-    expect(axios.get).toBeCalledWith('/search/documents?accessRight=private&title=love&offset=0&limit=7');
+    expect(axios.get).toBeCalledWith('/api/v1/search/documents?accessRight=private&title=love&offset=0&limit=7');
   });
 
   it(`should return an action with type "GET_DOCUMENT"`,
@@ -63,12 +70,7 @@ describe('getDocuments action', () => {
     axios.get = jest.fn((url) => mockError);
     getDocuments('private','love')
     .then(response => {
-      // update "expectedAction" value to reflect new expected action
-      expectedAction.message = mockData.errorMessage;
-      expectedAction.status = 'failed';
-      expectedAction.document = [];
-      expectedAction.pageCount = 0;
-      expect(response).toEqual(expectedAction);
+      expect(response).toEqual(errorMessage);
     });
   });
 

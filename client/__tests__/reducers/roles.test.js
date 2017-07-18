@@ -1,6 +1,6 @@
 import reducer from '../../reducers/role';
 import * as types from '../../actions/actionTypes';
-import mockData from '../../../server/__test__/mockData';
+import mockData from '../../../server/tests/mockData';
 
 describe('loginFailed reducer', () => {
   const action = {

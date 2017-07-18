@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import message from './message';
-import session from './session';
+import login from './login';
 import SignupMessage from './signup';
 import roles from './role';
 import createDocStatus from './createDoc';
@@ -13,7 +13,7 @@ import Users from './getUsers';
  */
 export default combineReducers({
   message,
-  session,
+  login,
   SignupMessage,
   roles,
   createDocStatus,

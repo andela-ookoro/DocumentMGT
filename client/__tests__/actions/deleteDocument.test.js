@@ -1,7 +1,7 @@
 import axios from 'axios';
-import * as types from '../../actions/actionTypes'; 
+import { MESSAGE }  from '../../actions/actionTypes'; 
 import deleteDocument from '../../actions/deleteDocument';
-import mockData from '../../../server/__test__/mockData';
+import mockData from '../../../server/tests/mockData';
 
 // mock axios post and get methods.
 const mockDocument = mockData.document;
@@ -12,10 +12,11 @@ const resolveData = {
 };
 
 const expectedAction = {
- type: types.DELETE_DOCUMENT,
- status: 'success',
- document: mockDocument,
- message: ''
+  type: MESSAGE,
+  message: {
+    from: 'deleteDocument',
+    info: 'document has been deleted successfully'
+  }
 };
 
 const error = {
@@ -41,7 +42,7 @@ axios.delete = jest.fn((url) => mockResponse);
 describe('deleteDocument action', () => {
   it('should make a delete request with the documentId', () => {
     deleteDocument(1);
-    expect(axios.delete).toBeCalledWith('/documents/1');
+    expect(axios.delete).toBeCalledWith('/api/v1/documents/1');
   });
 
   it('should return the response from the server', () => {
@@ -56,7 +57,7 @@ describe('deleteDocument action', () => {
     axios.delete = jest.fn((url) => mockError);
     deleteDocument(mockData.document, 1)
     .then(response => {
-      expectedAction.message = mockData.errorMessage;
+      expectedAction.message.info = mockData.errorMessage;
       expect(response).toEqual(expectedAction);
     });
   });

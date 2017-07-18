@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as types from '../../actions/actionTypes'; 
 import { getRoles } from '../../actions/roles';
-import mockData from '../../../server/__test__/mockData';
+import mockData from '../../../server/tests/mockData';
 
 // mock axios post and get methods.
 const mockRoles = mockData.role;
@@ -39,9 +39,9 @@ const mockError = new Promise((resolve, reject) => {
 axios.get = jest.fn((url) => mockResponse);
 
 describe('getRoles action', () => {
-  it('should make a get request to a route "/roles"', () => {
+  it('should make a get request to a route "/api/v1/roles"', () => {
     getRoles();
-    expect(axios.get).toBeCalledWith('/roles');
+    expect(axios.get).toBeCalledWith('/api/v1/roles');
   });
 
   it(`should return an action with type "ROLES_LOADED" on successful server response`,

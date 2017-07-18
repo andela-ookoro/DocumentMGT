@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-// import tinymce from 'tinymce';
 import toaster from 'toastr';
 import upsertDocument from '../actions/createDocument';
 import getDocument from '../actions/getDocument';
@@ -64,7 +63,7 @@ export class CreateDocument extends React.Component {
       toolbar: 'undo redo | bold italic | ' +
       'fontsizeselect fontselect | ' +
       'alignleft aligncenter alignright | forecolor backcolor' +
-      '| table | numlist bullist | emoticons | codesample',
+      '| table | numlist bullist | emoticons | codesample | code',
       table_toolbar: 'tableprops tabledelete ' +
       '| tableinsertrowbefore ' +
       'tableinsertrowafter tabledeleterow | tableinsertcolbefore ' +
@@ -93,7 +92,7 @@ export class CreateDocument extends React.Component {
    */
   componentWillReceiveProps(nextProps) {
     // show the document for update
-    if (nextProps.document !== {}) {
+    if (nextProps.document.body) {
       const curDocument = nextProps.document;
       this.setState({
         title: curDocument.title,
@@ -118,15 +117,19 @@ export class CreateDocument extends React.Component {
     }
 
     if (nextProps.messageFrom === 'upsertDocument') {
-      let message = this.props.message;
-      if (this.props.message === 'successs') {
-        message = 'Document has been saved successfully';
+      console.log('this is the next props', nextProps)
+      let message = nextProps.message.toString();
+      let title = this.state.title;
+      // reset editor when action is successful
+      if (message.includes('success')) {
+        title = ''
         tinymce.get('content').setContent('');
       }
       toaster.info(message);
       this.setState({
         message,
-        isloading: false
+        isloading: false,
+        title
       });
     }
   }
@@ -194,12 +197,13 @@ export class CreateDocument extends React.Component {
    */
   saveDocument(e) {
     e.preventDefault();
+    const title = this.title.value
     // get the  text editor content
     const body = tinyMCE.get('content').getContent();
     // find the selected acess right
     const accessRights = document.getElementsByName('accessRight');
     let accessRight;
-
+    // detect the access right select
     for (let i = 0; i < accessRights.length; i += 1) {
       if (accessRights[i].checked) {
         accessRight = accessRights[i].id;
@@ -209,13 +213,23 @@ export class CreateDocument extends React.Component {
 
     // create error message
     let message;
-    if (body === '') {
-      message = 'Please insert the content of the document';
+    // check minimal number of character for title
+    console.log(title, '..............', body);
+    if (!/^.{3,}$/.test(title)) {
+      message = 'Please write the title ';
+      console.log('1', message);
+    }
+    if (!/^.{3,}$/.test(body)) {
+      message = `${(message) ? `${message} and` : 'Please'} write the body `;
+      console.log('2', message);
     }
     if (!accessRight) {
-      message += `${(message) ? ' and ' : 'Please'} select an access mode`;
+      message = `${(message) ? `${message} and` : 'Please'} select an access mode`;
+      console.log('3', message);
     }
+
     if (message) {
+      message = `${message} of the document.`;
       this.setState({
         message
       });
@@ -226,7 +240,7 @@ export class CreateDocument extends React.Component {
        */
       const userInfo = JSON.parse(localStorage.getItem('userInfo'));
       const document = {
-        title: this.title.value,
+        title,
         body,
         owner: userInfo.id,
         accessRight,
@@ -264,6 +278,7 @@ export class CreateDocument extends React.Component {
                 name="title"
                 className="validate"
                 onChange={this.onChange}
+                value={this.state.title}
                 ref={(input) => { this.title = input; }}
                 required
               />
@@ -315,6 +330,7 @@ export class CreateDocument extends React.Component {
                 className="btn waves-effect waves-light right"
                 type="submit"
                 name="action"
+                id="btnsubmit"
                 onClick={this.saveDocument}
               >
                 {(this.state.body === '') ? 'Submit' : 'Update' }
@@ -342,7 +358,7 @@ const mapDispatchToProps = dispatch => (
   {
     upsertDocument: (document, docId) =>
      dispatch(upsertDocument(document, docId)),
-    getDocument: documentID => dispatch(getDocument(documentID))
+    getDocument: (documentID) => dispatch(getDocument(documentID))
   }
 );
 
@@ -373,7 +389,6 @@ CreateDocument.defaultProps = {
   document: {},
   match: {}
 };
-// Use connect to put them together
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(
   CreateDocument));

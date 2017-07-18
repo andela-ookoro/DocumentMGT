@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import $ from 'jquery';
 import addJWT from '../actions/addJWT';
 // import component
+import pageNotFound from './pageNotFound';
 import NavigationBar from './NavigationBar';
 import Footer from './Footer';
 
@@ -28,7 +29,7 @@ class Layout extends React.Component {
 
   /**
    * @returns {object} - html doc
-   * @memberof Auth
+   * @memberof Layout
    */
   render() {
     $(document).ready(() => {
@@ -38,16 +39,20 @@ class Layout extends React.Component {
        */
       $('a').removeClass('activelink');
       const url = window.location.toString();
-      if (url.includes('#/dashboard')) {
+      if (/^((http[s]?|ftp):\/\/)?(.*)(\/)?(#\/dashboard)(\/)?$/.test(url)
+      ||
+      /^((http[s]?|ftp):\/\/)?(.*)(\/)?#\/$/.test(url)) {
         $('a[href$="#/dashboard"]').addClass('activelink');
-      } else if (url.includes('#/document')) {
+      } else if (/^((http[s]?|ftp):\/\/)?(.*)(\/)?(#\/document)(\/)?(\w*)$/.test(url)) {
         $('a[href$="#/document"]').addClass('activelink');
-      } else if (url.includes('#/createDocument')) {
+      } else if (/^((http[s]?|ftp):\/\/)?(.*)(\/)?(#\/createDocument)(\/)?(\w*)$/.test(url)) {
         $('a[href$="#/createDocument"]').addClass('activelink');
-      } else if (url.includes('#/profile')) {
+      } else if (/^((http[s]?|ftp):\/\/)?(.*)(\/)?(#\/profile)(\/)?(\w*)$/.test(url)) {
         $('a[href$="#/profile"]').addClass('activelink');
-      } else if (url.includes('#/manageUsers')) {
+     } else if (/^((http[s]?|ftp):\/\/)?(.*)(\/)?(#\/manageUsers)(\/)?(\w*)$/.test(url)) {
          $('a[href$="#/manageUsers"]').addClass('activelink');
+      } else {
+        window.location ='/#/notfound';
       }
     });
     return (
