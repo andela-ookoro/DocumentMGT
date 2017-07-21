@@ -148,8 +148,6 @@ describe('components', () => {
           expect(createdAt.children).toEqual(mockDocument.createdAt);
         });
         describe('should have colomn "delete" for only document owner', () => {
-
-          console.log(`#${mockDocument.id}`);
           const deleteButton = Wrapper.find(`#${mockDocument.id}`).props();
           it('button id should be the same as document id', () => {
             expect(deleteButton.id).toEqual(mockDocument.id);

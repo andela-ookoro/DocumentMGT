@@ -4,7 +4,6 @@ import sendMessage from './message';
 
 
 const updateProfile = (userid, updates)  => {
-  console.log(updates);
   return axios.put(`/api/v1/users/${userid}`, updates)
   .then((response) => {
     // if jwt was returned

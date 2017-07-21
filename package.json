@@ -22,8 +22,8 @@
     "client-test": "jest  --config jest.config.js -u ",
     "e2e-test": "nightwatch",
     "acceptanceTest": "run-p -r start  test-e2e",
-    "server-pretest": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=development sequelize db:migrate ",
-    "server-test": "npm run server-pretest && DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=development PORT=3000 nyc  mocha --require ./server/tests/testSetup.js --timeout 900000 --compilers js:babel-register -- ./server/tests/**/*.spec.js"
+    "server-pretest": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test sequelize db:migrate ",
+    "server-test": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test PORT=3000 nyc  mocha --require ./server/tests/testSetup.js --timeout 900000 --compilers js:babel-register -- ./server/tests/**/*.spec.js"
   },
   "dependencies": {
     "axios": "^0.16.2",

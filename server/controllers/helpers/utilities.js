@@ -13,7 +13,6 @@ module.exports = {
    * @returns {object} -
    */
   sendMessage(res, message, statusCode) {
-    console.log()
    res.status(statusCode).send({
       status: 'fail',
       message
@@ -39,7 +38,6 @@ module.exports = {
       status: 'success'
     };
     payload[dataType] = data;
-    console.log(payload)
     res.status(statusCode).send({ ...payload });
   },
   /**
@@ -136,7 +134,6 @@ module.exports = {
       if (!role) {
         return sendMessage(res, 'Role not found.', 200);
       }
-      console.log('this is the users', user);
       // create jwt payload
       const userInfo = {
         name: `${user.fname} ${user.mname} ${user.lname}`,

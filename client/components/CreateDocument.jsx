@@ -117,7 +117,6 @@ export class CreateDocument extends React.Component {
     }
 
     if (nextProps.messageFrom === 'upsertDocument') {
-      console.log('this is the next props', nextProps)
       let message = nextProps.message.toString();
       let title = this.state.title;
       // reset editor when action is successful
@@ -216,18 +215,14 @@ export class CreateDocument extends React.Component {
     // create error message
     let message;
     // check minimal number of character for title
-    console.log(title, '..............', body);
     if (!/^.{3,}$/.test(title)) {
       message = 'Please write the title ';
-      console.log('1', message);
     }
-    if (!/^.{3,}$/.test(body)) {
+    if (body.length < 10) {
       message = `${(message) ? `${message} and` : 'Please'} write the body `;
-      console.log('2', message);
     }
     if (!accessRight) {
       message = `${(message) ? `${message} and` : 'Please'} select an access mode`;
-      console.log('3', message);
     }
 
     if (message) {
@@ -244,7 +239,6 @@ export class CreateDocument extends React.Component {
       const document = {
         title,
         body,
-        owner: userInfo.id,
         accessRight,
         role: userInfo.role
       };
@@ -371,7 +365,7 @@ CreateDocument.propTypes = {
   message: PropTypes.string,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      documentId: PropTypes.number
+      documentId: PropTypes.any
     })
   }),
   document: PropTypes.shape({

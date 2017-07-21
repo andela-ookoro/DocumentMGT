@@ -29,7 +29,6 @@ module.exports = {
         offset: 0
       };
     }
-    console.log('authorizedDoc(req.user)', authorizedDoc(req.user), req.user)
     // get all documents
     Document.findAndCountAll({
       attributes,

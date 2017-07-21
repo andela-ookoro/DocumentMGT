@@ -166,7 +166,7 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
 
   And(/^a JWT Token and my profile should be store in the localStorage$/,
   async () => {
-    // console.log('localstorage');
+    // check localstorage
   });
 
   When(/^I click the "([^"]*)" button$/, async (id) => {
@@ -192,7 +192,7 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
 
   And(/^the JWT Token and my profile should be removed from the localStorage$/,
   async () => {
-    // console.log('localstorage');
+    // check localstorage
   });
 
   And(/^I enter right values but with an existing email in the "([^"]*)" form$/,

@@ -4,7 +4,7 @@ import model from '../models/index';
 import { sendMessage, returnJWt, sendData } from './helpers/utilities';
 import sequelizeConfig from '../config/config.json';
 
-// connecct to postgrres
+// connecct to postgres
 const env = process.env.NODE_ENV || 'development';
 const DBconfig = sequelizeConfig[env];
 
@@ -34,7 +34,6 @@ module.exports = {
   login(req, res) {
     // create object from request
     const user = req.body;
-    console.log(user, bcrypt.hashSync(user.password))
     // check for required fields
     if (user.email && user.password) {
       // get user with this email
@@ -377,13 +376,11 @@ module.exports = {
           .then(updateUser => returnJWt(res, updateUser.dataValues, 200))
           .catch(error => {
              const message = error.message || error.toString();
-             console.log('1....................', message);
             return sendMessage(res, message, 500)
           });
       })
       .catch(error => {
         const message = error.message || error.toString();
-        console.log('2....................', message);
         return sendMessage(res, message, 500)
       });
     return sendMessage(res,

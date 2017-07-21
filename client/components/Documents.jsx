@@ -70,9 +70,9 @@ export class Documents extends React.Component {
     let message = '';
     let newDocs;
     const sender = nextProps.messageFrom;
+    let pageCount = nextProps.pageCount;
     // show error message when error is reported
-    if (sender === 'getDocuments' || sender === 'deleteDocument' 
-      || nextProps.documents) {
+    if (sender === 'getDocuments' || sender === 'deleteDocument' ) {
         message = nextProps.message;
         if (sender === 'deleteDocument') {
           // remove document from table
@@ -82,7 +82,8 @@ export class Documents extends React.Component {
             newDocs = _.remove(this.state.documents, (document) => {
               return (document.id === parseInt(curDocId, 10));
             });
-            this.props.sendMessage('reset', 'reset');
+            pageCount = pageCount - 1;
+            // this.props.sendMessage('reset', 'reset');
             message = '';
           } 
         }
@@ -94,7 +95,6 @@ export class Documents extends React.Component {
       }
     }
     // set state to reflect the props dispatched
-    const pageCount = nextProps.pageCount;
     this.setState({
       message,
       isloading: false,
@@ -148,7 +148,7 @@ export class Documents extends React.Component {
   searchDocument() {
     const searchHint = $('#searchHint').val();
     // const searchHint = this.searchHint.value;
-    // set state for pagination, to remove category all general search
+    // set state for pagination, remove category for  general search
     this.setState({
       searchHint,
       category: '',

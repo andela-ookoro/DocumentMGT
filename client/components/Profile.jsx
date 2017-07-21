@@ -211,7 +211,6 @@ export class Profile extends React.Component {
     event.preventDefault();
     // create request payload from state
      const user = JSON.parse(localStorage.getItem('userInfo'));
-     console.log(user, 'user')
     const userid = user.id;
     const userProfile = {
       fname: this.state.fname,
@@ -219,7 +218,6 @@ export class Profile extends React.Component {
       mname: this.state.mname,
       email: this.state.email
     };
-    console.log(userProfile, userid)
     // show preloader
     this.setState({
       isloading: true
