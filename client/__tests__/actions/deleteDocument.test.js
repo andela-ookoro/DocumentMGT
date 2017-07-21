@@ -17,6 +17,7 @@ const expectedAction = {
     from: 'deleteDocument',
     info: 'document has been deleted successfully'
   }
+
 };
 
 const error = {
@@ -36,8 +37,8 @@ const mockError = new Promise((resolve, reject) => {
   throw error;
 });
 
-// mock axios methods 
-axios.delete = jest.fn((url) => mockResponse);
+// mock axios methods
+axios.delete = jest.fn(url => mockResponse);
 
 describe('deleteDocument action', () => {
   it('should make a delete request with the documentId', () => {
@@ -49,12 +50,12 @@ describe('deleteDocument action', () => {
     deleteDocument(1)
     .then(response =>
       expect(response).toEqual(expectedAction)
-    )
+    );
   });
 
   it('should return an error message when an error is reported from server',
   () => {
-    axios.delete = jest.fn((url) => mockError);
+    axios.delete = jest.fn(url => mockError);
     deleteDocument(mockData.document, 1)
     .then(response => {
       expectedAction.message.info = mockData.errorMessage;
