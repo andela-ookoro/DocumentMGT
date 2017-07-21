@@ -8,9 +8,9 @@ import Documents from './getDocuments';
 import deleteDocument from './deleteDocument';
 import document from './getDocument';
 import Users from './getUsers';
-/**
- * contains every reducers
- */
+import user from './getUser';
+
+// contains every reducers
 export default combineReducers({
   message,
   login,
@@ -20,5 +20,6 @@ export default combineReducers({
   Documents,
   deleteDocument,
   document,
-  Users
+  Users,
+  user
 });

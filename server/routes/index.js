@@ -12,11 +12,14 @@ module.exports = (app) => {
   app.post('/users/login', usersController.login);
   app.post('/users/logout', usersController.logout);
   app.post('/users', usersController.createUser);
+  
   app.get('/roles', rolesController.getRoles);
+
   // check for user session
   app.use(validateUser);
 
   // the routes below are authenticated
+  app.delete('/users', usersController.deleteUser);
   app.get('/users/:id/documents', adminOnly, usersController.getUserDocument);
   app.get('/search/users', adminOnly, usersController.lookupUser);
   app.get('/search/documents', documentsController.searchByTitle);
@@ -35,7 +38,7 @@ module.exports = (app) => {
   .put(documentsController.updateDocument);
 
   app.route('/documents')
-  .get(adminOnly, documentsController.getDocuments)
+  .get(documentsController.getDocuments)
   .post(documentsController.createDocument);
 
   app.post('/roles', adminOnly, rolesController.createRole);

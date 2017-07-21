@@ -86,10 +86,10 @@ describe('/api/v1/role ', () => {
         .end((err, res) => {
           if (!err) {
             // store new Role for futher testing
-            registeredRole.title = res.body.data.title;
-            registeredRole.id = res.body.data.id;
+            registeredRole.title = res.body.role.title;
+            registeredRole.id = res.body.role.id;
             res.should.have.status(201);
-            res.body.data.title.should.be.eql(role.title);
+            res.body.role.title.should.be.eql(role.title);
             res.body.status.should.be.eql('success');
           }
           done();
@@ -123,7 +123,7 @@ describe('/api/v1/role ', () => {
           if (!err) {
             res.should.have.status(200);
             res.body.status.should.be.eql('success');
-            res.body.data.should.be.an('array');
+            res.body.roles.should.be.an('array');
           }
           done();
         });
@@ -180,7 +180,6 @@ describe('/api/v1/role ', () => {
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              // res.body.data;
             } else {
               res.body.message.should.be.eql('Role not found.');
             }

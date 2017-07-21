@@ -82,17 +82,26 @@ export class Signup extends React.Component {
     // validate input
     let validationStatus;
     let ValidatonPrefix = 'Validator';
-    if (e.target.name === 'fname' || e.target.name === 'lname'
-      || e.target.name === 'mname') {
-      validationStatus = validateName(e.target.value);
-    } else if (e.target.name === 'email') {
-      validationStatus = validateEmail(e.target.value);
+    const controlName = e.target.name;
+    const controlValue = e.target.value;
+    const jquerySelector = `#${controlName}`;
+
+    if (controlName === 'fname' || controlName === 'lname') {
+      validationStatus = validateName(controlValue);
+    } else if (controlName === 'mname') {
+      if (controlValue === '') {
+        validationStatus = true
+      } else {
+        validationStatus = validateName(controlValue);
+      }
+    }else if (controlName === 'email') {
+      validationStatus = validateEmail(controlValue);
       ValidatonPrefix = `${ValidatonPrefix}signup`;
-    } else if (e.target.name === 'password') {
-      validationStatus = validatePassword(e.target.value);
+    } else if (controlName === 'password') {
+      validationStatus = validatePassword(controlValue);
       ValidatonPrefix = `${ValidatonPrefix}signup`;
-    } else if (e.target.name === 'roleId') {
-      validationStatus = validateRoleId(e.target.value);
+    } else if (controlName === 'roleId') {
+      validationStatus = validateRoleId(controlValue);
     }
     // get validControls
     const validControls = this.state.validControls;
@@ -101,23 +110,29 @@ export class Signup extends React.Component {
     // set state when input is valid
     if (validationStatus === true) {
       // check if control was valid
-      if (!validControls.hasOwnProperty(e.target.name)) {
-        validControls[e.target.name] = e.target.name;
+      if (!validControls.hasOwnProperty(controlName)) {
+        validControls[e.target.name] =controlName;
       }
-      // remove error message
+      /**
+       * remove error message
+       * set border buttom color to green
+       */ 
+      $(jquerySelector).css('border-bottom', '1px solid green !important');
       validationLabel.textContent = '';
+
     } else {
       // remove control from list of validControls
-      if (!validControls.hasOwnProperty(e.target.name)) {
-        delete validControls[e.target.name];
+      if (!validControls.hasOwnProperty(controlName)) {
+        delete validControls[controlName];
       }
       // show error message
+      $(jquerySelector).css('border-bottom', '1px solid red !important');
       validationLabel.textContent = validationStatus;
       validationLabel.style.color = '#BD2F10';
     }
     // set state
     this.setState({
-      [e.target.name]: e.target.value,
+      [controlName]: controlValue,
       validControls
     });
     // enable button when every control is valid
@@ -220,7 +235,6 @@ export class Signup extends React.Component {
                 id="fname"
                 value={this.state.fname}
                 onChange={this.onChange}
-                className="validate"
               />
               <label htmlFor="first_name">First Name</label>
               <div className="validatorContainer">
@@ -261,6 +275,23 @@ export class Signup extends React.Component {
             </div>
           </div>
           <div className="row">
+
+            <div className="input-field col  l4 m6 s12">
+              <i className="material-icons prefix">email</i>
+              <input
+                placeholder="Email"
+                name="email"
+                type="email"
+                id="emailsignup"
+                className="validate"
+                value={this.state.email}
+                onChange={this.onChange}
+              />
+              <label htmlFor="email" >Email</label>
+              <div className="validatorContainer">
+                <span id="emailValidatorsignup" />
+              </div>
+            </div>
             <div className="input-field col  l4 m6 s12">
               <i className="material-icons prefix">lock</i>
               <input
@@ -297,23 +328,6 @@ export class Signup extends React.Component {
                 </label>
               <div className="validatorContainer">
                 <span id="comfirmpasswordValidator" />
-              </div>
-
-            </div>
-            <div className="input-field col  l4 m6 s12">
-              <i className="material-icons prefix">email</i>
-              <input
-                placeholder="Email"
-                name="email"
-                type="email"
-                id="emailsignup"
-                className="validate"
-                value={this.state.email}
-                onChange={this.onChange}
-              />
-              <label htmlFor="email" >Email</label>
-              <div className="validatorContainer">
-                <span id="emailValidatorsignup" />
               </div>
             </div>
           </div>

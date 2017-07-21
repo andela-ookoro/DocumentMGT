@@ -1,5 +1,5 @@
 import model from '../models/index';
-import {sendMessage,sendData } from './helpers/utilities';
+import {sendMessage, sendData, authorizedDoc } from './helpers/utilities';
 
 const User = model.user;
 const Document = model.document;
@@ -29,17 +29,28 @@ module.exports = {
         offset: 0
       };
     }
+    console.log('authorizedDoc(req.user)', authorizedDoc(req.user), req.user)
     // get all documents
     Document.findAndCountAll({
       attributes,
+      where: {
+        $or: authorizedDoc(req.user)
+      },
       order: [['title', 'ASC']],
       ...hint
     })
-    .then(documents => res.status(200).send({
-      status: 'success',
-      documents
+    .then(documents => {
+      const count = documents.count;
+      const rows = documents.rows;
+      const documentsPayload = {
+        count,
+        rows,
+        curPage: parseInt(offset/limit, 10),
+        pageCount: parseInt(count/limit, 10),
+        pageSize: rows.length
+      };
+      return  sendData(res, documentsPayload, 200, 'documents');
     })
-    )
     .catch(error => sendMessage(res, error.message, 500));
   },
    /**
@@ -62,7 +73,7 @@ module.exports = {
         document.author = `${user.fname} ${user.mname} ${user.lname}`;
         Document.create(document)
         .then((newdocument) => {
-         return sendData(res, newdocument, 201);
+         return sendData(res, newdocument, 201, 'document');
         })
         .catch((err) => {
           return sendMessage(res, err.message, 500);
@@ -89,19 +100,7 @@ module.exports = {
     Document.findOne({
       attributes,
       where: {
-        $or: [
-          {
-            accessRight: 'role',
-            role: req.user.role
-          },
-          {
-            accessRight: 'private',
-            owner: req.user.id
-          },
-          {
-            accessRight: 'public',
-          }
-        ],
+        $or: authorizedDoc(req.user),
         id: docID
       }
     })
@@ -109,7 +108,7 @@ module.exports = {
       if (!document) {
         return sendMessage(res, 'Document not found.', 200);
       } 
-      return sendData(res, document, 200);
+      return sendData(res, document, 200, 'document');
     })
     .catch(error => sendMessage(res, error.message, 400));
   },
@@ -136,7 +135,7 @@ module.exports = {
 
       return document
       .destroy()
-      .then(() => sendData(res, document, 200))
+      .then(() => sendData(res, document, 200, 'document'))
       .catch(error => sendMessage(res, error.message, 400));
     })
     .catch(error => sendMessage(res, error.message, 400));
@@ -170,7 +169,7 @@ module.exports = {
       return document
       .update(changes)
       .then(() =>
-         sendData(res, document, 200)
+         sendData(res, document, 200, 'document')
       )
       .catch(error => sendMessage(res, error.message, 400));
     })
@@ -241,19 +240,7 @@ module.exports = {
       documentQuery = Document.findAndCountAll({
         attributes,
         where: {
-          $or: [
-            {
-              accessRight: 'role',
-              role: req.user.role
-            },
-            {
-              accessRight: 'private',
-              owner: req.user.id
-            },
-            {
-              accessRight: 'public',
-            }
-          ],
+          $or: authorizedDoc(req.user),
           title: {
             $iLike: `%${title}%`
           }
@@ -269,19 +256,7 @@ module.exports = {
       documentQuery = Document.findAndCountAll({
         attributes,
         where: {
-          $or: [
-            {
-              accessRight: 'role',
-              role: req.user.role
-            },
-            {
-              accessRight: 'private',
-              owner: req.user.id
-            },
-            {
-              accessRight: 'public',
-            }
-          ],
+          $or: authorizedDoc(req.user),
         },
         offset,
         limit,
@@ -294,7 +269,16 @@ module.exports = {
       if (documents.length < 1) {
         return sendMessage(res, 'No document was found.', 200);
       }
-      return sendData(res, documents, 200);
+      const count = documents.count;
+      const rows = documents.rows;
+      const documentsPayload = {
+        count,
+        rows,
+        curPage: parseInt(offset/limit, 10),
+        pageCount: parseInt(count/limit, 10),
+        pageSize: rows.length
+      };
+      return  sendData(res, documentsPayload, 200, 'documents');
     })
     .catch(error => sendMessage(res, error.message, 500));
   },

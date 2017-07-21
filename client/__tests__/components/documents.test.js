@@ -1,54 +1,14 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon';
-import { MemoryRouter} from 'react-router-dom';
-import configureStore from 'redux-mock-store';
-import getDocuments from '../../actions/getDocuments';
-import Documents from '../../components/Documents';
+import { Documents } from '../../components/Documents';
 import mockData from '../../../server/tests/mockData';
 
 let mockDocument = mockData.document;
-mockDocument.createdAt = new Date();
+mockDocument.createdAt = new Date().toDateString();
 mockDocument.id = 1;
 mockDocument.owner = 1;
 const getAttribute = value => ('test');
-
-const mockStore = configureStore();
-const initialState = {
-  message: {
-    info: '',
-    from: ''
-  },
-  login: true,
-  SignupMessage: true,
-  roles: [],
-  createDocStatus: {},
-  Documents: {
-    type: 'GET_DOCUMENTS',
-    status: 'success',
-    documents: [
-      {
-        id: 7,
-        title: 'Jesus loves me and yo',
-        synopsis: null,
-        body: 'the first person to ever care about you',
-        role: 20,
-        accessRight: 'private',
-        owner: 228,
-        author: 'nkem cele okwudiri',
-        createdAt: '2017-06-29T02:24:02.521Z',
-        updatedAt: '2017-07-09T21:12:23.677Z'
-      },
-    ],
-    pageCount: 2
-  },
-  deleteDocument: {},
-  document: {},
-  Users: {}
-}
-
-const store = mockStore(initialState);
-
 const mockTab = {
   preventDefault: jest.fn(),
   target: {
@@ -57,30 +17,30 @@ const mockTab = {
     value: 'test'
   }
 };
+// const mockDeleteButton = {
+//   preventDefault: jest.fn(),
+//   target: {
+//     id : mockDocument.id
+//   }
+// };
 
-// mock html control
-const mockEvent = mockData.mockEvent;
-
-const props1 = {
+const props = {
   status: '',
   documents: [mockDocument],
   pageCount: 0,
   message: '',
   deleteStatus: '',
-  getDocuments,
-  deleteDocument: () => {},
+  getDocuments: jest.fn(),
+  deleteDocument: jest.fn(),
   sendMessage: () => {},
-  store
 };
 
 const setup = () => {
   const Wrapper = mount(
-    <MemoryRouter>
-      <Documents store={store} />
-    </MemoryRouter>
+      <Documents { ...props } />
   );
   return {
-    props: props1,
+    props,
     Wrapper
   };
 };
@@ -108,10 +68,6 @@ describe('components', () => {
 
             it('should call the action "getDocuments" with the value of the' +
             'searchHint textbox', () => {
-              console.log('txtsearchHint......................', txtsearchHint);
-              // wrapper.ref('searchHint').prop('value') = 'love';
-              // Wrapper.searchHint.value = 'love';
-              //txtsearchHint.value = 'love';
               txtsearchHint.onChange();
               expect(props.getDocuments.mock.calls.length).toBe(2);
             });
@@ -149,43 +105,27 @@ describe('components', () => {
     });
 
     describe('should call componentWillReceiveProps on update', () => {
-      // const spy = jest.spyOn(Documents, 'componentWillReceiveProps');
-      // expect(spy).toHaveBeenCalled();
-      // set localStorage
       const mockUser = mockData.user;
       mockUser.id = 1;
       localStorage.setItem('userInfo', JSON.stringify(mockUser));
-      it('should update state node "message" with the value of the props ' +
-         '"message" when the props "status" ' +
-          'does not have the value "success"', () => {
+      it('should display a message from actions when an operation',
+      () => {
         Wrapper.setProps({
           status: 'failed',
+          messageFrom: 'deleteDocument',
           message: 'unknown request',
           deleteStatus: 'failed'
         });
         expect(Wrapper.state('message')).toEqual('unknown request');
       });
 
-      it('should update state node "message" with the value of the props ' +
-         '"message" when the props "deleteStatus" ' +
-          'does not have the value "success"',
+      it('should reset the message state when an operation is successful',
       () => {
         Wrapper.setProps({
           deleteStatus: 'failed',
-          message: 'unknown request'
+          message: 'document has been deleted successfully '
         });
-        expect(Wrapper.state('message')).toEqual('unknown request');
-      });
-
-      it('should update state node "message" with the value ' +
-         '"Document has been deleted successfully" ' +
-         'when the props "deleteStatus" has the value "success"',
-      () => {
-        Wrapper.setProps({
-          deleteStatus: 'success',
-        });
-        expect(Wrapper.state('message'))
-        .toEqual('Document has been deleted successfully');
+        expect(Wrapper.state('message')).toEqual('');
       });
     });
 
@@ -193,22 +133,32 @@ describe('components', () => {
       describe('rows', () => {
         it('should have column "Author"', () => {
           const author = Wrapper.find('#author1').props();
-          console.log(author);
-          expect(author.value).toEqual(mockDocument.author);
+          expect(author.children).toEqual(mockDocument.author);
         });
-        // it('should have column "Title"', () => {
-        //   const title = Wrapper.find('#title1').props();
-        //   console.log('title', title);
-        //  // expect(title.value).toEqual(mockDocument.title);
-        // });
-        // // it('should have column "createdAt"', () => {
-        // //   const createdAt = Wrapper.find('#createdAt1').props();
-        // //   expect(createdAt.value).toEqual(mockDocument.createdAt);
-        // // });
-        // it('should have colomn "Author"', () => {
-        //   const deleteButton = Wrapper.find('#1').props();
-        //   expect(deleteButton.value).toEqual(mockDocument.id);
-        // });
+        it('should have column "Title"', () => {
+          const title = Wrapper.find('#title1').props();
+         expect(title.children).toEqual(mockDocument.title);
+        });
+        it('should have column "Accessibilty"', () => {
+          const access = Wrapper.find('#access1').props();
+         expect(access.children).toEqual(mockDocument.accessRight);
+        });
+        it('should have column "createdAt"', () => {
+          const createdAt = Wrapper.find('#createdAt1').props();
+          expect(createdAt.children).toEqual(mockDocument.createdAt);
+        });
+        describe('should have colomn "delete" for only document owner', () => {
+
+          console.log(`#${mockDocument.id}`);
+          const deleteButton = Wrapper.find(`#${mockDocument.id}`).props();
+          it('button id should be the same as document id', () => {
+            expect(deleteButton.id).toEqual(mockDocument.id);
+          });
+          it('should invoke the "deleteDocument" on diuble click', () => {
+            // deleteButton.onDoubleClick(mockDeleteButton);
+            // expect(props.deleteDocuments.mock.calls.length).toBe(1);
+          });
+        });
       });
     });
   });

@@ -65,7 +65,6 @@ export class Document extends React.Component {
     }
   }
 
-
   /**
    * signin user
    * @param {*} event
@@ -156,8 +155,8 @@ const mapDispatchToProps = dispatch => (
 Document.propTypes = {
   getDocument: PropTypes.func.isRequired,
   document: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
+    id: PropTypes.number,
+    title: PropTypes.string,
     body: PropTypes.string,
     author: PropTypes.string,
     accessRight: PropTypes.string,
@@ -166,7 +165,7 @@ Document.propTypes = {
   }),
   match: PropTypes.shape({
     params: PropTypes.shape({
-      documentId: PropTypes.number
+      documentId: PropTypes.any
     })
   }),
   message: PropTypes.string,

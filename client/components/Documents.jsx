@@ -47,7 +47,6 @@ export class Documents extends React.Component {
    */
   componentWillMount() {
     this.props.getDocuments('myDocument', '', 0, 6);
-    console.log('..................',this.props.getDocuments('myDocument', '', 0, 6))
     this.setState({
       isloading: true
     });
@@ -69,6 +68,7 @@ export class Documents extends React.Component {
    */
   componentWillReceiveProps(nextProps) {
     let message = '';
+    let newDocs;
     const sender = nextProps.messageFrom;
     // show error message when error is reported
     if (sender === 'getDocuments' || sender === 'deleteDocument' 
@@ -79,22 +79,24 @@ export class Documents extends React.Component {
           if (message.toString().includes('success')) {
             // remove row from table when opertion was successfully
             const curDocId = this.state.curDocID;
-            newUsers = _.remove(this.state.documents, (document) => {
+            newDocs = _.remove(this.state.documents, (document) => {
               return (document.id === parseInt(curDocId, 10));
             });
             this.props.sendMessage('reset', 'reset');
+            message = '';
           } 
         }
 
       // show message only when message exists
-      if (message !== '') {
+      if (message !== '' &&
+       (sender === 'getDocuments' || sender === 'deleteDocument' )) {
         toaster.info(nextProps.message);
       }
     }
     // set state to reflect the props dispatched
     const pageCount = nextProps.pageCount;
     this.setState({
-      message: '',
+      message,
       isloading: false,
       noFound: `${pageCount} document${(pageCount<2) ? '' : 's'} found`,
       curDocID: 0,
@@ -152,7 +154,7 @@ export class Documents extends React.Component {
       category: '',
       isloading: true
     });
-    toaster.info(`searching for documents with hint ${searchHint}`);
+    // toaster.info(`searching for documents with hint ${searchHint}`);
     this.props.getDocuments('', searchHint, 0, 6);
   }
 
@@ -299,7 +301,7 @@ export class Documents extends React.Component {
                         <td id={`createdAt${document.id}`}>
                           {toServertime(document.createdAt)}
                         </td>
-                        <td >{document.accessRight}</td>
+                        <td id={`access${document.id}`}>{document.accessRight}</td>
                         {(user.id === document.owner)
                           ?
                             <td>
@@ -401,9 +403,9 @@ const mapStateToProps = state => (
 // Maps actions to props
 const mapDispatchToProps = dispatch => (
   {
-    getDocuments: (accessRight, title, offset, limit) => {
-      getDocuments(accessRight, title, offset, limit);
-    },
+    getDocuments: (accessRight, title, offset, limit) => 
+      dispatch(getDocuments(accessRight, title, offset, limit))
+    ,
     deleteDocument: documentID => dispatch(deleteDocument(documentID)),
     sendMessage: () => dispatch(sendMessage())
   }

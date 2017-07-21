@@ -17,7 +17,7 @@ const getDocuments = (accessRight = '', title = '', offset = 0, limit = 7) =>
     `/api/v1/search/documents?accessRight=${accessRight}&title=${title}&offset=${offset}&limit=${limit}`
   )
   .then(response =>
-    getDocStatus('success', response.data.data, '')
+    getDocStatus('success', response.data.documents)
   )
   .catch((error) => {
     let message = 'An internal error occurred, please try again';
