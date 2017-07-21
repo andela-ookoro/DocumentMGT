@@ -43,9 +43,9 @@ class Layout extends React.Component {
       ||
       /^((http[s]?|ftp):\/\/)?(.*)(\/)?#\/$/.test(url)) {
         $('a[href$="#/dashboard"]').addClass('activelink');
-      } else if (/^((http[s]?|ftp):\/\/)?(.*)(\/)?(#\/document)(\/)?(\w*)$/.test(url)) {
+      } else if (/^((http[s]?|ftp):\/\/)?(.*)(\/)?(#\/document)(\/)?(\w*)(\/)?(\w*)$/.test(url)) {
         $('a[href$="#/document"]').addClass('activelink');
-      } else if (/^((http[s]?|ftp):\/\/)?(.*)(\/)?(#\/createDocument)(\/)?(\w*)$/.test(url)) {
+      } else if (/^((http[s]?|ftp):\/\/)?(.*)(\/)?(#\/createDocument)(\/)?(\w*)(\/)?(\w*)(\/)?(\w*)$/.test(url)) {
         $('a[href$="#/createDocument"]').addClass('activelink');
       } else if (/^((http[s]?|ftp):\/\/)?(.*)(\/)?(#\/profile)(\/)?(\w*)$/.test(url)) {
         $('a[href$="#/profile"]').addClass('activelink');

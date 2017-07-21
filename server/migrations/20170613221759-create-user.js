@@ -67,6 +67,10 @@ module.exports = {
       hashPassword: {
         type: Sequelize.STRING
       },
+      isAdmin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       status: {
         type: Sequelize.STRING,
         defaultValue: 'active',

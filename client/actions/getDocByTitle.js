@@ -17,7 +17,7 @@ const getDocByTitle = (title, owner) =>
     `/api/v1/search/documents?`
   )
   .then(response =>
-    getDocStatus('success', response.data.data, '')
+    getDocStatus('success', response.data.documents, '')
   )
   .catch((error) => {
     let message = 'An internal error occurred, please try again';

@@ -17,7 +17,7 @@ const getUsers = (category = '', fname = '', offset = 0, limit = 6) =>
     `/api/v1/Users?status=${category}&fname=${fname}&offset=${offset}&limit=${limit}`
   )
   .then(response =>
-    getUserAction('success', response.data.data, '')
+    getUserAction('success', response.data.users)
   )
   .catch((error) => {
     let message = 'An internal error occurred, please try again';

@@ -374,3 +374,14 @@ input[type=text].invalid {
 #spanRole i {
   display: inline !important ;
 }
+.switch label input[type=checkbox]:checked + .lever {
+    background-color: #a1887f !important;
+}
+.switch label input[type=checkbox]:checked + .lever:after {
+    background-color: #a1887f !important;
+    left: 24px;
+}
+.userInfo{
+  color: #a1887f;
+  font-family: 'Fjalla One', sans-serif;
+}

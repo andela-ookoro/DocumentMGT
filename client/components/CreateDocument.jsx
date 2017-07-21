@@ -133,6 +133,7 @@ export class CreateDocument extends React.Component {
       });
     }
   }
+
   /**
    * @memberof CreateDocument
    * @returns {null} - null
@@ -140,6 +141,7 @@ export class CreateDocument extends React.Component {
   componentWillUnmount() {
     tinymce.remove(this.state.editor);
   }
+
   /**
    * set the value of the control to the respective state node
    * @param {*} e

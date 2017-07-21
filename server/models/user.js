@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
-      defaultValue: false,
+      allowNull: false,
       unique: true,
       validate: {
         isEmail: {
@@ -53,6 +53,10 @@ module.exports = (sequelize, DataTypes) => {
           msg: 'password should contain between 10 to 20 characters'
         },
       }
+    },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     hashPassword: {
       type: DataTypes.STRING,

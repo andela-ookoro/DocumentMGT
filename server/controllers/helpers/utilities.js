@@ -13,6 +13,7 @@ module.exports = {
    * @returns {object} -
    */
   sendMessage(res, message, statusCode) {
+    console.log()
    res.status(statusCode).send({
       status: 'fail',
       message
@@ -25,11 +26,21 @@ module.exports = {
    * @param {*} statusCode - status Code
    * @returns {object} -
    */
-  sendData(res, data, statusCode) {
-    res.status(statusCode).send({
-      status: 'success',
-      data
-    });
+  // const obj = {};
+  //   obj.status = 'success';
+  //   obj[actionType] = data;
+  //   res.status(statusCode).send({
+  //     status: 'success',
+  //     data
+  //   });
+  sendData(res, data, statusCode, dataType) {
+    // create response payload
+    const payload = {
+      status: 'success'
+    };
+    payload[dataType] = data;
+    console.log(payload)
+    res.status(statusCode).send({ ...payload });
   },
   /**
    * validate user using jwt
@@ -60,20 +71,35 @@ module.exports = {
         User
         .find({
           where: {
-            email: decoded.email
+            id: decoded.id
           },
         })
         .then((foundUser) => {
           if (foundUser) {
-             // check if user is disabled
-            if (foundUser.status === 'disabled') {
-              res.status(401).send({
-                message: 'This account is blocked, Please contact the admin'
-              });
-            }
-             // attach user info to the request object
-            req.user = decoded;
-            next();
+
+             // react to user status
+             const accountStatus = foundUser.status;
+             switch (accountStatus) {
+               case 'disabled':
+                res.status(401).send({
+                  message: 'This account is blocked, Please contact the admin'
+                });
+                break;
+              case 'inactive':
+                res.status(401).send({
+                  message: 'This account does not exist'
+                });
+                break;
+              case 'active':
+                // attach user info to the request object
+                req.user = decoded;
+                next();
+                break;
+              default:
+                res.status(401).send({
+                  message: 'Invalid operation, check your credentials'
+                });
+             }
             return;
           } else {
             res.status(401).send({
@@ -110,13 +136,14 @@ module.exports = {
       if (!role) {
         return sendMessage(res, 'Role not found.', 200);
       }
+      console.log('this is the users', user);
       // create jwt payload
       const userInfo = {
-        email: user.email,
         name: `${user.fname} ${user.mname} ${user.lname}`,
         role: role.id,
         title: role.title,
-        id: user.id
+        id: user.id,
+        isAdmin: user.isAdmin
       };
       const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET);
       // send response to client
@@ -138,7 +165,7 @@ module.exports = {
    * @returns {object} - next route or error message
    */
   adminOnly(req, res, next) {
-    if (req.user.title === 'admin') {
+    if (req.user.isAdmin) {
       next();
       return;
     }
@@ -161,5 +188,39 @@ module.exports = {
         throw err;
       }
     });
+  },
+
+  /**
+   * @summary function to get the authorized list of document
+   * @param {any} user 
+   * @returns {array} - an array of criteria
+   */
+  authorizedDoc(user){
+    // for a regulat user
+    let citeria = [
+      {
+        accessRight: 'role',
+        role: user.role
+      },
+      {
+        accessRight: 'private',
+        owner: user.id
+      },
+      {
+        accessRight: 'public',
+      }
+    ];
+    if (user.isAdmin) {
+      citeria = [
+      {
+        accessRight: 'private',
+        owner: user.id
+      },
+      {
+        accessRight: 'public',
+      }
+    ];
+    }
+    return citeria;
   }
 };

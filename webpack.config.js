@@ -18,7 +18,9 @@ const basePlugins = [
     allChunks: true
   })
 ];
+
 const debugPlugins = [new ExtractTextPlugin('style.css')];
+
 const productionPlugins = [
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.optimize.UglifyJsPlugin(),

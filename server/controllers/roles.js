@@ -19,18 +19,16 @@ module.exports = {
       hint = { offset, limit };
     }
 
-    // get all users
+    // get all enable role
     Role.findAll({
       attributes: ['id', 'title', 'description'],
       order: [['title', 'ASC']],
       where: {
-        title: {
-          $ne: 'admin'
-        }
+        status: 'enable'
       },
       ...hint
     })
-    .then(roles => sendData(res, roles, 200))
+    .then(roles => sendData(res, roles, 200, 'roles'))
     .catch(error => sendMessage(res, error.message, 500));
   },
   /**
@@ -47,7 +45,7 @@ module.exports = {
     if (role.title) {
       Role.create(role)
       .then(newRole => {
-        return sendData(res, newRole, 201)}
+        return sendData(res, newRole, 201, 'role')}
       )
       .catch(err => sendMessage(res, err.message, 500));
     } else {
@@ -73,7 +71,7 @@ module.exports = {
       if (!role) {
         return sendMessage(res, 'Role not found.', 200);
       }
-      return sendData(res, role, 200);
+      return sendData(res, role, 200, 'role');
     })
     .catch(error => sendMessage(res, error.message, 400));
   },
@@ -99,7 +97,7 @@ module.exports = {
       }
       return role
       .update({ ...changes })
-      .then(() => sendData(res, role, 200))
+      .then(() => sendData(res, role, 200, 'role'))
       .catch(error => sendMessage(res, error.message, 400));
     })
     .catch(error => sendMessage(res, error.message, 400));
@@ -125,8 +123,8 @@ module.exports = {
       }
 
       return role
-      .destroy()
-      .then(() => sendData(res, role, 200))
+      .update( { status: 'disabled'})
+      .then(() => sendData(res, 'role was been delete', 200, 'message'))
       .catch(error => sendMessage(res, error.message, 400));
     })
     .catch(error => sendMessage(res, error.message, 400));
@@ -158,7 +156,7 @@ module.exports = {
         if (!users) {
           return sendMessage(res, 'Users not found.', 200);
         }
-        return sendData(res, users, 200);
+        return sendData(res, users, 200, 'users');
       })
       .catch(error => sendMessage(res, error.message, 400));
     })

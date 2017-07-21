@@ -34,14 +34,13 @@ module.exports = {
   login(req, res) {
     // create object from request
     const user = req.body;
+    console.log(user, bcrypt.hashSync(user.password))
     // check for required fields
     if (user.email && user.password) {
       // get user with this email
       return User
         .find({
-          where: {
-            email: user.email
-          },
+          where: { email: user.email }
         })
         .then((foundUser) => {
           if (foundUser) {
@@ -57,14 +56,13 @@ module.exports = {
             if (pass) {
               return returnJWt(res, foundUser.dataValues, 200);
             }
-            return sendMessage(res, 'Wrong email or password.', 401);
+            return sendMessage(res, 'Wrong email or password1.', 401);
           }
-          return sendMessage(res, 'Wrong email or password.', 401);
+          return sendMessage(res, 'Wrong email or password2.', 401);
         })
-        .catch(err => sendMessage(res, err.message, 401));
+        .catch(err => sendMessage(res, `${ err.message || err}`, 401));
     } else {
-      return sendMessage(res, 'Email and password are compulsory.',
-      401);
+      return sendMessage(res, 'Email and password are compulsory.',401);
     }
   },
    /**
@@ -143,14 +141,19 @@ module.exports = {
         // create object to store users fetch and total number of users
         const usersPayload = {
           count: 0,
-          rows: users
+          rows: users,
+          curPage: 1,
+          pageCount: 1,
+          pageSize: users.length
         };
         // get total number of users in category
         return sequelize.query(getUsersCount)
         .then(countResult => {
           const count = countResult[0][0].count;
+          usersPayload.pageCount = parseInt(count/limit, 10);
+          usersPayload.curPage = parseInt(offset/limit, 10)
           usersPayload.count = parseInt(count, 10);
-          return sendData(res, usersPayload, 200);
+          return sendData(res, usersPayload, 200, 'user');
         })
         .catch(error => sendMessage(res, error.message, 500));
       }
@@ -178,7 +181,16 @@ module.exports = {
         .then((foundUser) => {
           // if user exist exist return error
           if (foundUser) {
-            sendMessage(res, 'Email already exist', 409);
+            // when account has been blocked
+            switch (foundUser.status) {
+              case disabled:
+                sendMessage(res,
+                  'This account is blocked, Please account admin',
+                  401);
+                break;
+              default:
+                sendMessage(res, 'Email already exist', 409);
+            }
           }
           return User.create(user)
             .then(newuser => returnJWt(res, newuser.dataValues, 201))
@@ -203,20 +215,28 @@ module.exports = {
   getUser(req, res) {
     const userId = parseInt(req.params.id, 10);
     if (isNaN(userId)) {
-      sendMessage(res, 'Invalid user ID', 400);
+      return sendMessage(res, 'Invalid user ID', 400);
     }
-    // get user with this id
-    return User.findOne({
-        where: { id: userId },
-        attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
-      })
-      .then((user) => {
-        if (!user) {
-          sendMessage(res, 'User was not found.', 404);
-        }
-        sendData(res, user, 200);
-      })
-      .catch(error => sendMessage(res, error.message, 500));
+    // disallow regular users from view other user profile 
+    if (!req.user.isAdmin && userId !== req.user.id) {
+      return sendMessage(res,
+        'Unathorized operation, please check user id passed', 500);
+    }
+    const fetchUserQuery = `
+     select fname, lname, mname, "users"."roleId", "roles"."title" , email
+     from users 
+     inner join roles
+     on "users"."roleId" = "roles".id
+     where "users"."id"= ${userId}`;
+     sequelize.query(fetchUserQuery)
+    .then(result => {
+      if (result[0] === []) {
+        return sendMessage(res, 'User was not found.', 404);
+      }
+      const user = result[0][0];
+      return sendData(res, user, 200, 'user');
+    })
+    .catch(error => sendMessage(res, error.message, 500));
   },
   /**
    * detele user by id
@@ -226,7 +246,7 @@ module.exports = {
    */
   deleteUser(req, res) {
     // convert param to int
-    const userId = parseInt(req.params.id, 10);
+    const userId = parseInt(req.user.id, 10);
     if (isNaN(userId)) {
       return sendMessage(res, 'Invalid user ID', 400);
     }
@@ -240,38 +260,16 @@ module.exports = {
           sendMessage(res, 'User was not found.', 200);
         }
 
+        /**
+         * change user status
+         * set email to <delete+email>, to enable future signup
+         */
         return user
-        .update({ status: 'disabled' })
-        .then(() => sendData(res, 'User has been blocked successfully', 200))
-        .catch(error => sendMessage(res, error.message, 400));
-      })
-      .catch(error => sendMessage(res, error.message, 400));
-  },
-  /**
-   * detele user by id
-   * @param {*} req - client request
-   * @param {*} res - server response
-   * @return {string } - user fullname
-   */
-  deleteUser(req, res) {
-    // convert param to int
-    const userId = parseInt(req.params.id, 10);
-    if (isNaN(userId)) {
-      return sendMessage(res, 'Invalid user ID', 400);
-    }
-
-    // get user with this id
-    return User.findOne({
-        where: { id: userId }
-      })
-      .then((user) => {
-        if (!user) {
-          sendMessage(res, 'User was not found.', 200);
-        }
-
-        return user
-        .update({ status: 'disabled' })
-        .then(() => sendData(res, 'User has been blocked successfully', 200))
+        .update({
+          status: 'inactive',
+          email: `delete${user.email}`
+        })
+        .then(() => sendData(res, 'Your account has been deleted', 200, 'message'))
         .catch(error => sendMessage(res, error.message, 400));
       })
       .catch(error => sendMessage(res, error.message, 400));
@@ -300,7 +298,7 @@ module.exports = {
 
         return user
         .update({ status: 'disabled' })
-        .then(() => sendData(res, 'User has been blocked successfully', 200))
+        .then(() => sendData(res, 'User has been blocked successfully', 200, 'message'))
         .catch(error => sendMessage(res, error.message, 400));
       })
       .catch(error => sendMessage(res, error.message, 400));
@@ -329,7 +327,7 @@ module.exports = {
 
         return user
         .update({ status: 'active' })
-        .then(() => sendData(res, 'User has been restored successfully', 200))
+        .then(() => sendData(res, 'User has been restored successfully', 200, 'messsage'))
         .catch(error => sendMessage(res, error.message, 400));
       })
       .catch(error => sendMessage(res, error.message, 400));
@@ -352,51 +350,42 @@ module.exports = {
     else if (req.user.title !== 'admin' && userId !== req.user.id ) {
       return sendMessage(res, 'Invalid operation', 403);
     }
-
+    // get update from request body
+    const update = req.body;
     // check if old password was provide
     const curPassword = req.body.curPassword;
-    if (curPassword) {
-      // find user
-      return User.findOne({
-          where: { id: userId }
-        })
-        .then((foundUser) => {
-          if (!foundUser) {
-           sendMessage(res, 'User was not found', 200);
-          }
-          // verify user's password
+    // find user
+    return User.findOne({
+        where: { id: userId }
+      })
+      .then((foundUser) => {
+        if (!foundUser) {
+          return sendMessage(res, 'User was not found', 200);
+        }
+
+        // check if user old password, check if password was updated
+        if (update.password) {
           const pass = bcrypt.compareSync(curPassword, foundUser.password);
-          const test =  bcrypt.hashSync(curPassword, bcrypt.genSaltSync(10));
-          const test1 =  bcrypt.hashSync(curPassword);
-          if (pass) {
-            // create changes
-            const changes = {
-              fname: req.body.fname || foundUser.fname,
-              lname: req.body.lname || foundUser.lname,
-              mname: req.body.mname || foundUser.mname,
-              email: req.body.email || foundUser.email,
-              roleId: req.body.roleId || foundUser.roleId
-            };
-            // check if the user wants to change her password
-            if (req.body.password) {
-              changes.password = req.body.password;
-            }
-            return foundUser
-              .update({ ...changes })
-              .then(updateUser => returnJWt(res, updateUser.dataValues, 200))
-              .catch(error => {
-                return sendMessage(res, error.message, 500)
-              });
+          if (!pass) {
+            return sendMessage(res,
+            'Unauthorized operation, check the credential provided',
+            403);
           }
-          return sendMessage(res,
-          'Unauthorized operation, check the credential provided1',
-          403);
-        })
-        .catch(error => {
-          const message = error.message || error.toString()
-          return sendMessage(res, message, 500)
-        });
-    }
+        }
+        return foundUser
+          .update({ ...update })
+          .then(updateUser => returnJWt(res, updateUser.dataValues, 200))
+          .catch(error => {
+             const message = error.message || error.toString();
+             console.log('1....................', message);
+            return sendMessage(res, message, 500)
+          });
+      })
+      .catch(error => {
+        const message = error.message || error.toString();
+        console.log('2....................', message);
+        return sendMessage(res, message, 500)
+      });
     return sendMessage(res,
     'Unauthorized operation, check the credential provided2', 403);
   },
@@ -415,10 +404,11 @@ module.exports = {
         attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
       })
       .then((users) => {
-        if (!users) {
+        
+        if (users) {
           sendMessage(res, 'No user was found.', 200);
         }
-         sendData(res, users, 200);
+         sendData(res, users, 200, 'user');
       })
       .catch(error => sendMessage(res, error.message, 400));
   },
@@ -429,6 +419,9 @@ module.exports = {
    * @return {object} - documents
    */
   getUserDocument(req, res) {
+    // get pagination
+    const offset = parseInt(req.query.offset, 10) || 0;
+    const limit = parseInt(req.query.limit, 10) || 7;
     // get user with this id
     const userId = parseInt(req.params.id, 10);
     if (isNaN(userId)) {
@@ -447,13 +440,24 @@ module.exports = {
         // return user's documents
        return  Document.findAndCountAll({
           where: { owner: userId },
-          attributes: docAttributes
+          attributes: docAttributes,
+          offset,
+          limit,
         })
         .then((documents) => {
           if (!documents) {
            return sendMessage(res, 'Document was not found.', 200);
           }
-          return sendData(res, documents, 200);
+          const count = documents.count;
+          const rows = documents.rows;
+          const documentsPayload = {
+            count,
+            rows,
+            curPage: parseInt(offset/limit, 10),
+            pageCount: parseInt(count/limit, 10),
+            pageSize: rows.length
+          };
+          return  sendData(res, documentsPayload, 200, 'documents');
         })
         .catch(error => sendMessage(res, error.message, 500));
       })

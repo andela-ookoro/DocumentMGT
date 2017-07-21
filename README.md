@@ -6,7 +6,7 @@
 ## Introduction
 ### **`Document Hub`** is a full stack project that serves an api and a single page web application built with [React](https://facebook.github.io/react/) framework that manages documents
 ### It has the following features;
-  * User signin and signup
+  * User authentication
   * User can view documents
   * User can view documents based on access right
   * User can search for document based on title
@@ -62,4 +62,12 @@ Document Hub uses [React](https://facebook.github.io/react/) and [Materialize cs
   * We would review it and get back to you. (Ensure your attach a contact to your PR comment)
   * For more information send an email to  [Developing team](okwudiri.okoro@andela.com)
 
+## limitation
+  * The project does not support third party authentication 
+  * The project does not support file upload
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+## FAQ
 

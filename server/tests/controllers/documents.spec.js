@@ -85,10 +85,10 @@ describe('/api/v1/document', () => {
           if (!err) {
             // store new document for futher testing
             if (res.body.status === 'success') {
-              registeredDocument.title = res.body.data.title;
-              registeredDocument.id = res.body.data.id;
+              registeredDocument.title = res.body.document.title;
+              registeredDocument.id = res.body.document.id;
               res.should.have.status(201);
-              res.body.data.title.should.be.eql(document.title);
+              res.body.document.title.should.be.eql(document.title);
               res.body.status.should.be.eql('success');
             } else {
               expect(res.body).toExist('message');
@@ -299,7 +299,7 @@ describe('/api/v1/document', () => {
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data.rows.should.be.an('array');
+              res.body.documents.rows.should.be.an('array');
             } else {
               res.body.message.should.be.eql('No document was found.');
             }
@@ -318,7 +318,7 @@ describe('/api/v1/document', () => {
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data.rows.should.be.an('array');
+              res.body.documents.rows.should.be.an('array');
             } else {
               res.body.message.should.be.eql('No document was found.');
             }
@@ -337,7 +337,7 @@ describe('/api/v1/document', () => {
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data.rows.should.be.an('array');
+              res.body.documents.rows.should.be.an('array');
             } else {
               res.body.message.should.be.eql('No document was found.');
             }
@@ -356,7 +356,7 @@ describe('/api/v1/document', () => {
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data.rows.should.be.an('array');
+              res.body.documents.rows.should.be.an('array');
             } else {
               res.body.message.should.be.eql('No document was found.');
             }
@@ -375,7 +375,7 @@ describe('/api/v1/document', () => {
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data.rows.should.be.an('array');
+              res.body.documents.rows.should.be.an('array');
             } else {
               res.body.message.should.be.eql('No document was found.');
             }
@@ -396,7 +396,7 @@ describe('/api/v1/document', () => {
             // if there is no error, that is user exist
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
-              res.body.data.rows.should.be.an('array');
+              res.body.documents.rows.should.be.an('array');
             } else {
               res.body.message.should.be.eql('No document was found.');
             }
