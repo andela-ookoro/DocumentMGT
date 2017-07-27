@@ -59,7 +59,6 @@ class Layout extends React.Component {
       <div>
         <NavigationBar />
         <div className="extraDiv" />
-        {console.log(this.props.children)}
         { this.props.children }
         <Footer />
       </div>

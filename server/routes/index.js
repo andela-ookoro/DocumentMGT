@@ -1,8 +1,6 @@
 import Controllers from '../controllers';
 import { validateUser, adminOnly } from '../controllers/helpers/utilities';
 
-
-
 // import the model
 const usersController = Controllers.User;
 const documentsController = Controllers.Document;

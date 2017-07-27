@@ -17,7 +17,6 @@ const getUsers = (category = '', fname = '', offset = 0, limit = 6) =>
     `/api/v1/Users?status=${category}&fname=${fname}&offset=${offset}&limit=${limit}`
   )
   .then(response => {
-    console.log('response.data.users', response.data);
     return getUserAction('success', response.data.users);
   }
   )

@@ -10,12 +10,10 @@ const checkDoc = (accessRight) => {
    // assert for either no document found or document(s) was found
   const noDocFound = document.getElementById('noDoc');
   if (noDocFound) {
-    console.log('no doc found', noDocFound);
     return false;
   } 
   // check if there rows
   const documentTable =document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
   // get second row, skip first row for header
   const firstDoc = documentTable.rows[1];
   const firstDocAccessibility = firstDoc.cells[3].id;

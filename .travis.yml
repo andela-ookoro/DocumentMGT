@@ -4,6 +4,9 @@ install: npm install
 before_script:
   - npm install -g sequelize-cli
 script: npm run client-test
+addon:
+  code_climate:
+    repo_token: 343cc6b05d8e558b6df8a006bff3e494266eea9c2a37c10e37bd9c0d130dcd98
 after_success:
   - npm install -g codeclimate-test-reporter
   - cat ./lcov.info | ./node_modules/coveralls/bin/coveralls.js

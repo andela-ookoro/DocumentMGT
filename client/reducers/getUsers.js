@@ -6,7 +6,6 @@ export default (state = {}, action) => {
     case GET_USERS:
       // reset message action
       sendMessage('', '');
-      console.log('action oh', action);
       return action;
     default:
       return state;
