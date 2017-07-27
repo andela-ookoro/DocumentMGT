@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+const io = require('socket.io-client');
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import toaster from 'toastr';
 import upsertDocument from '../actions/createDocument';
 import getDocument from '../actions/getDocument';
 
-
+// create 
+// const socket = io();
 /**
  * react component that displays a document
  * @class CreateDocument
@@ -32,6 +34,12 @@ export class CreateDocument extends React.Component {
     };
     this.saveDocument = this.saveDocument.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.broadcastUpdate = this.broadcastUpdate.bind(this);
+    this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
+    // attach socket event
+    // socket.on('receive code', (payload) => {   
+    //   this.updateCodeFromSockets(payload);
+    // });
   }
 
 
@@ -47,6 +55,8 @@ export class CreateDocument extends React.Component {
       this.setState({
         isloading: true,
       });
+      // join room 
+      //socket.emit('room', {room: documentID});
     }
   }
 
@@ -78,6 +88,14 @@ export class CreateDocument extends React.Component {
         });
         setTimeout(() => {
           editor.setContent(this.state.body);
+           // for socket event
+           editor.on('change', function(e) {
+             const docBody = editor.getContent();
+             this.broadcastUpdate(docBody);
+            console.log('the event object ', e);
+            console.log('the editor object ', editor);
+            console.log('the content ', editor.getContent());
+          });
         }, 1000);
       }
     });
@@ -109,6 +127,8 @@ export class CreateDocument extends React.Component {
           accessRights[i].checked = true;
         }
       }
+      // join room with document id
+      //socket.emit('room', {room: curDocument.id});
     }
 
     if (nextProps.messageFrom === 'upsertDocument') {
@@ -134,8 +154,34 @@ export class CreateDocument extends React.Component {
    */
   componentWillUnmount() {
     tinymce.remove(this.state.editor);
+    // remove user from existing socket room
+    // socket.emit('leave room', {
+    //   room: this.state.docId
+    // })
   }
 
+
+  /**
+   * respond to socket broadcast 
+   * @param {any} payload 
+   * @memberof CreateDocument
+   */
+  updateCodeFromSockets(payload) {
+    console.log('this is new oh', payload);
+   // this.setState({code: payload.newCode})
+  }
+
+  /**
+   * send update to other users viewing this page
+   * @param {any} docBody 
+   * @memberof CreateDocument
+   */
+  broadcastUpdate(docBody) {
+    // socket.emit('coding event', {
+    //   room: this.state.docId,
+    //   newDocBody: docBody
+    // });
+  }
   /**
    * set the value of the control to the respective state node
    * @param {*} e

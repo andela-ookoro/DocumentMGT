@@ -20,7 +20,6 @@ export default (state = { info: '', from: '' }, action) => {
           info: 'reset'
         }
       }
-      console.log(',,,,,,,,,,,,,,,,,,,,,,,,,,',message)
       return message;
     default:
       return state;

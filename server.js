@@ -18,6 +18,10 @@ import webpackConfig from './webpack.config';
 
 import routes from './server/routes';
 
+// integrate socket
+import socket from './server/config/socket';
+//socket(app);
+
 // initiate dotenv
 dotenv.config();
 
