@@ -1,8 +1,10 @@
 import React from 'react';
+import toaster from 'toastr';
 import { shallow } from 'enzyme';
 import { Document } from '../../components/Document';
 import mockData from '../../../server/tests/mockData';
 
+toaster.info = jest.fn(message => '');
 const mockDocument = mockData.document;
 mockDocument.createdAt = new Date().toDateString();
 mockDocument.id = 1;
@@ -104,6 +106,19 @@ describe('components', () => {
       it('should render a link to return to the document dashboard', () => {
         const docDashboardlink = docNotFound.children[1];
         expect(docDashboardlink.props.href).toEqual('#/dashboard');
+      });
+    });
+
+    describe('should call componentWillReceiveProps on update', () => {
+      it('should display a message from \'getDocument\' actions',
+      () => {
+        Wrapper.setProps({
+          messageFrom: 'getDocument',
+          message: 'unknown request',
+        });
+        const messageState = Wrapper.state('message');
+        const isSubString = messageState.includes("unknown request")
+        expect(isSubString).toEqual(true);
       });
     });
   });

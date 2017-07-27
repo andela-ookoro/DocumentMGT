@@ -20,7 +20,7 @@ export class Profile extends React.Component {
   /**
    * Creates an instance of Signup.
    * @param {any} props -
-   * @memberof Signup
+   * @memberof Profile
    */
   constructor(props) {
     super(props);
@@ -32,9 +32,12 @@ export class Profile extends React.Component {
       password: '',
       curPassword: '',
       message: '',
+      showPassword: false,
       userid: 0,
       validControls: {},
-      isloading: false
+      isloading: false,
+      disableBtnUpdateProfile: true,
+      disableBtnSubmit: true
     };
     this.onChange = this.onChange.bind(this);
     this.updateProfile = this.updateProfile.bind(this);
@@ -47,31 +50,22 @@ export class Profile extends React.Component {
 
   /**
    * @returns {null} -
-   * @memberof Signup
+   * @memberof Profile
    */
   componentWillMount() {
-    // if user has not signin, redirect to the login page
-    if (!localStorage.getItem('jwt')) {
-      window.location = '/#/';
+    // get user info from localstorage
+    const user = JSON.parse(localStorage.getItem('userInfo'));
+    if (user) {
+      this.props.getUser(user.id);
+      this.setState({
+        isloading: true
+      });
     } else {
-      // get user info from localstorage
-      const user = JSON.parse(localStorage.getItem('userInfo'));
-      const userID = user.id;
-      if (userID) {
-        this.props.getUser(userID);
-        this.setState({
-          isloading: true
-        });
-      }
+      this.setState({
+        isloading: false,
+        message: 'Unable to retrieve your profile, please signout and login.',
+      });
     }
-  }
-
-  /**
-   * @returns {null} -
-   * @memberof profile
-   */
-  componentDidMount() {
-    document.getElementById('btnUpdateProfile').disabled = true;
   }
 
   /**
@@ -98,14 +92,13 @@ export class Profile extends React.Component {
         updatePassword: false,
       });
     }
-    if (nextProps.messageFrom === 'profile') {
+    const messageFrom = nextProps.messageFrom;
+    if (messageFrom === 'profile' || messageFrom === 'getUser') {
       const message = nextProps.message;
-      const formeValidControls = this.state.validControls;
       toaster.info(message);
       this.setState({
         isloading: false,
-        message,
-        validControls: formeValidControls
+        message
       });
     }
   }
@@ -122,9 +115,10 @@ export class Profile extends React.Component {
     let validationStatus;
     const controlName = e.target.name;
     const controlValue = e.target.value;
-    const jquerySelector = `#${controlName}`;
-    let enableButton = false;
-    const updatePassword = this.state.updatePassword;
+    const updatePassword = this.state.showPassword;
+    let disableBtnUpdateProfile = true;
+    let disableBtnSubmit = true;
+    let validatorText = '';
 
     if (controlName === 'fname' || controlName === 'lname') {
       validationStatus = validateName(controlValue);
@@ -155,51 +149,50 @@ export class Profile extends React.Component {
       validControls.curPassword = ' ';
     }
 
-    // get validControls
-    const validationLabel = document.getElementById(`${controlName}Validator`);
-    // set state when input is valid
+    // add control to list of valid control
     if (validationStatus === true) {
       // check if control was valid
       if (!validControls.hasOwnProperty(controlName)) {
         validControls[controlName] = controlValue;
       }
-      // remove error message
-      validationLabel.textContent = '';
     } else {
       // remove control from list of validControls
       if (validControls.hasOwnProperty(controlName)) {
         delete validControls[controlName];
       }
       // show error message
-      validationLabel.textContent = validationStatus;
-      validationLabel.style.color = '#BD2F10';
+      validatorText = validationStatus;
     }
-    // set state
-    this.setState({
-      [controlName]: controlValue,
-      validControls
-    });
+
     // enable button when every control is valid
     if (Object.keys(validControls).length === 6) {
       // if update password was checked
       if (updatePassword) {
         if (this.matchPassword()) {
-          enableButton = false;
+          disableBtnSubmit = false;
         } else {
-          enableButton = true;
+          disableBtnSubmit = true;
         }
-        document.getElementById('btnSubmit').disabled = enableButton;
       } else {
-          document.getElementById('btnUpdateProfile').disabled = false;
+        disableBtnUpdateProfile = false;
       }
     } else {
       // if update password was checked
       if (updatePassword) {
-        document.getElementById('btnSubmit').disabled = true;
+        disableBtnSubmit = true;
       } else {
-        document.getElementById('btnUpdateProfile').disabled = false;
+        disableBtnUpdateProfile = true;
       }
     }
+
+    // set state
+    this.setState({
+      [controlName]: controlValue,
+      validControls,
+      disableBtnUpdateProfile,
+      disableBtnSubmit,
+      [`${controlName}Validator`]: validatorText
+    });
   }
   
   /**
@@ -234,7 +227,7 @@ export class Profile extends React.Component {
     event.preventDefault();
     // create request payload from state
     const user = JSON.parse(localStorage.getItem('userInfo'));
-    const userid = this.user.id;
+    const userid = user.id;
     const userProfile = {
       fname: this.state.fname,
       lname: this.state.lname,
@@ -248,39 +241,38 @@ export class Profile extends React.Component {
       isloading: true
     });
     this.props.updateProfile(userid, userProfile);
+    
   }
 
   /**
    * check if password and comfirm password match
-   * @memberof Signup
+   * @memberof Profile
    *  @returns {null} -
    */
   matchPassword() {
     const comfirmpassword = this.comfirmpassword.value;
+    let disableBtnSubmit = true;
     // if password and comfirm password match, set label to matched
-    let matchStatus;
-    let fontColor = '#a1887f';
     let match;
+    let validatorText = '';
     if (comfirmpassword === this.state.password) {
       match = true;
-      matchStatus = 'Right password';
       // get validControls
       const validControls = this.state.validControls;
       if (Object.keys(validControls).length === 6) {
-        document.getElementById('btnSubmit').disabled = false;
+        disableBtnSubmit = false;
       }
     } else {
       match = false;
-      matchStatus = 'Password does not match';
-      fontColor = '#ff0000';
+      validatorText = 'Password does not match';
       // disable submit button
-      document.getElementById('btnSubmit').disabled = true;
+      disableBtnSubmit = true;
     }
-    //  set the result of the comparism
-    const matchStatusTextBox = document
-    .getElementById('comfirmpasswordValidator');
-    matchStatusTextBox.textContent = matchStatus;
-    matchStatusTextBox.style.color = fontColor;
+    // set state
+    this.setState({
+      disableBtnSubmit,
+      comfirmpasswordValidator: validatorText
+    });
     return match;
   }
 
@@ -290,16 +282,16 @@ export class Profile extends React.Component {
    * @memberof Profile
    */
   editPassword() {
-    const updatePassword = document.getElementById('updatePassword').checked;
+    const showPassword = this.showPassword.checked;
     this.setState({
-      updatePassword
+      showPassword
     })
   }
 
 
   /**
    * @returns {object} - html DOM
-   * @memberof Signup
+   * @memberof Profile
    */
   render() {
     const username= `${this.props.fname} ${this.props.mname} ${this.props.lname}`
@@ -307,7 +299,7 @@ export class Profile extends React.Component {
       <div className="container">
         <div className="body row" >
           <div className="col s12">
-             <div className=" userInfo row" >
+             <div className="userInfo row" >
                 <h6 className="col l4 s12">
                   Name: {username}
                 </h6>
@@ -343,9 +335,11 @@ export class Profile extends React.Component {
                       onChange={this.onChange}
                       className="validate"
                     />
-                    <label htmlFor="first_name">First Name</label>
+                    <label htmlFor="fname">First Name</label>
                     <div className="validatorContainer">
-                      <span id="fnameValidator" />
+                      <span id="fnameValidator">
+                        {this.state.fnameValidator}
+                      </span>
                     </div>
                   </div>
 
@@ -360,9 +354,11 @@ export class Profile extends React.Component {
                       value={this.state.mname}
                       onChange={this.onChange}
                     />
-                    <label htmlFor="middle_name">Middle Name</label>
+                    <label htmlFor="mname">Middle Name</label>
                     <div className="validatorContainer">
-                      <span id="mnameValidator" />
+                      <span id="mnameValidator">
+                        {this.state.mnameValidator}
+                      </span>
                     </div>
                   </div>
 
@@ -377,9 +373,11 @@ export class Profile extends React.Component {
                       value={this.state.lname}
                       onChange={this.onChange}
                     />
-                    <label htmlFor="last_name">Last Name</label>
+                    <label htmlFor="lname">Last Name</label>
                     <div className="validatorContainer">
-                      <span id="lnameValidator" />
+                      <span id="lnameValidator" >
+                        {this.state.lnameValidator}
+                      </span>
                     </div>
                   </div>
 
@@ -389,17 +387,21 @@ export class Profile extends React.Component {
                       placeholder="Email"
                       name="email"
                       type="email"
+                      id="email"
                       className="validate"
                       value={this.state.email}
                       onChange={this.onChange}
                     />
                     <label htmlFor="email">Email</label>
                     <div className="validatorContainer">
-                      <span id="emailValidator" />
+                      <span id="emailValidator">
+                        {this.state.emailValidator}
+                      </span>
+
                     </div>
                   </div>
 
-                  {(this.state.updatePassword) 
+                  {(this.state.showPassword) 
                     ?
                     ''
                     :
@@ -410,6 +412,7 @@ export class Profile extends React.Component {
                           name="action"
                           id="btnUpdateProfile"
                           onClick={this.updateProfile}
+                          disabled={this.state.disableBtnUpdateProfile}
                         >
                           Submit <i className="material-icons right">send</i>
                         </button>
@@ -428,12 +431,13 @@ export class Profile extends React.Component {
                         type="checkbox"
                         onChange={this.editPassword}
                         id="updatePassword"
+                        ref={(input) => { this.showPassword = input; }}
                         />
                       <span className="lever"></span>
                       On
                     </label>
                   </div>
-                {(this.state.updatePassword) 
+                {(this.state.showPassword) 
                   ?
                     <div>
                     <div className="input-field col s12">
@@ -449,7 +453,9 @@ export class Profile extends React.Component {
                       />
                       <label htmlFor="password">Password</label>
                       <div className="validatorContainer">
-                        <span id="passwordValidator" />
+                        <span id="passwordValidator">
+                          {this.state.passwordValidator}
+                        </span>
                       </div>
                     </div>
 
@@ -468,17 +474,16 @@ export class Profile extends React.Component {
                       />
                       <label htmlFor="comfirmpassword">comfirm password</label>
                       <div className="validatorContainer">
-                        <span
-                          id="comfirmpasswordValidator"
-                          ref={(input) => { this.validatorContainer = input; }}
-                        />
+                        <span>
+                          {this.state.comfirmpasswordValidator}
+                        </span>
                       </div>
                     </div>
 
                     <div className="input-field col s12">
                       <i className="material-icons prefix">lock</i>
                       <input
-                        placeholder="Authorize Password"
+                        placeholder="old Password"
                         name="curPassword"
                         id="curPassword"
                         type="password"
@@ -488,7 +493,9 @@ export class Profile extends React.Component {
                       />
                       <label htmlFor="curPassword">Authorize Password</label>
                       <div className="validatorContainer">
-                        <span id="curPasswordValidator" />
+                        <span id="curPasswordValidator">
+                         {this.state.curPasswordValidator}
+                        </span>
                       </div>
                     </div>
 
@@ -499,7 +506,7 @@ export class Profile extends React.Component {
                         name="action"
                         id="btnSubmit"
                         onClick={this.updatePassword}
-                        disabled
+                        disabled={this.state.disableBtnSubmit}
                       >
                         Submit <i className="material-icons right">send</i>
                       </button>

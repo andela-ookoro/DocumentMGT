@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-
 /**
  * @class NavigationBar
  * @extends {React.Component}
@@ -41,10 +40,10 @@ class NavigationBar extends React.Component {
     const username = user.name;
     const role = user.title;
     const nav = () => (
-      <div>
+      <div id="header">
         <li>
           <Link to="/dashboard" id="dashboard">
-          Documents
+            Documents
           </Link>
         </li>
         <li>
@@ -85,7 +84,8 @@ class NavigationBar extends React.Component {
                 <div className="header nav-wrapper" >
                   <a href="#!" className="brand-logo">
                     <img src="/logo.png" id="logoImg" alt="logo" />
-                    Doc Hub</a>
+                    Doc Hub
+                   </a>
                   <a href="#" data-activates="mobile-demo" className="button-collapse">
                     <i className="material-icons">menu</i>
                   </a>

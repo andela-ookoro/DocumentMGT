@@ -299,6 +299,17 @@ input[type=text].invalid {
     margin-top: -15px;
     transition: .2s opacity ease-out, .2s color ease-out;
 }
+.validatorContainer
+{
+    display: block;
+    content: "";
+    position: absolute;
+    top: 60px;
+    margin-left: 45px;
+    margin-top: -15px;
+    color: red;
+    transition: .2s opacity ease-out, .2s color ease-out;
+}
 .errorMessage {
   color: #BD2F10;
 }
@@ -384,4 +395,10 @@ input[type=text].invalid {
 .userInfo{
   color: #a1887f;
   font-family: 'Fjalla One', sans-serif;
+}
+#header i {
+  margin: 1px;
+}
+button#btnDownload {
+  margin-bottom: 10px;
 }

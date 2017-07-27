@@ -9,7 +9,6 @@ import getUsers from '../actions/getUsers';
 import blockUser from '../actions/blockUser';
 import restoreUser from '../actions/restoreUser';
 import { toServertime } from '../helper';
-import sendMessage from '../actions/message';
 
 
 /**
@@ -88,7 +87,6 @@ export class ManageUsers extends React.Component {
         newUsers = _.remove(this.state.users, (user) => {
           return (user.id === parseInt(curUserId, 10));
         });
-        this.props.sendMessage('reset', 'reset');
       }  
       toaster.info(nextProps.message);
     } 
@@ -164,7 +162,7 @@ export class ManageUsers extends React.Component {
       category: '',
       isloading: true
     });
-    toaster.info(`searching for users with hint ${searchHint}`);
+    // toaster.info(`searching for users with hint ${searchHint}`);
     this.props.getUsers('', searchHint, 0, 6);
   }
 
@@ -264,6 +262,16 @@ export class ManageUsers extends React.Component {
                   Blocked Users
                 </a>
               </li>
+              <li className="tab col s3">
+                <a
+                  href="#adminDashboard"
+                  value="inactive"
+                  id="inactive"
+                  onClick={this.getUsers}
+                >
+                  Deleted Users
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -286,14 +294,14 @@ export class ManageUsers extends React.Component {
                   <tbody id="tblUsers">
                     {this.state.users.map(user => (
                       <tr key={user.id} id={`row${user.id}`}>
-                        <td id={`name${user.name}`}>{user.name}</td>
-                        <td id={`email${user.email}`}>{user.email}</td>
-                        <td id={`role${user.role}`}>{user.role}</td>
-                        <td id={`docCount${user.doccount}`}>
+                        <td id={`name${user.id}`}>{user.name}</td>
+                        <td id={`email${user.id}`}>{user.email}</td>
+                        <td id={`role${user.id}`}>{user.role}</td>
+                        <td id={`docCount${user.id}`}>
                           {user.doccount}
                         </td>
                         <td> {toServertime(user.createdAt)} </td>
-                        <td id={`status${user.status}`}>
+                        <td id={`status${user.id}`}>
                           {user.status}
                         </td>
                         <td>
@@ -312,6 +320,10 @@ export class ManageUsers extends React.Component {
                                 </span>
                               </botton>
                             :
+                            ''
+                        }
+                        {(user.status === 'disabled')
+                            ?
                               <botton className="tooltip">
                                 <i
                                   className="admin-Action material-icons"
@@ -324,8 +336,9 @@ export class ManageUsers extends React.Component {
                                   double click to restore user
                                 </span>
                               </botton>
-                          }
-                         
+                            :
+                            ''
+                        }
                         </td>
                         
                       </tr>
@@ -377,8 +390,7 @@ const mapDispatchToProps = dispatch => (
       dispatch(getUsers(category, hint, offset, limit));
     },
     blockUser: userID => dispatch(blockUser(userID)),
-    restoreUser: userID => dispatch(restoreUser(userID)),
-    sendMessage: () => dispatch(sendMessage())
+    restoreUser: userID => dispatch(restoreUser(userID))
   }
 );
 
@@ -386,7 +398,6 @@ ManageUsers.propTypes = {
   getUsers: PropTypes.func.isRequired,
   blockUser: PropTypes.func.isRequired,
   restoreUser: PropTypes.func.isRequired,
-  sendMessage: PropTypes.func.isRequired,
   users: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,

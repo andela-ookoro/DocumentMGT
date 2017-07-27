@@ -30,6 +30,19 @@ const mockData = {
     email: faker.internet.email(),
     roleId: 3
   },
+  regularUser: {
+    id: 3,
+    name: 'Dele Musa Chimdi',
+    status: 'active',
+    email: faker.internet.email(),
+    role: 'D1 fellow',
+    title: 'D1 Fellow',
+    fname: 'Dele',
+    lname: 'Musa',
+    mname: 'Chimdi',
+    createdAt: new Date().toDateString(),
+    doccount: '1'
+  },
   updateuser: {
     fname: faker.name.firstName(),
     lname: faker.name.lastName(),

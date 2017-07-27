@@ -280,9 +280,10 @@ export class Documents extends React.Component {
           </div>
 
           <div id="documentDashboard" >
-            {(this.state.documents.length > 0) ?
+            {(this.state.documents.length > 0)
+              ?
               <div>
-                <table>
+                <table id="tbDocuments">
                   <thead>
                     <tr>
                       <th>Title</th>
@@ -307,6 +308,7 @@ export class Documents extends React.Component {
                             <td>
                               <a
                                 className="tooltip"
+                                id={`view${document.id}`}
                                 href={`#/document/${document.id}/${document
                                   .title
                                   .toString()
@@ -319,12 +321,13 @@ export class Documents extends React.Component {
                               </a>
                               <a
                                 className="tooltip"
+                                id={`edit${document.id}`}
                                 href={`#/createDocument/${document
                                   .id}/${document
                                   .title.toString()
                                   .replace(new RegExp(' ', 'g'), '_')}/edit`}
                               >
-                                <i className=" material-icons">mode_edit</i>
+                                <i className="material-icons">mode_edit</i>
                                 <span className="tooltiptext">
                                   Edit document
                                 </span>
@@ -335,7 +338,7 @@ export class Documents extends React.Component {
                                   id={document.id}
                                   onDoubleClick={this.deleteDocument}
                                 >
-                                  delete
+                                  delete_forever
                                   </i>
                                 <span className="tooltiptext">
                                   double click to Delete document
@@ -379,7 +382,7 @@ export class Documents extends React.Component {
               :
               <div className="info">
                 <br />
-                <h4> No document found, try more options &uarr;. </h4>
+                <h4 id="noDoc"> No document found, try more options &uarr;. </h4>
               </div>
             }
           </div>
@@ -404,8 +407,7 @@ const mapStateToProps = state => (
 const mapDispatchToProps = dispatch => (
   {
     getDocuments: (accessRight, title, offset, limit) => 
-      dispatch(getDocuments(accessRight, title, offset, limit))
-    ,
+      dispatch(getDocuments(accessRight, title, offset, limit)),
     deleteDocument: documentID => dispatch(deleteDocument(documentID)),
     sendMessage: () => dispatch(sendMessage())
   }

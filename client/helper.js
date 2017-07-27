@@ -14,17 +14,8 @@ export const requireAuth = () => {
  */
 export const isAdmin = () => {
   const user = JSON.parse(localStorage.getItem('userInfo'));
-  return user.isAdmin;
+  return user.isAdmin ? true  : false;
 };
 export const toServertime = (time =>
  new Date(time).toDateString()
 );
-
-
-// export const initiateEditor = (target =>
-//   tinymce.init({
-//     selector: target,
-//     height: 300,
-//     browser_spellcheck: true,
-//   })
-// );

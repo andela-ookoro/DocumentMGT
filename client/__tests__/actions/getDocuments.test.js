@@ -9,7 +9,7 @@ const mockDocument = mockData.document;
 const resolveData = {
   data: {
     status: 'success',
-    data: {
+    documents: {
       rows: [mockDocument],
       count: 1
     } 
@@ -20,7 +20,6 @@ const expectedAction = {
  type: GET_DOCUMENTS,
  status: 'success',
  document: [mockDocument],
- message: '',
  pageCount: 1
 };
 
@@ -60,9 +59,10 @@ describe('getDocuments action', () => {
   it(`should return an action with type "GET_DOCUMENT"`,
   () => {
     getDocuments('private','love')
-    .then(response =>
-      expect(response).toEqual(expectedAction)
-    );
+    .then(response => {
+      const responseDocsCount = response.documents.length;
+      expect(responseDocsCount).toEqual(1);
+    });
   });
 
   it('should return an error message when error is reported from server',
@@ -70,7 +70,8 @@ describe('getDocuments action', () => {
     axios.get = jest.fn((url) => mockError);
     getDocuments('private','love')
     .then(response => {
-      expect(response).toEqual(errorMessage);
+      const errorMessage = response.message.info;
+      expect(errorMessage).toEqual(mockData.errorMessage);
     });
   });
 

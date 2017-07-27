@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MESSAGE, SIGNUP_IN_SUCCESS }from '../../actions/actionTypes'; 
+import { MESSAGE, SIGN_UP_SUCCESS }from '../../actions/actionTypes'; 
 import { signup } from '../../actions/signup';
 import mockData from '../../../server/tests/mockData';
 
@@ -17,7 +17,7 @@ const resolveData = {
 };
 
 let expectedAction = {
-  type: SIGNUP_IN_SUCCESS
+  type: SIGN_UP_SUCCESS
 };
 
 const errorAction = {
@@ -67,12 +67,8 @@ describe('getRoles action', () => {
     axios.post = jest.fn((url) => mockError);
     signup(mockUser)
     .then(response => {
-      // update "expectedAction" value to reflect new expected action
-      expectedAction = {
-        type: types.SIGNUP_FAILED,
-        signupMessage: mockData.errorMessage
-      };
-      expect(response).toEqual(expectedAction);
+      const errorMessage = response.message.info;
+      expect(errorMessage).toEqual(mockData.errorMessage);
     });
   });
 

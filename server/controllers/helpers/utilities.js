@@ -139,9 +139,12 @@ module.exports = {
         name: `${user.fname} ${user.mname} ${user.lname}`,
         role: role.id,
         title: role.title,
-        id: user.id,
-        isAdmin: user.isAdmin
+        id: user.id
       };
+      // put isAdmin only for an admin
+      if (user.isAdmin) {
+        userInfo.isAdmin = true;
+      }
       const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET);
       // send response to client
       res.status(statusCode).send({

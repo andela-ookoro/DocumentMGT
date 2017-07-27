@@ -23,15 +23,15 @@ const routes = () => (
         <Route exact path="/" component={Auth} />
         <Route exact path="/notfound" component={pageNotFound} />
         <App onEnter={requireAuth}>
-          <Route path="/dashboard" component={Documents} />
+          <Route exact path="/dashboard" component={Documents} />
           <Route path="/document/:documentId" component={Document} />
-          <Route path="/document" component={Document} />
+          <Route exact path="/document" component={Document} />
           <Route
             path="/createDocument/:documentId"
             component={CreateDocument}
           />
-          <Route path="/createDocument" component={CreateDocument} />
-          <Route path="/profile" component={Profile} />
+          <Route exact path="/createDocument" component={CreateDocument} />
+          <Route exact path="/profile" component={Profile} />
           <Route
             path="/manageUsers"
             render={() => (

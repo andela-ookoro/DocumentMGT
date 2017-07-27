@@ -57,13 +57,13 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
     .waitForElementVisible('body', 5000);
   });
 
-  And(/^I click the "([^"]*)" tab$/, async (form) => {
-    await client.waitForElementVisible(`#${form}tab`, 5000)
+  And(/^I click on the "([^"]*)" tab$/, async (form) => {
+    await client.waitForElementVisible(`#${form}tab`, 3000)
     .click(`#${form}tab`);
   });
 
  When(/^I click on the "([^"]*)" tab$/, async (form) => {
-    await client.waitForElementVisible(`#${form}tab`, 5000)
+    await client.waitForElementVisible(`#${form}tab`, 3000)
     .click(`#${form}tab`);
   });
 
@@ -169,9 +169,9 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
     // check localstorage
   });
 
-  When(/^I click the "([^"]*)" button$/, async (id) => {
+  When(/^I click the "([^"]*)" button$/, async (form) => {
     let buttonid = `#${id}`;
-    if (id === 'signin' || id === 'signup') {
+    if (form === 'signin' || form === 'signup') {
       buttonid = `${buttonid}Submit`;
     }
     await client.click(buttonid);
@@ -236,12 +236,14 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
   Then(/^I have gone through Document Hub "([^"]*)" process successfully$/,
   async (feature) => {
     // delete user from database
-    User.findOne({
-      where: {
-        email: user.email
-      }
-    })
-    .then(founduser => founduser.destroy());
+    if (feature === 'authentication') {
+      User.findOne({
+        where: {
+          email: user.email
+        }
+      })
+      .then(founduser => founduser.destroy());
+    }
 
     // close the browser windows
     await client.closeWindow();

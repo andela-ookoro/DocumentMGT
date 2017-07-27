@@ -10,10 +10,10 @@ const resolveData = {
   data: mockDocument
 };
 
-const expectedAction = {
+let expectedAction = {
   message: {
-    from: "upsertDocument",
-    info: "Document has been updated successfully"
+    from: 'upsertDocument',
+    info: 'Document has been created successfully'
   },
   type: MESSAGE
 }
@@ -34,7 +34,7 @@ const mockResponse = new Promise((resolve, reject) => {
 const mockError = new Promise((resolve, reject) => {
   throw error;
 });
-
+let message;
 // mock axios methods 
 axios.post = jest.fn((url) => mockResponse);
 
@@ -47,12 +47,13 @@ describe('upsertDocument action', () => {
     expect(axios.post).toBeCalledWith('/api/v1/documents', mockDocument);
   });
 
-  it('should return an action with type "CREATE_DOCUMENT_STATUS" when the documentId is not provided',
+  it('should return an action with type \'CREATE_DOCUMENT_STATUS\' when the documentId is not provided',
   () => {
     upsertDocument(mockData.document, 0)
-    .then(response =>
-      expect(response).toEqual(expectedAction)
-    )
+    .then(response => {
+      message = response.message.info;
+      expect(message).toEqual('Document has been created successfully');
+    });
   });
 
   it('should make a put request when the documentId is provided',
@@ -61,12 +62,13 @@ describe('upsertDocument action', () => {
     expect(axios.put).toBeCalledWith('/api/v1/documents/1', mockDocument);
   });
 
-  it('should return an action with type "CREATE_DOCUMENT_STATUS" when the documentId is not provided',
+  it('should return an action with type \'CREATE_DOCUMENT_STATUS\' when the documentId is not provided',
   () => {
     upsertDocument(mockData.document, 1)
-    .then(response => 
-      expect(response).toEqual(expectedAction)
-    )
+    .then(response => {
+     message = response.message.info;
+     expect(message).toEqual('Document has been updated successfully');
+    });
   });
 
   it('should return an error message when error is reported from server',
@@ -74,9 +76,8 @@ describe('upsertDocument action', () => {
     axios.put = jest.fn((url) => mockError);
     upsertDocument(mockData.document, 1)
     .then(response => {
-      expectedAction.message.info = mockData.errorMessage;
-      expect(response).toEqual(expectedAction);
+      message = response.message.info;
+      expect(message).toEqual(mockData.errorMessage);
     });
   });
-
 });
