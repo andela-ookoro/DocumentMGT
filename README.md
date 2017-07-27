@@ -4,17 +4,18 @@
 # Document Hub
 
 ## Introduction
-### **`Document Hub`** is a full stack project that serves an api and a single page web application built with [React](https://facebook.github.io/react/) framework that manages documents
+### **`Document Hub`** is a full stack project that serves an api and a single page web application built with [React](https://facebook.github.io/react/) framework that manages documents.
 ### It has the following features;
   * User authentication
   * User can view documents
-  * User can view documents based on access right
-  * User can search for document based on title
+  * User can view documents based on access right and title
   * User can delete a document
   * User can view a limited number of documents
   * User can download documents
   * User can update profile
   * User can update documents
+  * An admin User can block and restore regular users
+  * An user can delete her account
 *  Click [here](http://dochome.herokuapp.com/) to access the app on Heroku
 
 ## Tech Stack
@@ -70,4 +71,17 @@ Document Hub uses [React](https://facebook.github.io/react/) and [Materialize cs
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## FAQ
-
+* How can I view the API documentation.
+  > You can access the API documentation [here](http://dochome.herokuapp.com/apiDoc)
+* Can I change the author of the document
+  > No, You can't change an author of a document. You can update your profile, the document would have the new author name.
+* When an admin blocks a user, what happens to her documents
+  > Nice, the documents are not deleted and the document retains it's properties.
+* When an admin restore a user account, would the user gain access to her existing documents.
+  > Yes, the user regains existing priviledges and access to her existing documents.
+* What is the password policy of the application
+  > A password should have at least six character, a number and a special symbol.
+* Does the API report use of disallowed words
+  > No, you can include that feature in your client project
+* What is the maximum length of the document body or content.
+  > The api support any character and the maximum length is 5000 character. You can clone and edit this setting in your model.
