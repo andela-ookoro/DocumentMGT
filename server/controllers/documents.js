@@ -29,7 +29,6 @@ module.exports = {
         offset: 0
       };
     }
-    console.log('authorizedDoc(req.user)', authorizedDoc(req.user), req.user)
     // get all documents
     Document.findAndCountAll({
       attributes,
@@ -45,7 +44,7 @@ module.exports = {
       const documentsPayload = {
         count,
         rows,
-        curPage: parseInt(offset/limit, 10),
+        curPage: parseInt(offset/limit, 10)+1,
         pageCount: parseInt(count/limit, 10),
         pageSize: rows.length
       };
@@ -62,8 +61,12 @@ module.exports = {
   createDocument(req, res) {
     // create object from request
     const document = req.body;
+    // check for 
+    if (document.owner !== req.user.id) {
+      return sendMessage(res, 'Unauthorized operation', 403);
+    }
     // check for required fields
-    if (document.title && document.body && (document.owner === req.user.id)) {
+    if (document.title && document.body) {
       // get owner name
       User.findOne({
         where: { id: req.user.id },
@@ -75,14 +78,12 @@ module.exports = {
         .then((newdocument) => {
          return sendData(res, newdocument, 201, 'document');
         })
-        .catch((err) => {
-          return sendMessage(res, err.message, 500);
-        });
+        .catch((err) => sendMessage(res, err.message, 500));
       })
-      .catch(error => sendMessage(res, error.message, 400));
+      .catch(error => sendMessage(res, error.message, 500));
     } else {
      return  sendMessage(res, 'Document\'s title and body are compulsory.',
-      500);
+      400);
     }
   },
    /**
@@ -274,7 +275,7 @@ module.exports = {
       const documentsPayload = {
         count,
         rows,
-        curPage: parseInt(offset/limit, 10),
+        curPage: parseInt(offset/limit, 10)+1,
         pageCount: parseInt(count/limit, 10),
         pageSize: rows.length
       };

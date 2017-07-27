@@ -1,8 +1,8 @@
-import * as types from '../actions/actionTypes';
+import { MESSAGE } from '../actions/actionTypes';
 
 export default (state = { info: '', from: '' }, action) => {
   switch (action.type) {
-    case types.MESSAGE:
+    case MESSAGE:
       let message = action.message;
       // check if user account is block
       if (message.info === 'This account is blocked, Please contact the admin') {
@@ -20,6 +20,7 @@ export default (state = { info: '', from: '' }, action) => {
           info: 'reset'
         }
       }
+      console.log(',,,,,,,,,,,,,,,,,,,,,,,,,,',message)
       return message;
     default:
       return state;

@@ -66,12 +66,8 @@ describe('getRoles action', () => {
     axios.post = jest.fn((url) => mockError);
     logIn(mockUser)
     .then((response) => {
-      // update "expectedAction" value to reflect new expected action
-      expectedAction = {
-        type: types.LOG_FAILED,
-        loginMessage: mockData.errorMessage
-      };
-      expect(response).toEqual(expectedAction);
+      const errorMessage = response.message.info;
+      expect(errorMessage).toEqual(mockData.errorMessage);
     });
   });
 

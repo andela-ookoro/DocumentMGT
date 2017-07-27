@@ -5,7 +5,8 @@ const sendMessage = (from, info) => (
     type: MESSAGE,
     message: {
       from,
-      info
+      info,
+      dateSent : new Date().valueOf()
     }
   }
 );

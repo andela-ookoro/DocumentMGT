@@ -1,5 +1,5 @@
 import axios from 'axios';
-import * as types from '../../actions/actionTypes'; 
+import { MESSAGE, ROLES } from '../../actions/actionTypes'; 
 import { getRoles } from '../../actions/roles';
 import mockData from '../../../server/tests/mockData';
 
@@ -9,12 +9,12 @@ const mockRoles = mockData.role;
 const resolveData = {
   data: {
     status: 'success',
-    data: [mockRoles]
+    roles: [mockRoles]
   }
 };
 
 let expectedAction = {
-  type: types.ROLES_LOADED,
+  type: ROLES,
   roles: [mockRoles]
 };
 
@@ -26,7 +26,6 @@ const error = {
     }
   }
 };
-
 const mockResponse = new Promise((resolve, reject) => {
   resolve(resolveData);
 });
@@ -57,13 +56,8 @@ describe('getRoles action', () => {
     axios.get = jest.fn((url) => mockError);
     getRoles()
     .then(response => {
-      // update "expectedAction" value to reflect new expected action
-      expectedAction = {
-        type: types.ROLES_LOAD_FAILED,
-        roleLooadError: mockData.errorMessage
-      };
-      expect(response).toEqual(expectedAction);
+      const errorMessage = response.message.info;
+      expect(errorMessage).toEqual(mockData.errorMessage);
     });
   });
-
 });

@@ -13,7 +13,6 @@ module.exports = {
    * @returns {object} -
    */
   sendMessage(res, message, statusCode) {
-    console.log()
    res.status(statusCode).send({
       status: 'fail',
       message
@@ -39,7 +38,6 @@ module.exports = {
       status: 'success'
     };
     payload[dataType] = data;
-    console.log(payload)
     res.status(statusCode).send({ ...payload });
   },
   /**
@@ -136,15 +134,17 @@ module.exports = {
       if (!role) {
         return sendMessage(res, 'Role not found.', 200);
       }
-      console.log('this is the users', user);
       // create jwt payload
       const userInfo = {
         name: `${user.fname} ${user.mname} ${user.lname}`,
         role: role.id,
         title: role.title,
-        id: user.id,
-        isAdmin: user.isAdmin
+        id: user.id
       };
+      // put isAdmin only for an admin
+      if (user.isAdmin) {
+        userInfo.isAdmin = true;
+      }
       const jwtToken = jwt.sign(userInfo, process.env.TOKENSECRET);
       // send response to client
       res.status(statusCode).send({

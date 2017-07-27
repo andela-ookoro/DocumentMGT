@@ -28,7 +28,8 @@ export class Login extends React.Component {
       password: '',
       validControls: {},
       message: '',
-      isloading: false
+      isloading: false,
+      disableSigninSubmit: true
     };
     this.onChange = this.onChange.bind(this);
     this.onSave = this.onSave.bind(this);
@@ -40,7 +41,7 @@ export class Login extends React.Component {
     * @returns {null} -
     */
   componentDidMount() {
-    document.getElementById('signinSubmit').disabled = true;
+   //  document.getElementById('signinSubmit').disabled = true;
   }
 
   /**
@@ -55,6 +56,10 @@ export class Login extends React.Component {
         message: nextProps.message,
         isloading: false
       });
+    } else {
+      this.setState({
+        isloading: false
+      });
     }
   }
 
@@ -65,6 +70,8 @@ export class Login extends React.Component {
    */
   onChange(e) {
     let validationStatus;
+    let validatorText = '';
+    let disableSigninSubmit =  true;
     if (e.target.name === 'email') {
       validationStatus = validateEmail(e.target.value);
     } else if (e.target.name === 'password') {
@@ -72,36 +79,35 @@ export class Login extends React.Component {
     }
     // get validControls
     const validControls = this.state.validControls;
-    const validationLabel = document
-      .getElementById(`${e.target.name}Validator`);
+    const validationStateName = `${e.target.name}Validator`;
     // set state when input is valid
     if (validationStatus === true) {
       // check if control was valid
       if (!validControls.hasOwnProperty(e.target.name)) {
         validControls[e.target.name] = e.target.name;
       }
-      // remove error message
-      validationLabel.textContent = '';
     } else {
       // remove control from list of validControls
       if (validControls.hasOwnProperty(e.target.name)) {
         delete validControls[e.target.name];
       }
       // show error message
-      validationLabel.textContent = validationStatus;
-      validationLabel.style.color = '#BD2F10';
+      validatorText = validationStatus;
+    }
+
+    // enable button when every control is valid
+    if (Object.keys(validControls).length === 2) {
+      disableSigninSubmit = false;
+    } else {
+      disableSigninSubmit = true;
     }
     // set state
     this.setState({
       [e.target.name]: e.target.value,
-      validControls
+      validControls,
+      disableSigninSubmit,
+      [validationStateName]: validatorText
     });
-    // enable button when every control is valid
-    if (Object.keys(validControls).length === 2) {
-      document.getElementById('signinSubmit').disabled = false;
-    } else {
-      document.getElementById('signinSubmit').disabled = true;
-    }
   }
 
   /**
@@ -155,7 +161,9 @@ export class Login extends React.Component {
             />
             <label htmlFor="email">Email</label>
             <div className="validatorContainer">
-              <span id="emailValidator" />
+              <span id="emailValidator">
+               {this.state.emailValidator}
+              </span>
             </div>
           </div>
           <div className="input-field col  s12">
@@ -172,7 +180,9 @@ export class Login extends React.Component {
             />
             <label htmlFor="password">Password</label>
             <div className="validatorContainer">
-              <span id="passwordValidator" />
+              <span id="passwordValidator">
+               {this.state.passwordValidator}
+              </span>
             </div>
           </div>
           <div className="input-field col s12" >
@@ -182,6 +192,7 @@ export class Login extends React.Component {
               id="signinSubmit"
               onClick={this.onSave}
               name="action"
+              disabled={this.state.disableSigninSubmit}
             >
               Login <i className="material-icons right">send</i>
             </button>
@@ -197,7 +208,8 @@ export class Login extends React.Component {
 const mapStateToProps = state => (
   {
     message: state.message.info,
-    messageFrom: state.message.from
+    messageFrom: state.message.from,
+    dateSent: state.message.dateSent
   }
 );
 
@@ -211,12 +223,14 @@ const mapDispatchToProps = dispatch => (
 Login.propTypes = {
   siginin: PropTypes.func.isRequired,
   message: PropTypes.string,
-  messageFrom: PropTypes.string
+  messageFrom: PropTypes.string,
+  dateSent: PropTypes.number
 };
 
 Login.defaultProps = {
   message: '',
-  messageFrom: ''
+  messageFrom: '',
+  dateSent: 0
 };
 // Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

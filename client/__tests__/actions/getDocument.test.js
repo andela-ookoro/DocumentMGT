@@ -9,7 +9,7 @@ const mockDocument = mockData.document;
 const resolveData = {
   data: {
     status: 'success',
-    data: mockDocument
+    document: mockDocument
   }
 };
 
@@ -57,9 +57,10 @@ describe('getDocument action', () => {
   it('should return an action with type "GET_DOCUMENT"',
   () => {
     getDocument(1)
-    .then(response =>
-      expect(response).toEqual(expectedAction)
-    );
+    .then(response => {
+      const responseDocTitle = response.document.title;
+      expect(responseDocTitle).toEqual(mockDocument.title)
+    });
   });
 
   it('should return an error message when error is reported from server',
@@ -67,7 +68,8 @@ describe('getDocument action', () => {
     axios.get = jest.fn(url => mockError);
     getDocument(1)
     .then((response) => {
-      expect(response).toEqual(expectedMessageAction);
+      const errorMessage = response.message.info;
+      expect(errorMessage).toEqual(mockData.errorMessage);
     });
   });
 });

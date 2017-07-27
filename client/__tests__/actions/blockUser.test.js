@@ -29,7 +29,7 @@ const error = {
     }
   }
 };
-
+let message;
 const mockResponse = new Promise((resolve, reject) => {
   resolve(resolveData);
 });
@@ -51,9 +51,10 @@ describe('blockUser action', () => {
   it('should return an action with type "MESSAGE"',
   () => {
     blockUser(1)
-    .then(response =>
-      expect(response).toEqual(expectedAction)
-    );
+    .then(respnse => {
+      message = response.message.info;
+      expect(message).toEqual('User has been blocked successfully');
+    });
   });
 
   it('should return an error message when error is reported from server',
@@ -62,9 +63,8 @@ describe('blockUser action', () => {
     axios.delete = jest.fn(url => mockError);
     blockUser(1)
     .then((response) => {
-      // update "expectedAction" value to reflect new expected action
-      expectedAction.message.info = mockData.errorMessage;
-      expect(response).toEqual(expectedAction);
+      message = response.message.info;
+      expect(message).toEqual(mockData.errorMessage);
     });
   });
 });

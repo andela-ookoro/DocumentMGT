@@ -126,6 +126,13 @@ export class Document extends React.Component {
                     onClick={this.downloadDoc}
                   >
                     Download Document
+                     <i
+                      className="material-icons"
+                      id={document.id}
+                      onDoubleClick={this.deleteDocument}
+                    >
+                      file_download
+                      </i>
                   </button>
                   <br />
                 </div>

@@ -3,7 +3,7 @@ node_js: "6"
 install: npm install
 before_script:
   - npm install -g sequelize-cli
-script: npm run server-test
+script: npm run client-test
 after_success:
   - npm install -g codeclimate-test-reporter
   - cat ./lcov.info | ./node_modules/coveralls/bin/coveralls.js

@@ -1,21 +1,13 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import Renderer from 'react-test-renderer';
 import pageNotFound from '../../components/pageNotFound';
 
-const setup = () => (
-  shallow(
-    <pageNotFound />
-  )
-);
-
-
-describe('components', () => {
-  describe('pageNotFound', () => {
-    const Wrapper = setup();
-    it('should render the product logo', () => {
-      const imgLogo = Wrapper.find('#logoImg');
-      // expect(imgLogo.src).toEqual('/logo.png');
-      expect(3).toEqual(3);
-    });
+describe('rendering', () => {
+  it('should render content as describe in the component', () => {
+    const component = Renderer.create(
+      <pageNotFound />,
+    );
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
   });
 });

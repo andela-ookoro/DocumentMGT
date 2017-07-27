@@ -41,14 +41,14 @@ const mockResponse = new Promise((resolve, reject) => {
 const mockError = new Promise((resolve, reject) => {
   throw error;
 });
-
+let message;
 // mock axios methods
 axios.put = jest.fn(url => mockResponse);
 
 describe('updateProfile action', () => {
-  it('should make a delete request to a route "/api/v1/users/<userId>"',
+  it('should make a put request to a route "/api/v1/users/<userId>"',
   () => {
-    updateProfile(mockUser);
+    updateProfile(1, mockUser);
     const requestData = {
       status: "active"
     };
@@ -57,22 +57,34 @@ describe('updateProfile action', () => {
 
   it('should return an action with type "MESSAGE"',
   () => {
-    updateProfile(mockUser)
-    .then(response =>
-      expect(response).toEqual(expectedAction)
-    );
+    updateProfile(1, mockUser)
+    .then(response => {
+      message = response.message.info;
+      expect(message).toEqual(successMessage);
+    });
   });
 
-  it('should return an error message when error is reported from server',
-  () => {
+  it('should return an error message from server', () => {
     // return an error
     axios.put = jest.fn(url => mockError);
-    updateProfile(mockUser)
+    updateProfile(1, mockUser)
     .then((response) => {
-      // update "expectedAction" value to reflect new expected action
-      expectedAction.message.info = mockData.errorMessage;
-      expect(response).toEqual(expectedAction);
+      message = response.message.info;
+      expect(message).toEqual(mockData.errorMessage);
+    });
+  });
+
+  it('should return message, when response does not contain jwt', () => {
+    // remove jwt from response
+    delete resolveData.data.jwtToken;
+    // mock axios methods
+    axios.put = jest.fn(url => mockResponse);
+    updateProfile(1, mockUser)
+    .then((response) => {
+      message = response.message.info;
+      expect(message).toEqual(mockData.errorMessage);
     });
   });
 });
+
 

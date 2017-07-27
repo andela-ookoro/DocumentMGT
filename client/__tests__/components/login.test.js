@@ -1,7 +1,9 @@
 import React from 'react';
+import toaster from 'toastr';
 import { mount } from 'enzyme';
 import { Login } from '../../components/Login';
 
+toaster.info = jest.fn(message => '');
 const mockEvent = {
   preventDefault: jest.fn(),
   target: {
@@ -39,7 +41,7 @@ describe('components', () => {
         it('textbox should be required', () => {
           expect(txtFname.required).toEqual(true);
         });
-        it('should have a placeholder "First Name"', () => {
+        it('should have a placeholder "Email"', () => {
           expect(txtFname.placeholder).toEqual('Email');
         });
         it('should have a className "validate"', () => {
@@ -67,7 +69,7 @@ describe('components', () => {
       });
 
       describe('should render a  button', () => {
-        const btnSubmit = Wrapper.find('#submit').props();
+        const btnSubmit = Wrapper.find('#signinSubmit').props();
         it('should have a type "submit" ', () => {
           expect(btnSubmit.type).toBe('submit');
         });
@@ -76,6 +78,15 @@ describe('components', () => {
           btnSubmit.onClick(mockEvent);
           expect(props.siginin.mock.calls.length).toBe(1);
         });
+      });
+      it('should render message from \'login\' actions ', () => {
+          Wrapper.setProps({
+            messageFrom: 'login',
+            message: 'welcome'
+          });
+          const messageState = Wrapper.state('message');
+          const isSubString = messageState.includes("welcome")
+          expect(isSubString).toEqual(true);
       });
     });
   });

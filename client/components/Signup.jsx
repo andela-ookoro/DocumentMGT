@@ -34,7 +34,8 @@ export class Signup extends React.Component {
       password: '',
       roleId: '',
       validControls: {},
-      isloading: false
+      isloading: false,
+      disableSignupSubmit: true
     };
     this.onChange = this.onChange.bind(this);
     this.onSave = this.onSave.bind(this);
@@ -52,21 +53,21 @@ export class Signup extends React.Component {
       isloading: false
     });
   }
-  /**
-   * @returns {null} -
-   * @memberof Signup
-   */
-  componentDidMount() {
-    document.getElementById('signupSubmit').disabled = true;
-  }
+
   /**
   * @param {any} nextProps -
   * @memberof Signup
   * @returns {null} -
   */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.messageFrom === 'signup') {
+    const { messageFrom } = nextProps;
+    if (messageFrom === 'signup' || messageFrom === 'getRoles') {
       toaster.info(nextProps.message);
+      this.setState({
+        message: nextProps.message,
+        isloading: false
+      });
+    } else {
       this.setState({
         isloading: false
       });
@@ -85,6 +86,8 @@ export class Signup extends React.Component {
     const controlName = e.target.name;
     const controlValue = e.target.value;
     const jquerySelector = `#${controlName}`;
+    let validatorText = '';
+    let disableSignupSubmit =  true;
 
     if (controlName === 'fname' || controlName === 'lname') {
       validationStatus = validateName(controlValue);
@@ -105,42 +108,34 @@ export class Signup extends React.Component {
     }
     // get validControls
     const validControls = this.state.validControls;
-    const validationLabelId = `${e.target.name}${ValidatonPrefix}`;
-    const validationLabel = document.getElementById(validationLabelId);
+    const validationStateName = `${e.target.name}${ValidatonPrefix}`;
     // set state when input is valid
     if (validationStatus === true) {
       // check if control was valid
       if (!validControls.hasOwnProperty(controlName)) {
         validControls[e.target.name] =controlName;
       }
-      /**
-       * remove error message
-       * set border buttom color to green
-       */ 
-      $(jquerySelector).css('border-bottom', '1px solid green !important');
-      validationLabel.textContent = '';
 
     } else {
       // remove control from list of validControls
       if (!validControls.hasOwnProperty(controlName)) {
         delete validControls[controlName];
       }
-      // show error message
-      $(jquerySelector).css('border-bottom', '1px solid red !important');
-      validationLabel.textContent = validationStatus;
-      validationLabel.style.color = '#BD2F10';
+      // set validation message
+      validatorText = validationStatus;
     }
+    // enable button when every control is valid
+    if (Object.keys(validControls).length === 6 && this.matchPassword()) {
+      disableSignupSubmit = false;
+    }
+
     // set state
     this.setState({
       [controlName]: controlValue,
-      validControls
+      validControls,
+      disableSignupSubmit,
+      [validationStateName]: validatorText
     });
-    // enable button when every control is valid
-    if (Object.keys(validControls).length === 6 && this.matchPassword()) {
-      document.getElementById('signupSubmit').disabled = false;
-    } else {
-      document.getElementById('signupSubmit').disabled = true;
-    }
   }
 
   /**
@@ -173,11 +168,10 @@ export class Signup extends React.Component {
   matchPassword() {
     const comfirmpassword = this.comfirmpassword.value;
     // if password and comfirm password match, set label to matched
-    let matchStatus;
-    let fontColor = '#a1887f';
     let match;
+    let disableSignupSubmit = true
+    let validatorText = '';
     if (comfirmpassword === this.state.password) {
-      matchStatus = 'Right password';
       match = true;
       /**
        * enable submit button when every input is valid
@@ -186,21 +180,19 @@ export class Signup extends React.Component {
       const validControls = this.state.validControls;
       // enable button when every control is valid
       if (Object.keys(validControls).length === 6) {
-        document.getElementById('signupSubmit').disabled = false;
+        disableSignupSubmit = false;
       }
     } else {
-      // document.getElementById('signupSubmit').disabled = true;
-      matchStatus = 'Password does not match';
-      fontColor = '#ff0000';
+      validatorText = 'Password does not match';
       match = false;
       // disable submit button
-      document.getElementById('signupSubmit').disabled = true;
+      disableSignupSubmit = true;
     }
-
-    //  set the result of the comparism
-    const matchStatusTextBox = document.getElementById('comfirmpasswordValidator');
-    matchStatusTextBox.textContent = matchStatus;
-    matchStatusTextBox.style.color = fontColor;
+    // set state
+    this.setState({
+      disableSignupSubmit,
+      comfirmpasswordValidator: validatorText
+    });
     return match;
   }
 
@@ -224,7 +216,7 @@ export class Signup extends React.Component {
           <br />
           <div className="row">
             <p className="errorMessage" id="errorMessageSignup">
-              {this.props.message}
+              {this.state.message}
             </p>
             <div className="input-field col l4 m6 s12">
               <i className="material-icons prefix">account_circle</i>
@@ -233,12 +225,15 @@ export class Signup extends React.Component {
                 name="fname"
                 type="text"
                 id="fname"
+                className="validate"
                 value={this.state.fname}
                 onChange={this.onChange}
               />
               <label htmlFor="first_name">First Name</label>
               <div className="validatorContainer">
-                <span id="fnameValidator" />
+                <span id="fnameValidator" >
+                  {this.state.fnameValidator}
+                </span>
               </div>
             </div>
             <div className="input-field col l4 m6 s12">
@@ -254,7 +249,9 @@ export class Signup extends React.Component {
               />
               <label htmlFor="middle_name">Middle Name</label>
               <div className="validatorContainer">
-                <span id="mnameValidator" />
+                <span id="mnameValidator" >
+                  {this.state.mnameValidator}
+                </span>
               </div>
             </div>
             <div className="input-field col l4 m6 s12">
@@ -270,7 +267,9 @@ export class Signup extends React.Component {
               />
               <label htmlFor="last_name">Last Name</label>
               <div className="validatorContainer">
-                <span id="lnameValidator" />
+                <span id="lnameValidator" >
+                  {this.state.lnameValidator}
+                </span>
               </div>
             </div>
           </div>
@@ -289,7 +288,9 @@ export class Signup extends React.Component {
               />
               <label htmlFor="email" >Email</label>
               <div className="validatorContainer">
-                <span id="emailValidatorsignup" />
+                <span id="emailValidatorsignup">
+                   {this.state.emailValidatorsignup}
+                </span>
               </div>
             </div>
             <div className="input-field col  l4 m6 s12">
@@ -305,7 +306,9 @@ export class Signup extends React.Component {
               />
               <label htmlFor="password">Password</label>
               <div className="validatorContainer">
-                <span id="passwordValidatorsignup" />
+                <span id="passwordValidatorsignup">
+                  {this.state.passwordValidatorsignup}
+                </span>
               </div>
             </div>
             <div className="input-field col  l4 m6 s12">
@@ -321,13 +324,13 @@ export class Signup extends React.Component {
                 required=""
                 aria-required="true"
               />
-              <label
-                htmlFor="comfirmpassword"
-              >
+              <label htmlFor="comfirmpassword">
                 comfirm password
                 </label>
               <div className="validatorContainer">
-                <span id="comfirmpasswordValidator" />
+                <span id="comfirmpasswordValidator">
+                  {this.state.comfirmpasswordValidator}
+                </span>
               </div>
             </div>
           </div>
@@ -356,7 +359,9 @@ export class Signup extends React.Component {
                 </select>
               }
               <div className="validatorContainer">
-                <span id="roleIdValidator" />
+                <span id="roleIdValidator" >
+                  {this.state.roleIdValidator}
+                </span>
               </div>
             </div>
             <div className="input-field col l8 m6 s12" >
@@ -366,6 +371,7 @@ export class Signup extends React.Component {
                 name="action"
                 id="signupSubmit"
                 onClick={this.onSave}
+                disabled={this.state.disableSignupSubmit}
               >
                 Submit <i className="material-icons right">send</i>
               </button>
@@ -389,7 +395,8 @@ const mapDispatchToProps = dispatch => ({
 const mapStateToProps = state => ({
   roles: state.roles,
   message: state.message.info,
-  messageFrom: state.message.from
+  messageFrom: state.message.from,
+  dateSent: state.message.dateSent
 });
 
 Signup.propTypes = {
@@ -403,13 +410,15 @@ Signup.propTypes = {
     })
   ),
   message: PropTypes.string,
-  messageFrom: PropTypes.string
+  messageFrom: PropTypes.string,
+  dateSent: PropTypes.number
 };
 
 Signup.defaultProps = {
   message: '',
   messageFrom: '',
-  roles: []
+  roles: [],
+  dateSent: 0
 };
 // Use connect to put them together
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(

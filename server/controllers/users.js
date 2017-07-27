@@ -3,8 +3,7 @@ import Sequelize from 'sequelize';
 import model from '../models/index';
 import { sendMessage, returnJWt, sendData } from './helpers/utilities';
 import sequelizeConfig from '../config/config.json';
-
-// connecct to postgrres
+// connect to postgres
 const env = process.env.NODE_ENV || 'development';
 const DBconfig = sequelizeConfig[env];
 
@@ -34,7 +33,6 @@ module.exports = {
   login(req, res) {
     // create object from request
     const user = req.body;
-    console.log(user, bcrypt.hashSync(user.password))
     // check for required fields
     if (user.email && user.password) {
       // get user with this email
@@ -56,9 +54,9 @@ module.exports = {
             if (pass) {
               return returnJWt(res, foundUser.dataValues, 200);
             }
-            return sendMessage(res, 'Wrong email or password1.', 401);
+            return sendMessage(res, 'Wrong email or password.', 401);
           }
-          return sendMessage(res, 'Wrong email or password2.', 401);
+          return sendMessage(res, 'Wrong email or password.', 401);
         })
         .catch(err => sendMessage(res, `${ err.message || err}`, 401));
     } else {
@@ -140,10 +138,7 @@ module.exports = {
       if (users.length > 0) {
         // create object to store users fetch and total number of users
         const usersPayload = {
-          count: 0,
           rows: users,
-          curPage: 1,
-          pageCount: 1,
           pageSize: users.length
         };
         // get total number of users in category
@@ -151,9 +146,9 @@ module.exports = {
         .then(countResult => {
           const count = countResult[0][0].count;
           usersPayload.pageCount = parseInt(count/limit, 10);
-          usersPayload.curPage = parseInt(offset/limit, 10)
+          usersPayload.curPage = parseInt(offset/limit, 10) + 1;
           usersPayload.count = parseInt(count, 10);
-          return sendData(res, usersPayload, 200, 'user');
+          return sendData(res, usersPayload, 200, 'users');
         })
         .catch(error => sendMessage(res, error.message, 500));
       }
@@ -377,13 +372,11 @@ module.exports = {
           .then(updateUser => returnJWt(res, updateUser.dataValues, 200))
           .catch(error => {
              const message = error.message || error.toString();
-             console.log('1....................', message);
             return sendMessage(res, message, 500)
           });
       })
       .catch(error => {
         const message = error.message || error.toString();
-        console.log('2....................', message);
         return sendMessage(res, message, 500)
       });
     return sendMessage(res,
@@ -453,7 +446,7 @@ module.exports = {
           const documentsPayload = {
             count,
             rows,
-            curPage: parseInt(offset/limit, 10),
+            curPage: parseInt(offset/limit, 10) + 1,
             pageCount: parseInt(count/limit, 10),
             pageSize: rows.length
           };

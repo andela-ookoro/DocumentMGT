@@ -4,7 +4,7 @@ import sendMessage from './message';
 
 const sendReponse = (status, document = {}) => (
   {
-    type: types.GET_DOCUMENT,
+    type: GET_DOCUMENT,
     status,
     document
   }

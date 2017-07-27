@@ -1,10 +1,10 @@
 import axios from 'axios';
-import * as types from './actionTypes';
+import { ROLES } from './actionTypes';
 import sendMessage from './message';
 
 export const sendRoles = (roles) => {
   return {
-    type: types.ROLES_LOADED,
+    type: ROLES,
     roles
   };
 };
@@ -25,6 +25,6 @@ export const getRoles = () =>
     if (error.response.status !== 500) {
       message = error.response.data.message;
     }
-    return sendMessage('restoreUser', message);
+    return sendMessage('getRoles', message);
   });
 

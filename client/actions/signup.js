@@ -22,5 +22,3 @@ export const signup = credentials =>
     }
     return sendMessage('signup', message);
   });
-
-

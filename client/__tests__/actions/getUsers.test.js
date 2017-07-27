@@ -11,7 +11,7 @@ const mockUser = mockData.user;
 const resolveData = {
   data: {
     status: 'success',
-    data: {
+    users: {
       rows: [mockUser],
       count: 1
     } 
@@ -56,7 +56,8 @@ axios.get = jest.fn((url) => mockResponse);
 describe('getUsers action', () => {
   it('should make a get request to a route "/api/v1/documents"', () => {
     getUsers('blocked','dele');
-    expect(axios.get).toBeCalledWith('/api/v1/Users?status=blocked&fname=dele&offset=0&limit=6');
+    const link = '/api/v1/Users?status=blocked&fname=dele&offset=0&limit=6'
+    expect(axios.get).toBeCalledWith(link);
   });
 
   it(`should return an action with type "GET_DOCUMENT"`,
@@ -72,7 +73,8 @@ describe('getUsers action', () => {
     axios.get = jest.fn((url) => mockError);
      getUsers('blocked','dele')
     .then(response => {
-      expect(response).toEqual(errorMessage);
+      const errorMessage = response.message.info;
+      expect(errorMessage).toEqual(mockData.errorMessage)
     });
   });
 

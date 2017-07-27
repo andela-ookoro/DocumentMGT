@@ -8,14 +8,14 @@ const mockDocument = mockData.document;
 
 const resolveData = {
   status: 'success',
-  data: mockDocument
+  message: mockDocument
 };
-
+let successMessage = 'document has been deleted successfully';
 const expectedAction = {
   type: MESSAGE,
   message: {
     from: 'deleteDocument',
-    info: 'document has been deleted successfully'
+    info: successMessage
   }
 
 };
@@ -48,9 +48,10 @@ describe('deleteDocument action', () => {
 
   it('should return the response from the server', () => {
     deleteDocument(1)
-    .then(response =>
-      expect(response).toEqual(expectedAction)
-    );
+    .then(response => {
+      message = response.message.info;
+      expect(message).toEqual(successMessage);
+    });
   });
 
   it('should return an error message when an error is reported from server',
@@ -58,8 +59,8 @@ describe('deleteDocument action', () => {
     axios.delete = jest.fn(url => mockError);
     deleteDocument(mockData.document, 1)
     .then(response => {
-      expectedAction.message.info = mockData.errorMessage;
-      expect(response).toEqual(expectedAction);
+      message = response.message.info;
+      expect(message).toEqual(mockData.errorMessage);
     });
   });
 

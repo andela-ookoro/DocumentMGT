@@ -1,8 +1,8 @@
-import * as types from '../actions/actionTypes';
+import { GET_DOCUMENT } from '../actions/actionTypes';
 
 export default (state = {}, action) => {
   switch (action.type) {
-    case types.GET_DOCUMENT:
+    case GET_DOCUMENT:
       return action;
     default:
       return state;

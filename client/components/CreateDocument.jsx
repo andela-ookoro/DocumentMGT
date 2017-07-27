@@ -32,7 +32,6 @@ export class CreateDocument extends React.Component {
     };
     this.saveDocument = this.saveDocument.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.setDocument = this.setDocument.bind(this);
   }
 
 
@@ -101,10 +100,6 @@ export class CreateDocument extends React.Component {
         docId: curDocument.id,
         isloading: false
       });
-
-      // set the title
-      this.title.value = this.state.title;
-      document.getElementById('title').value = curDocument.title;
       // find the selected access right
       const accessRights = document.getElementsByName('accessRight');
       const accessRight = curDocument.accessRight;
@@ -117,7 +112,6 @@ export class CreateDocument extends React.Component {
     }
 
     if (nextProps.messageFrom === 'upsertDocument') {
-      console.log('this is the next props', nextProps)
       let message = nextProps.message.toString();
       let title = this.state.title;
       // reset editor when action is successful
@@ -148,49 +142,16 @@ export class CreateDocument extends React.Component {
    * @returns {null} - null
    */
   onChange(e) {
+    // for role
+    let value = e.target.value;
+    if ( e.target.name === 'accessRight') {
+      value = e.target.id;
+    }
     this.setState({
-      [e.target.name]: e.target.value
+      [e.target.name]: value
     });
   }
 
-  /**
-   * set state to documents or error message
-   * @param {object} apiResponse - promise from the api called
-   * @memberof Documents
-   * @returns {null} - null
-   */
-  setDocument(apiResponse) {
-    // get server response and set state
-    apiResponse
-    .then((response) => {
-      if (response.message) {
-        this.setState({
-          message: response.message
-        });
-        toaster.warning(response.message);
-      } else {
-        const curDocument = response.document.data;
-        this.setState({
-          title: curDocument.title,
-          body: curDocument.body.toString(),
-          curDocument,
-          docId: curDocument.id
-        });
-
-        // set the title
-        this.title.value = curDocument.title;
-        // find the selected access right
-        const accessRights = document.getElementsByName('accessRight');
-        const accessRight = curDocument.accessRight;
-
-        for (let i = 0; i < accessRights.length; i += 1) {
-          if (accessRights[i].id === accessRight) {
-            accessRights[i].checked = true;
-          }
-        }
-      }
-    });
-  }
 
   /**
    * create a document object and send a request to create the document
@@ -199,35 +160,23 @@ export class CreateDocument extends React.Component {
    */
   saveDocument(e) {
     e.preventDefault();
-    const title = this.title.value
+    const title = this.state.title;
     // get the  text editor content
     const body = tinyMCE.get('content').getContent();
     // find the selected acess right
-    const accessRights = document.getElementsByName('accessRight');
-    let accessRight;
-    // detect the access right select
-    for (let i = 0; i < accessRights.length; i += 1) {
-      if (accessRights[i].checked) {
-        accessRight = accessRights[i].id;
-        break;
-      }
-    }
+    const accessRight = this.state.accessRight;
 
     // create error message
     let message;
     // check minimal number of character for title
-    console.log(title, '..............', body);
     if (!/^.{3,}$/.test(title)) {
       message = 'Please write the title ';
-      console.log('1', message);
     }
-    if (!/^.{3,}$/.test(body)) {
+    if (body.length < 10) {
       message = `${(message) ? `${message} and` : 'Please'} write the body `;
-      console.log('2', message);
     }
     if (!accessRight) {
       message = `${(message) ? `${message} and` : 'Please'} select an access mode`;
-      console.log('3', message);
     }
 
     if (message) {
@@ -244,9 +193,9 @@ export class CreateDocument extends React.Component {
       const document = {
         title,
         body,
-        owner: userInfo.id,
         accessRight,
-        role: userInfo.role
+        role: userInfo.role,
+        owner: userInfo.id
       };
       // call upsertDocument action
       this.props.upsertDocument(document, this.state.docId);
@@ -316,7 +265,7 @@ export class CreateDocument extends React.Component {
                 id="public"
                 onChange={this.onChange}
               />
-              <label htmlFor="public">Public</label>
+              <label htmlFor="public" id="publicLabel">Public</label>
             </div>
             <div className="input-field col l2 s4">
               <input
@@ -336,7 +285,7 @@ export class CreateDocument extends React.Component {
                 onClick={this.saveDocument}
               >
                 {(this.state.body === '') ? 'Submit' : 'Update' }
-                <i className="material-icons right">send</i>
+                <i className="material-icons right" id="submitLabel">send</i>
               </button>
             </div>
           </form>
@@ -371,7 +320,7 @@ CreateDocument.propTypes = {
   message: PropTypes.string,
   match: PropTypes.shape({
     params: PropTypes.shape({
-      documentId: PropTypes.number
+      documentId: PropTypes.any
     })
   }),
   document: PropTypes.shape({

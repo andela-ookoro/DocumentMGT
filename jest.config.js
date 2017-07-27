@@ -1,7 +1,8 @@
 module.exports = {
   moduleFileExtensions: [ 'es6', 'js', 'jsx'],
   globals: {
-    window: true
+    window: true,
+    document: true,
   },
   setupFiles: [
     '<rootDir>/client/__tests__/__mocks__/localstorage.js',
@@ -26,7 +27,7 @@ module.exports = {
   },
   testEnvironment: "jsdom",
   setupTestFrameworkScriptFile: "jest-environment-jsdom",
-  testMatch: ['**/client/__tests__/components/documents.test.js?(x)'],
+  testMatch: ['**/client/__tests__/(components|actions|reducers)/*.test.js?(x)'],
   verbose: true,
   bail: true
 };

@@ -29,6 +29,6 @@ Scenario: Signup, Login
   When I click the "signin" button
   Then I should be Logged in and redirected to the Dashboard page
   And a JWT Token and my profile should be store in the localStorage
-  Then I have gone through Document Hub authentication process successfully
+  Then I have gone through Document Hub "authentication" process successfully
 
   
