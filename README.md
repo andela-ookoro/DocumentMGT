@@ -74,7 +74,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## FAQ
 * How can I view the API documentation.
-  > You can access the API documentation [here](http://dochome.herokuapp.com/apiDoc)
+  > You can access the API documentation [here](http://dochome.herokuapp.com/apidoc)
 * Can I change the author of the document
   > No, You can't change an author of a document. You can update your profile, the document would have the new author name.
 * When an admin blocks a user, what happens to her documents
