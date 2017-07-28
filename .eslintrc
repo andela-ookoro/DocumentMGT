@@ -19,10 +19,12 @@
     "quote-props": "off",
     "jsx-a11y/no-static-element-interactions": "off",
     "one-var": 0,
+    "no-undef": "off",
     "max-len": ["error", 80],
     "one-var-declaration-per-line": 0,
     "new-cap": 0,
-    "consistent-return": 0,
+    "consistent-return": ["error", { "treatUndefinedAsUnspecified": true }],
+    "arrow-body-style": ["error", "as-needed"],
     "no-param-reassign": 0,
     "comma-dangle": 0,
     "curly": ["error", "multi-line"],
@@ -45,7 +47,5 @@
     "node": true,
     "es6": true,
     "jest": true
-    },
-    "consistent-return": ["error", { "treatUndefinedAsUnspecified": true }],
-    "arrow-body-style": ["error", "as-needed"]
+    }
 }

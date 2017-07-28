@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
 
 const debug = process.env.NODE_ENV !== 'production';
 const basePlugins = [
@@ -14,16 +13,14 @@ const basePlugins = [
   new webpack.NoEmitOnErrorsPlugin(),
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
-  new webpack.optimize.UglifyJsPlugin({
-    mangle: false,
-    sourcemap: true
-  }),
   new ExtractTextPlugin({
     filename: path.join(__dirname, 'public/style.css'),
     allChunks: true
   })
 ];
+
 const debugPlugins = [new ExtractTextPlugin('style.css')];
+
 const productionPlugins = [
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.optimize.UglifyJsPlugin(),
@@ -31,13 +28,6 @@ const productionPlugins = [
     filename: path.join(__dirname, 'public/style.css'),
     allChunks: true
   }),
-  new CompressionPlugin({
-    asset: '[path].gz[query]',
-    algorithm: 'gzip',
-    test: /\.js$|\.css$|\.html$/,
-    threshold: 10240,
-    minRatio: 0.8
-  })
 ];
 
 const plugins = debug ?
