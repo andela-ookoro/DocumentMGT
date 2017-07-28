@@ -1,6 +1,6 @@
-[![Code Climate](https://codeclimate.com/github/andela-ookoro/DocumentMGT.svg)](https://codeclimate.com/github/andela-ookoro/DocumentMGT)
+[![Code Climate](https://codeclimate.com/github/andela-ookoro/DocumentMGT/badges/gpa.svg)](https://codeclimate.com/github/andela-ookoro/DocumentMGT)
 [![Build Status](https://travis-ci.org/andela-ookoro/DocumentMGT.svg)](https://travis-ci.org/andela-ookoro/DocumentMGT)
-[![Coverage Status](https://coveralls.io/repos/github/andela-ookoro/DocumentMGT/badge.svg?branch=production)](https://coveralls.io/github/andela-ookoro/DocumentMGT?branch=staging)
+[![Coverage Status](https://coveralls.io/repos/github/andela-ookoro/DocumentMGT/badge.svg?branch=staging)](https://coveralls.io/github/andela-ookoro/DocumentMGT?branch=staging)
 [![codecov](https://codecov.io/gh/andela-ookoro/DocumentMGT/graph/badge.svg)](https://codecov.io/gh/andela-ookoro/DocumentMGT)
 
 # Document Hub

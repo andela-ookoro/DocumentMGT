@@ -1,22 +1,14 @@
 {
-  "require": [
-    "babel-register"
+  "reporter": [
+    "text",
+    "lcov"
   ],
   "include": [
-    "server/**/*.js"
+    "lib/server/**/*.js"
   ],
   "exclude": [
     "**/tests/",
     "**/seeders/",
     "**/migrations/"
-  ],
-  "all": true,
-  "reporter": [
-    "html",
-    "text",
-    "lcov"
-  ],
-  "sourceMap": false,
-  "instrument": true,
-  "check-coverage": true
+  ]
 }

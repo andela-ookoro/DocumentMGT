@@ -51,6 +51,7 @@ describe('/api/v1/users ', () => {
           plain: true
         });
         adminRoleId = adminRole.id;
+        mockUser.isAdmin = true;
         const wasCreated = created;
          // create admin account
         // set user role to admin

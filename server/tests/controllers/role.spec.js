@@ -53,6 +53,7 @@ describe('/api/v1/role ', () => {
          // create admin account
         // set user role to admin
         mockUser.roleId = adminRoleId;
+        mockUser.isAdmin = true;
         request
           .post('/api/v1/users')
           .send(mockUser)
