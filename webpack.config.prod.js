@@ -14,18 +14,14 @@ const basePlugins = [
   new webpack.optimize.OccurrenceOrderPlugin(),
   new webpack.HotModuleReplacementPlugin(),
   new ExtractTextPlugin({
-    filename: path.join(__dirname, 'public/style.css'),
+    filename: path.join('./style.css'),
     allChunks: true
   })
 ];
 const debugPlugins = [new ExtractTextPlugin('style.css')];
 const productionPlugins = [
   new webpack.optimize.OccurrenceOrderPlugin(),
-  new webpack.optimize.UglifyJsPlugin(),
-  new ExtractTextPlugin({
-    filename: path.join(__dirname, 'public/style.css'),
-    allChunks: true
-  }),
+  new webpack.optimize.UglifyJsPlugin()
 ];
 
 const plugins = debug ?

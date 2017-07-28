@@ -1,14 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-const io = require('socket.io-client');
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import toaster from 'toastr';
 import upsertDocument from '../actions/createDocument';
 import getDocument from '../actions/getDocument';
 
-// create 
-// const socket = io();
 /**
  * react component that displays a document
  * @class CreateDocument
@@ -34,12 +31,6 @@ export class CreateDocument extends React.Component {
     };
     this.saveDocument = this.saveDocument.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.broadcastUpdate = this.broadcastUpdate.bind(this);
-    this.updateCodeFromSockets = this.updateCodeFromSockets.bind(this);
-    // attach socket event
-    // socket.on('receive code', (payload) => {   
-    //   this.updateCodeFromSockets(payload);
-    // });
   }
 
 
@@ -55,8 +46,6 @@ export class CreateDocument extends React.Component {
       this.setState({
         isloading: true,
       });
-      // join room 
-      //socket.emit('room', {room: documentID});
     }
   }
 
@@ -88,14 +77,6 @@ export class CreateDocument extends React.Component {
         });
         setTimeout(() => {
           editor.setContent(this.state.body);
-           // for socket event
-           editor.on('change', function(e) {
-             const docBody = editor.getContent();
-             this.broadcastUpdate(docBody);
-            console.log('the event object ', e);
-            console.log('the editor object ', editor);
-            console.log('the content ', editor.getContent());
-          });
         }, 1000);
       }
     });
@@ -121,22 +102,19 @@ export class CreateDocument extends React.Component {
       // find the selected access right
       const accessRights = document.getElementsByName('accessRight');
       const accessRight = curDocument.accessRight;
-
       for (let i = 0; i < accessRights.length; i += 1) {
         if (accessRights[i].id === accessRight) {
           accessRights[i].checked = true;
         }
       }
-      // join room with document id
-      //socket.emit('room', {room: curDocument.id});
     }
 
     if (nextProps.messageFrom === 'upsertDocument') {
-      let message = nextProps.message.toString();
+      const message = nextProps.message.toString();
       let title = this.state.title;
       // reset editor when action is successful
       if (message.includes('success')) {
-        title = ''
+        title = '';
         tinymce.get('content').setContent('');
       }
       toaster.info(message);
@@ -153,35 +131,10 @@ export class CreateDocument extends React.Component {
    * @returns {null} - null
    */
   componentWillUnmount() {
+    // reset editor when action is successful
     tinymce.remove(this.state.editor);
-    // remove user from existing socket room
-    // socket.emit('leave room', {
-    //   room: this.state.docId
-    // })
   }
 
-
-  /**
-   * respond to socket broadcast 
-   * @param {any} payload 
-   * @memberof CreateDocument
-   */
-  updateCodeFromSockets(payload) {
-    console.log('this is new oh', payload);
-   // this.setState({code: payload.newCode})
-  }
-
-  /**
-   * send update to other users viewing this page
-   * @param {any} docBody 
-   * @memberof CreateDocument
-   */
-  broadcastUpdate(docBody) {
-    // socket.emit('coding event', {
-    //   room: this.state.docId,
-    //   newDocBody: docBody
-    // });
-  }
   /**
    * set the value of the control to the respective state node
    * @param {*} e
@@ -190,7 +143,7 @@ export class CreateDocument extends React.Component {
   onChange(e) {
     // for role
     let value = e.target.value;
-    if ( e.target.name === 'accessRight') {
+    if (e.target.name === 'accessRight') {
       value = e.target.id;
     }
     this.setState({
@@ -222,7 +175,9 @@ export class CreateDocument extends React.Component {
       message = `${(message) ? `${message} and` : 'Please'} write the body `;
     }
     if (!accessRight) {
-      message = `${(message) ? `${message} and` : 'Please'} select an access mode`;
+      message = `${(message) ?
+        `${message} and`
+        : 'Please'} select an access mode`;
     }
 
     if (message) {
@@ -355,7 +310,7 @@ const mapDispatchToProps = dispatch => (
   {
     upsertDocument: (document, docId) =>
      dispatch(upsertDocument(document, docId)),
-    getDocument: (documentID) => dispatch(getDocument(documentID))
+    getDocument: documentID => dispatch(getDocument(documentID))
   }
 );
 

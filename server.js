@@ -7,20 +7,20 @@ import helmet from 'helmet';
 import compression from 'compression';
 // package to get request body
 import bodyParser from 'body-parser';
-// packages for client side
-import webpack from 'webpack';
-import webpackMiddleware from 'webpack-dev-middleware';
+// // packages for client side
+// import webpack from 'webpack';
+// import webpackMiddleware from 'webpack-dev-middleware';
 
-// for webpack hot reload
-import webpackHotMiddleware from 'webpack-hot-middleware';
-// import the webpack config ftile
-import webpackConfig from './webpack.config';
+// // for webpack hot reload
+// import webpackHotMiddleware from 'webpack-hot-middleware';
+// // import the webpack config ftile
+// import webpackConfig from './webpack.config';
 
 import routes from './server/routes';
 
-// integrate socket
-import socket from './server/config/socket';
-//socket(app);
+// // integrate socket
+// import socket from './server/config/socket';
+// //socket(app);
 
 // initiate dotenv
 dotenv.config();
@@ -29,18 +29,18 @@ dotenv.config();
 const app = express();
 const router = express.Router();
 // create webpack compiler
-const webpackCompiler = webpack(webpackConfig);
+// const webpackCompiler = webpack(webpackConfig);
 
 // use hemlet to disable settings that would leak security
 app.use(helmet());
 app.use(compression());
-// use the webpack middleware in the server
-app.use(webpackMiddleware(webpackCompiler, {
-  hot: true,
-  publicPath: webpackConfig.output.publicPath,
-  noInfo: true
-}));
-app.use(webpackHotMiddleware(webpackCompiler));
+// // use the webpack middleware in the server
+// app.use(webpackMiddleware(webpackCompiler, {
+//   hot: true,
+//   publicPath: webpackConfig.output.publicPath,
+//   noInfo: true
+// }));
+// app.use(webpackHotMiddleware(webpackCompiler));
 
 
 // Log requests to the console.
@@ -75,7 +75,7 @@ app.all('*', (req, res) => res.status(404).send({
 
 // catch errors
 app.use((err, req, res) => {
-  res.send(500, { message: err.message })
+  res.send(500, { message: err.message });
 });
 
 app.listen(process.env.PORT || 1142);

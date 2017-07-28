@@ -1,5 +1,6 @@
 import React from 'react';
 import Renderer from 'react-test-renderer';
+import { mount } from 'enzyme';
 import pageNotFound from '../../components/pageNotFound';
 
 describe('rendering', () => {
