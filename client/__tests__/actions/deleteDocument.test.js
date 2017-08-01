@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MESSAGE }  from '../../actions/actionTypes'; 
+import { MESSAGE } from '../../actions/actionTypes';
 import deleteDocument from '../../actions/deleteDocument';
 import mockData from '../../../server/tests/mockData';
 
@@ -10,7 +10,7 @@ const resolveData = {
   status: 'success',
   message: mockDocument
 };
-let successMessage = 'document has been deleted successfully';
+const successMessage = 'document has been deleted successfully';
 const expectedAction = {
   type: MESSAGE,
   message: {
@@ -48,7 +48,7 @@ describe('deleteDocument action', () => {
 
   it('should return the response from the server', () => {
     deleteDocument(1)
-    .then(response => {
+    .then((response) => {
       message = response.message.info;
       expect(message).toEqual(successMessage);
     });
@@ -58,7 +58,7 @@ describe('deleteDocument action', () => {
   () => {
     axios.delete = jest.fn(url => mockError);
     deleteDocument(mockData.document, 1)
-    .then(response => {
+    .then((response) => {
       message = response.message.info;
       expect(message).toEqual(mockData.errorMessage);
     });

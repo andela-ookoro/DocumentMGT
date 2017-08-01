@@ -56,7 +56,7 @@ export class CreateDocument extends React.Component {
   componentDidMount() {
     tinymce.init({
       selector: '#content',
-      plugins: 'autolink link image lists' +
+      plugins: 'autolink link lists' +
                 ' print preview textcolor table emoticons codesample',
       toolbar: 'undo redo | bold italic | ' +
       'fontsizeselect fontselect | ' +
@@ -101,12 +101,12 @@ export class CreateDocument extends React.Component {
       });
       // find the selected access right
       const accessRights = document.getElementsByName('accessRight');
-      const accessRight = curDocument.accessRight;
-      for (let i = 0; i < accessRights.length; i += 1) {
-        if (accessRights[i].id === accessRight) {
-          accessRights[i].checked = true;
+      const documentAccessRight = curDocument.accessRight;
+      accessRights.forEach((accessRight) => {
+        if (accessRight.id = documentAccessRight) {
+          accessRight.checked = true;
         }
-      }
+      });
     }
 
     if (nextProps.messageFrom === 'upsertDocument') {

@@ -124,11 +124,11 @@ export class Profile extends React.Component {
       validationStatus = validateName(controlValue);
     } else if (controlName === 'mname') {
       if (controlValue === '') {
-        validationStatus = true
+        validationStatus = true;
       } else {
         validationStatus = validateName(controlValue);
       }
-    }else if (controlName === 'email') {
+    } else if (controlName === 'email') {
       validationStatus = validateEmail(controlValue);
     }
     // check if user does not want to update her password
@@ -176,13 +176,10 @@ export class Profile extends React.Component {
       } else {
         disableBtnUpdateProfile = false;
       }
+    } else if (updatePassword) {
+      disableBtnSubmit = true;
     } else {
-      // if update password was checked
-      if (updatePassword) {
-        disableBtnSubmit = true;
-      } else {
-        disableBtnUpdateProfile = true;
-      }
+      disableBtnUpdateProfile = true;
     }
 
     // set state
@@ -194,16 +191,16 @@ export class Profile extends React.Component {
       [`${controlName}Validator`]: validatorText
     });
   }
-  
+
   /**
-   * @summary 
+   * @summary - update user profile
    *  @returns {null} -
    * @param {*} event -
    */
   updateProfile(event) {
     event.preventDefault();
     // create request payload from state
-     const user = JSON.parse(localStorage.getItem('userInfo'));
+    const user = JSON.parse(localStorage.getItem('userInfo'));
     const userid = user.id;
     const userProfile = {
       fname: this.state.fname,
@@ -219,7 +216,7 @@ export class Profile extends React.Component {
   }
 
   /**
-   * @summary 
+   * @summary update user passwword
    *  @returns {null} -
    * @param {*} event -
    */
@@ -241,7 +238,6 @@ export class Profile extends React.Component {
       isloading: true
     });
     this.props.updateProfile(userid, userProfile);
-    
   }
 
   /**
@@ -280,12 +276,13 @@ export class Profile extends React.Component {
   /**
    * set update password state
    * @memberof Profile
+   * @return {null} -
    */
   editPassword() {
     const showPassword = this.showPassword.checked;
     this.setState({
       showPassword
-    })
+    });
   }
 
 
@@ -294,22 +291,23 @@ export class Profile extends React.Component {
    * @memberof Profile
    */
   render() {
-    const username= `${this.props.fname} ${this.props.mname} ${this.props.lname}`
+    const username =
+    `${this.props.fname} ${this.props.mname} ${this.props.lname}`;
     return (
       <div className="container">
         <div className="body row" >
           <div className="col s12">
-             <div className="userInfo row" >
-                <h6 className="col l4 s12">
+            <div className="userInfo row" >
+              <h6 className="col l4 s12">
                   Name: {username}
-                </h6>
-                <h6 className="col l4 s12">
+              </h6>
+              <h6 className="col l4 s12">
                   Email: {this.props.email}
-                </h6>
-                <h6 className="col l4 s12">
+              </h6>
+              <h6 className="col l4 s12">
                   Group: {this.props.title}
-                </h6>
-             </div>
+              </h6>
+            </div>
           </div>
           {(this.state.isloading)
             ?
@@ -401,29 +399,29 @@ export class Profile extends React.Component {
                     </div>
                   </div>
 
-                  {(this.state.showPassword) 
+                  {(this.state.showPassword)
                     ?
                     ''
                     :
-                      <div className="input-field col s12" >
-                        <button
-                          className="btn waves-effect waves-light right"
-                          type="submit"
-                          name="action"
-                          id="btnUpdateProfile"
-                          onClick={this.updateProfile}
-                          disabled={this.state.disableBtnUpdateProfile}
-                        >
+                    <div className="input-field col s12" >
+                      <button
+                        className="btn waves-effect waves-light right"
+                        type="submit"
+                        name="action"
+                        id="btnUpdateProfile"
+                        onClick={this.updateProfile}
+                        disabled={this.state.disableBtnUpdateProfile}
+                      >
                           Submit <i className="material-icons right">send</i>
-                        </button>
-                      </div>
+                      </button>
+                    </div>
                   }
                 </div>
-             </div>
-            
-            <div className="col l6 m12 s12">
-              <div className="row">
-                <div className="switch col s12">
+              </div>
+
+              <div className="col l6 m12 s12">
+                <div className="row">
+                  <div className="switch col s12">
                     <h6>Edit your password </h6>
                     <label>
                       Off
@@ -432,92 +430,93 @@ export class Profile extends React.Component {
                         onChange={this.editPassword}
                         id="updatePassword"
                         ref={(input) => { this.showPassword = input; }}
-                        />
-                      <span className="lever"></span>
+                      />
+                      <span className="lever" />
                       On
                     </label>
                   </div>
-                {(this.state.showPassword) 
+                  {(this.state.showPassword)
                   ?
                     <div>
-                    <div className="input-field col s12">
-                      <i className="material-icons prefix">lock</i>
-                      <input
-                        placeholder="Password"
-                        name="password"
-                        id="password"
-                        type="password"
-                        className="validate"
-                        value={this.state.password}
-                        onChange={this.onChange}
-                      />
-                      <label htmlFor="password">Password</label>
-                      <div className="validatorContainer">
-                        <span id="passwordValidator">
-                          {this.state.passwordValidator}
-                        </span>
+                      <div className="input-field col s12">
+                        <i className="material-icons prefix">lock</i>
+                        <input
+                          placeholder="Password"
+                          name="password"
+                          id="password"
+                          type="password"
+                          className="validate"
+                          value={this.state.password}
+                          onChange={this.onChange}
+                        />
+                        <label htmlFor="password">Password</label>
+                        <div className="validatorContainer">
+                          <span id="passwordValidator">
+                            {this.state.passwordValidator}
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="input-field col s12">
-                      <i className="material-icons prefix">lock</i>
-                      <input
-                        placeholder="Comfirm Password"
-                        name="comfirmpassword"
-                        id="comfirmpassword"
-                        type="password"
-                        className="validate"
-                        onChange={this.matchPassword}
-                        ref={(input) => { this.comfirmpassword = input; }}
-                        required=""
-                        aria-required="true"
-                      />
-                      <label htmlFor="comfirmpassword">comfirm password</label>
-                      <div className="validatorContainer">
-                        <span>
-                          {this.state.comfirmpasswordValidator}
-                        </span>
+                      <div className="input-field col s12">
+                        <i className="material-icons prefix">lock</i>
+                        <input
+                          placeholder="Comfirm Password"
+                          name="comfirmpassword"
+                          id="comfirmpassword"
+                          type="password"
+                          className="validate"
+                          onChange={this.matchPassword}
+                          ref={(input) => { this.comfirmpassword = input; }}
+                          required=""
+                          aria-required="true"
+                        />
+                        <label htmlFor="comfirmpassword">
+                          comfirm password
+                        </label>
+                        <div className="validatorContainer">
+                          <span>
+                            {this.state.comfirmpasswordValidator}
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="input-field col s12">
-                      <i className="material-icons prefix">lock</i>
-                      <input
-                        placeholder="old Password"
-                        name="curPassword"
-                        id="curPassword"
-                        type="password"
-                        className="validate"
-                        value={this.state.curPassword}
-                        onChange={this.onChange}
-                      />
-                      <label htmlFor="curPassword">Authorize Password</label>
-                      <div className="validatorContainer">
-                        <span id="curPasswordValidator">
-                         {this.state.curPasswordValidator}
-                        </span>
+                      <div className="input-field col s12">
+                        <i className="material-icons prefix">lock</i>
+                        <input
+                          placeholder="old Password"
+                          name="curPassword"
+                          id="curPassword"
+                          type="password"
+                          className="validate"
+                          value={this.state.curPassword}
+                          onChange={this.onChange}
+                        />
+                        <label htmlFor="curPassword">Authorize Password</label>
+                        <div className="validatorContainer">
+                          <span id="curPasswordValidator">
+                            {this.state.curPasswordValidator}
+                          </span>
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="input-field col l8 m6 s12" >
-                      <button
-                        className="btn waves-effect waves-light right"
-                        type="submit"
-                        name="action"
-                        id="btnSubmit"
-                        onClick={this.updatePassword}
-                        disabled={this.state.disableBtnSubmit}
-                      >
+                      <div className="input-field col l8 m6 s12" >
+                        <button
+                          className="btn waves-effect waves-light right"
+                          type="submit"
+                          name="action"
+                          id="btnSubmit"
+                          onClick={this.updatePassword}
+                          disabled={this.state.disableBtnSubmit}
+                        >
                         Submit <i className="material-icons right">send</i>
-                      </button>
-                    </div>
+                        </button>
+                      </div>
                     </div>
                   :
                   ''
                 }
-                 
+                </div>
               </div>
-            </div>
             </div>
           </form>
         </div>
@@ -525,8 +524,6 @@ export class Profile extends React.Component {
     );
   }
 }
-
-
 
 // Maps actions to props
 const mapDispatchToProps = dispatch => ({

@@ -25,13 +25,6 @@ module.exports = {
    * @param {*} statusCode - status Code
    * @returns {object} -
    */
-  // const obj = {};
-  //   obj.status = 'success';
-  //   obj[actionType] = data;
-  //   res.status(statusCode).send({
-  //     status: 'success',
-  //     data
-  //   });
   sendData(res, data, statusCode, dataType) {
     // create response payload
     const payload = {
@@ -125,7 +118,6 @@ module.exports = {
    * @returns {null} -
    */
   returnJWt(res, user, statusCode) {
-
     // get user role title
     Role.findOne({
       where: { id: user.roleId }
@@ -135,8 +127,11 @@ module.exports = {
         return sendMessage(res, 'Role not found.', 200);
       }
       // create jwt payload
+      // create middle name initial
+      const middleNameInitial = (user.mname) ?
+      `${user.mname.charAt(0)}.` : '';
       const userInfo = {
-        name: `${user.fname} ${user.mname} ${user.lname}`,
+        name: `${user.fname} ${middleNameInitial} ${user.lname}`,
         role: role.id,
         title: role.title,
         id: user.id
@@ -195,7 +190,7 @@ module.exports = {
    * @param {any} user 
    * @returns {array} - an array of criteria
    */
-  authorizedDoc(user){
+  authorizedDoc(user) {
     // for a regulat user
     let citeria = [
       {
@@ -211,15 +206,8 @@ module.exports = {
       }
     ];
     if (user.isAdmin) {
-      citeria = [
-      {
-        accessRight: 'private',
-        owner: user.id
-      },
-      {
-        accessRight: 'public',
-      }
-    ];
+      // all admin to view all role document
+      delete citeria[0].role;
     }
     return citeria;
   }

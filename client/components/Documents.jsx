@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import toaster from 'toastr';
-import _ from 'lodash/array'
+import _ from 'lodash/array';
 import getDocuments from '../actions/getDocuments';
-import { toServertime } from '../helper';
 import deleteDocument from '../actions/deleteDocument';
 import sendMessage from '../actions/message';
+import DocumentList from './DocumentList';
 
 /**
  * @class Documents
@@ -27,10 +27,10 @@ export class Documents extends React.Component {
       documents: [],
       message: '',
       category: 'myDocument',
-      searchHint: '',
+      searchText: '',
       pageCount: 0,
       isloading: false,
-      curDocID: 0
+      selectedDocumentID: 0
     };
 
     this.getDocuments = this.getDocuments.bind(this);
@@ -68,25 +68,23 @@ export class Documents extends React.Component {
    */
   componentWillReceiveProps(nextProps) {
     let message = '';
-    let newDocs;
     const sender = nextProps.messageFrom;
     let pageCount = nextProps.pageCount;
     // show error message when error is reported
-    if (sender === 'getDocuments' || sender === 'deleteDocument' ) {
-        message = nextProps.message;
-        if (sender === 'deleteDocument') {
-          // remove document from table
-          if (message.toString().includes('success')) {
-            // remove row from table when opertion was successfully
-            const curDocId = this.state.curDocID;
-            newDocs = _.remove(this.state.documents, (document) => {
-              return (document.id === parseInt(curDocId, 10));
-            });
-            pageCount = pageCount - 1;
-            // this.props.sendMessage('reset', 'reset');
-            message = '';
-          } 
+    if (sender === 'getDocuments' || sender === 'deleteDocument') {
+      message = nextProps.message;
+      if (sender === 'deleteDocument') {
+        // remove document from table
+        if (message.toString().includes('success')) {
+          // remove row from table when opertion was successfully
+          const selectedDocumentID = this.state.selectedDocumentID;
+          _.remove(this.state.documents, (document) => {
+            return (document.id === parseInt(selectedDocumentID, 10));
+          });
+          pageCount -= 1;
+          message = '';
         }
+      }
 
       // show message only when message exists
       if (message !== '' &&
@@ -98,13 +96,12 @@ export class Documents extends React.Component {
     this.setState({
       message,
       isloading: false,
-      noFound: `${pageCount} document${(pageCount<2) ? '' : 's'} found`,
-      curDocID: 0,
+      noFound: `${pageCount} document${(pageCount < 2) ? '' : 's'} found`,
+      selectedDocumentID: 0,
       status: nextProps.status,
       pageCount,
       documents: nextProps.documents,
     });
-
   }
 
   /**
@@ -119,7 +116,7 @@ export class Documents extends React.Component {
     // set category for further search such as pagination
     this.setState({
       category,
-      searchHint: '',
+      searchText: '',
       isloading: true
     });
   }
@@ -135,7 +132,7 @@ export class Documents extends React.Component {
     this.props.deleteDocument(documentID);
     this.setState({
       isloading: true,
-      curDocID: documentID
+      selectedDocumentID: documentID
     });
   }
 
@@ -146,16 +143,15 @@ export class Documents extends React.Component {
    * @returns {null} -
    */
   searchDocument() {
-    const searchHint = $('#searchHint').val();
-    // const searchHint = this.searchHint.value;
+    const searchText = $('#searchText').val();
     // set state for pagination, remove category for  general search
     this.setState({
-      searchHint,
+      searchText,
       category: '',
       isloading: true
     });
-    // toaster.info(`searching for documents with hint ${searchHint}`);
-    this.props.getDocuments('', searchHint, 0, 6);
+    // toaster.info(`searching for documents with hint ${searchText}`);
+    this.props.getDocuments('', searchText, 0, 6);
   }
 
 
@@ -168,9 +164,9 @@ export class Documents extends React.Component {
   handlePageClick(page) {
     const curPage = page.selected;
     const offset = Math.ceil(curPage * 6);
-    const searchHint = this.state.searchHint;
+    const searchText = this.state.searchText;
     const category = this.state.category;
-    this.props.getDocuments(category, searchHint, offset, 6);
+    this.props.getDocuments(category, searchText, offset, 6);
   }
 
 
@@ -179,8 +175,7 @@ export class Documents extends React.Component {
    * @memberof Documents
    */
   render() {
-    // get user info from local storage
-    const user = JSON.parse(localStorage.getItem('userInfo'));
+    // const user = JSON.parse(localStorage.getItem('userInfo'));
     return (
       <div className="container">
         <div className="body row">
@@ -195,21 +190,21 @@ export class Documents extends React.Component {
           <div className="col s12 m8 l10" id="searchDiv">
             <div className="row">
               <form>
-               <div className="col s12 m12 l5 ">
-                {(this.state.message !== '')
-                  ?
-                    <h6 className="errorMessage">{this.state.message} </h6>
-                  :
-                    <h6 className="searchCount">{this.state.noFound} </h6>
-                }
+                <div className="col s12 m12 l5 ">
+                  {(this.state.message !== '')
+                    ?
+                      <h6 className="errorMessage">{this.state.message} </h6>
+                    :
+                      <h6 className="searchCount">{this.state.noFound} </h6>
+                  }
                 </div>
                 <div className="col s9 m8 l5">
                   <input
                     placeholder="Search for documents"
                     type="text"
-                    name="searchHint"
-                    id="searchHint"
-                    ref={(input) => { this.searchHint = input; }}
+                    name="searchText"
+                    id="searchText"
+                    ref={(input) => { this.searchText = input; }}
                     onChange={this.searchDocument}
                   />
                 </div>
@@ -282,108 +277,54 @@ export class Documents extends React.Component {
           <div id="documentDashboard" >
             {(this.state.documents.length > 0)
               ?
-              <div>
-                <table id="tbDocuments">
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                      <th>Author</th>
-                      <th>Date Created</th>
-                      <th>Accessibilty</th>
-                      <th />
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    {this.state.documents.map(document => (
-                      <tr key={document.id} id={`doc${document.id}`}>
-                        <td id={`title${document.id}`}>{document.title}</td>
-                        <td id={`author${document.id}`}>{document.author}</td>
-                        <td id={`createdAt${document.id}`}>
-                          {toServertime(document.createdAt)}
-                        </td>
-                        <td id={`access${document.id}`}>{document.accessRight}</td>
-                        {(user.id === document.owner)
-                          ?
-                            <td>
-                              <a
-                                className="tooltip"
-                                id={`view${document.id}`}
-                                href={`#/document/${document.id}/${document
-                                  .title
-                                  .toString()
-                                  .replace(new RegExp(' ', 'g'), '_')}`}
-                              >
-                                <i className=" material-icons">description</i>
-                                <span className="tooltiptext">
-                                  View document
-                               </span>
-                              </a>
-                              <a
-                                className="tooltip"
-                                id={`edit${document.id}`}
-                                href={`#/createDocument/${document
-                                  .id}/${document
-                                  .title.toString()
-                                  .replace(new RegExp(' ', 'g'), '_')}/edit`}
-                              >
-                                <i className="material-icons">mode_edit</i>
-                                <span className="tooltiptext">
-                                  Edit document
-                                </span>
-                              </a>
-                              <botton className="tooltip">
-                                <i
-                                  className="material-icons"
-                                  id={document.id}
-                                  onDoubleClick={this.deleteDocument}
-                                >
-                                  delete_forever
-                                  </i>
-                                <span className="tooltiptext">
-                                  double click to Delete document
-                                </span>
-                              </botton>
-                            </td>
-                          :
-                            <td>
-                              <a
-                                className="tooltip"
-                                href={`#/document/${document.id}/${document
-                                  .title
-                                  .toString()
-                                  .replace(new RegExp(' ', 'g'), '_')}`}
-                              >
-                                <i className=" material-icons">description</i>
-                                <span className="tooltiptext">
-                                  View document
-                                </span>
-                              </a>
-                            </td>
-                        }
+                <div>
+                  <table id="tbDocuments">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Date Created</th>
+                        <th>Accessibilty</th>
+                        <th />
                       </tr>
+                    </thead>
+
+                    <tbody>
+                      {this.state.documents.map(document => (
+                        <DocumentList
+                          id={document.id}
+                          key={document.id}
+                          title={document.title}
+                          author={document.author}
+                          accessRight={document.accessRight}
+                          owner={document.owner}
+                          createdAt={document.createdAt}
+                          deleteDocument={this.deleteDocument}
+                        />
                     ))}
-                  </tbody>
-                </table>
-                <ReactPaginate
-                  previousLabel={'previous'}
-                  nextLabel={'next'}
-                  breakLabel={<a href="">...</a>}
-                  breakClassName={'break-me'}
-                  pageCount={this.state.pageCount / 6}
-                  marginPagesDisplayed={2}
-                  pageRangeDisplayed={5}
-                  onPageChange={this.handlePageClick}
-                  containerClassName={'pagination'}
-                  subContainerClassName={'pages pagination'}
-                  activeClassName={'active'}
-                />
-              </div>
-              :
-              <div className="info">
-                <br />
-                <h4 id="noDoc"> No document found, try more options &uarr;. </h4>
-              </div>
+                    </tbody>
+                  </table>
+                  <ReactPaginate
+                    previousLabel={'previous'}
+                    nextLabel={'next'}
+                    breakLabel={<a href="">...</a>}
+                    breakClassName={'break-me'}
+                    pageCount={this.state.pageCount / 6}
+                    marginPagesDisplayed={2}
+                    pageRangeDisplayed={5}
+                    onPageChange={this.handlePageClick}
+                    containerClassName={'pagination'}
+                    subContainerClassName={'pages pagination'}
+                    activeClassName={'active'}
+                  />
+                </div>
+                :
+                <div className="info">
+                  <br />
+                  <h4 id="noDoc" className="no-record">
+                    No document found, try more options above &uarr;.
+                  </h4>
+                </div>
             }
           </div>
         </div>
@@ -406,7 +347,7 @@ const mapStateToProps = state => (
 // Maps actions to props
 const mapDispatchToProps = dispatch => (
   {
-    getDocuments: (accessRight, title, offset, limit) => 
+    getDocuments: (accessRight, title, offset, limit) =>
       dispatch(getDocuments(accessRight, title, offset, limit)),
     deleteDocument: documentID => dispatch(deleteDocument(documentID)),
     sendMessage: () => dispatch(sendMessage())
@@ -416,7 +357,6 @@ const mapDispatchToProps = dispatch => (
 Documents.propTypes = {
   getDocuments: PropTypes.func.isRequired,
   deleteDocument: PropTypes.func.isRequired,
-  sendMessage: PropTypes.func.isRequired,
   documents: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number.isRequired,
@@ -432,8 +372,6 @@ Documents.propTypes = {
   pageCount: PropTypes.number,
   message: PropTypes.string,
   messageFrom: PropTypes.string
-
-
 };
 
 Documents.defaultProps = {

@@ -177,19 +177,6 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
     await client.click(buttonid);
   });
 
-  Then(/^I should be redirected to the "([^"]*)" page$/, async (link) => {
-    let page = link;
-    let lookupElement;
-    if (page === 'authentication') {
-      page = '';
-      lookupElement = '#signuptab';
-    } else {
-      lookupElement = '.mainHeader';
-    }
-    await client.waitForElementVisible(lookupElement, 5000)
-    .assert.urlEquals(`http://localhost:1142/#/${page}`);
-  });
-
   And(/^the JWT Token and my profile should be removed from the localStorage$/,
   async () => {
     // check localstorage

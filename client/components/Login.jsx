@@ -8,6 +8,8 @@ import {
   validatePassword
 } from '../helpers/validator';
 
+// create Object hasOwnProperty
+const has = Object.prototype.hasOwnProperty;
 
 /**
  * @class Login
@@ -56,10 +58,6 @@ export class Login extends React.Component {
         message: nextProps.message,
         isloading: false
       });
-    } else {
-      this.setState({
-        isloading: false
-      });
     }
   }
 
@@ -71,25 +69,28 @@ export class Login extends React.Component {
   onChange(e) {
     let validationStatus;
     let validatorText = '';
-    let disableSigninSubmit =  true;
-    if (e.target.name === 'email') {
-      validationStatus = validateEmail(e.target.value);
-    } else if (e.target.name === 'password') {
-      validationStatus = validatePassword(e.target.value);
+    let disableSigninSubmit;
+    const controlName = e.target.name;
+    const controlValue = e.target.value;
+    // validate controls
+    if (controlName === 'email') {
+      validationStatus = validateEmail(controlValue);
+    } else if (controlName === 'password') {
+      validationStatus = validatePassword(controlValue);
     }
     // get validControls
     const validControls = this.state.validControls;
-    const validationStateName = `${e.target.name}Validator`;
+    const validationStateName = `${controlName}Validator`;
     // set state when input is valid
     if (validationStatus === true) {
       // check if control was valid
-      if (!validControls.hasOwnProperty(e.target.name)) {
-        validControls[e.target.name] = e.target.name;
+      if (!has.call(validControls, controlName)) {
+        validControls[controlName] = controlValue;
       }
     } else {
       // remove control from list of validControls
-      if (validControls.hasOwnProperty(e.target.name)) {
-        delete validControls[e.target.name];
+      if (has.call(validControls, controlName)) {
+        delete validControls[controlName];
       }
       // show error message
       validatorText = validationStatus;
@@ -103,7 +104,7 @@ export class Login extends React.Component {
     }
     // set state
     this.setState({
-      [e.target.name]: e.target.value,
+      [controlName]: controlValue,
       validControls,
       disableSigninSubmit,
       [validationStateName]: validatorText
@@ -112,7 +113,7 @@ export class Login extends React.Component {
 
   /**
    * signin user
-   * @param {*} event
+   * @param {*} event - 
    * @returns {null} -
    */
   onSave(event) {
@@ -162,7 +163,7 @@ export class Login extends React.Component {
             <label htmlFor="email">Email</label>
             <div className="validatorContainer">
               <span id="emailValidator">
-               {this.state.emailValidator}
+                {this.state.emailValidator}
               </span>
             </div>
           </div>
