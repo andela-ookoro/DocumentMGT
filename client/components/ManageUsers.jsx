@@ -77,9 +77,9 @@ export class ManageUsers extends React.Component {
     let newUsers;
     // show error message when error is reported
     if (nextProps.messageFrom === 'getUsers'
-      || nextProps.messageFrom === 'blockUser' 
+      || nextProps.messageFrom === 'blockUser'
       || nextProps.messageFrom === 'restoreUser') {
-        message = nextProps.message;
+      message = nextProps.message;
       // show message only when message exists
       if (message.toString().includes('success')) {
         // remove row from table when opertion was successfully
@@ -87,9 +87,9 @@ export class ManageUsers extends React.Component {
         newUsers = _.remove(this.state.users, (user) => {
           return (user.id === parseInt(curUserId, 10));
         });
-      }  
+      }
       toaster.info(nextProps.message);
-    } 
+    }
     this.setState({
       status: nextProps.status,
       users: nextProps.users,
@@ -181,7 +181,6 @@ export class ManageUsers extends React.Component {
     this.props.getUsers(category, searchHint, offset, 6);
   }
 
-
   /**
    * @returns {object} - html dom
    * @memberof ManageUsers
@@ -202,12 +201,12 @@ export class ManageUsers extends React.Component {
             <div className="row">
               <form>
                 <div className="col s12 m12 l5 ">
-                {(this.state.message !== '')
-                  ?
-                    <h6 className="errorMessage">{this.state.message} </h6>
-                  :
-                    <h6 className="searchCount">{this.state.noFound} </h6>
-                }
+                  {(this.state.message !== '')
+                    ?
+                      <h6 className="errorMessage">{this.state.message} </h6>
+                    :
+                      <h6 className="searchCount">{this.state.noFound} </h6>
+                  }
                 </div>
                 <div className="col s9 m8 l5">
                   <input
@@ -340,7 +339,6 @@ export class ManageUsers extends React.Component {
                             ''
                         }
                         </td>
-                        
                       </tr>
                     ))}
                   </tbody>
@@ -360,9 +358,9 @@ export class ManageUsers extends React.Component {
                 />
               </div>
               :
-              <div className="info">
+              <div className="no-record">
                 <br />
-                <h4> No user found, try more options &uarr;. </h4>
+                <h4> No user found, try more options above &uarr;. </h4>
               </div>
             }
           </div>

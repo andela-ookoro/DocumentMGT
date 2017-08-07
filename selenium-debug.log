@@ -1,390 +1,324 @@
-09:13:38.351 INFO - Selenium build info: version: '3.4.0', revision: 'unknown'
-09:13:38.352 INFO - Launching a standalone Selenium Server
-2017-07-26 09:13:38.387:INFO::main: Logging initialized @321ms to org.seleniumhq.jetty9.util.log.StdErrLog
-09:13:38.444 INFO - Driver provider org.openqa.selenium.ie.InternetExplorerDriver registration is skipped:
+04:20:18.492 INFO - Selenium build info: version: '3.4.0', revision: 'unknown'
+04:20:18.493 INFO - Launching a standalone Selenium Server
+2017-08-01 04:20:18.517:INFO::main: Logging initialized @317ms to org.seleniumhq.jetty9.util.log.StdErrLog
+04:20:18.572 INFO - Driver provider org.openqa.selenium.ie.InternetExplorerDriver registration is skipped:
  registration capabilities Capabilities [{ensureCleanSession=true, browserName=internet explorer, version=, platform=WINDOWS}] does not match the current platform MAC
-09:13:38.445 INFO - Driver provider org.openqa.selenium.edge.EdgeDriver registration is skipped:
+04:20:18.573 INFO - Driver provider org.openqa.selenium.edge.EdgeDriver registration is skipped:
  registration capabilities Capabilities [{browserName=MicrosoftEdge, version=, platform=WINDOWS}] does not match the current platform MAC
-09:13:38.445 INFO - Driver class not found: com.opera.core.systems.OperaDriver
-09:13:38.445 INFO - Driver provider com.opera.core.systems.OperaDriver registration is skipped:
+04:20:18.573 INFO - Driver class not found: com.opera.core.systems.OperaDriver
+04:20:18.573 INFO - Driver provider com.opera.core.systems.OperaDriver registration is skipped:
 Unable to create new instances on this machine.
-09:13:38.445 INFO - Driver class not found: com.opera.core.systems.OperaDriver
-09:13:38.445 INFO - Driver provider com.opera.core.systems.OperaDriver is not registered
-2017-07-26 09:13:38.492:INFO:osjs.Server:main: jetty-9.4.3.v20170317
-2017-07-26 09:13:38.541:INFO:osjsh.ContextHandler:main: Started o.s.j.s.ServletContextHandler@d8355a8{/,null,AVAILABLE}
-2017-07-26 09:13:38.578:INFO:osjs.AbstractConnector:main: Started ServerConnector@146ba0ac{HTTP/1.1,[http/1.1]}{0.0.0.0:4444}
-2017-07-26 09:13:38.580:INFO:osjs.Server:main: Started @514ms
-09:13:38.580 INFO - Selenium Server is up and running
-09:13:40.152 INFO - SessionCleaner initialized with insideBrowserTimeout 0 and clientGoneTimeout 1800000 polling every 180000
-09:13:40.180 INFO - Executing: [new session: Capabilities [{acceptSslCerts=true, selenium={cli_args={webdriver.chrome.driver=/Users/andeladeveloper/Documents/andela/documentMGT/node_modules/chromedriver/lib/chromedriver/chromedriver}}, browserName=chrome, javascriptEnabled=true, platform=ANY}]])
-09:13:40.203 INFO - Creating a new session for Capabilities [{acceptSslCerts=true, selenium={cli_args={webdriver.chrome.driver=/Users/andeladeveloper/Documents/andela/documentMGT/node_modules/chromedriver/lib/chromedriver/chromedriver}}, browserName=chrome, javascriptEnabled=true, platform=ANY}]
-Starting ChromeDriver 2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262) on port 40565
+04:20:18.573 INFO - Driver class not found: com.opera.core.systems.OperaDriver
+04:20:18.573 INFO - Driver provider com.opera.core.systems.OperaDriver is not registered
+2017-08-01 04:20:18.619:INFO:osjs.Server:main: jetty-9.4.3.v20170317
+2017-08-01 04:20:18.653:INFO:osjsh.ContextHandler:main: Started o.s.j.s.ServletContextHandler@d8355a8{/,null,AVAILABLE}
+2017-08-01 04:20:18.698:INFO:osjs.AbstractConnector:main: Started ServerConnector@146ba0ac{HTTP/1.1,[http/1.1]}{0.0.0.0:4444}
+2017-08-01 04:20:18.699:INFO:osjs.Server:main: Started @499ms
+04:20:18.699 INFO - Selenium Server is up and running
+04:20:20.266 INFO - SessionCleaner initialized with insideBrowserTimeout 0 and clientGoneTimeout 1800000 polling every 180000
+04:20:20.302 INFO - Executing: [new session: Capabilities [{acceptSslCerts=true, selenium={cli_args={webdriver.chrome.driver=/Users/andeladeveloper/Documents/andela/documentMGT/node_modules/chromedriver/lib/chromedriver/chromedriver}}, browserName=chrome, javascriptEnabled=true, platform=ANY}]])
+04:20:20.326 INFO - Creating a new session for Capabilities [{acceptSslCerts=true, selenium={cli_args={webdriver.chrome.driver=/Users/andeladeveloper/Documents/andela/documentMGT/node_modules/chromedriver/lib/chromedriver/chromedriver}}, browserName=chrome, javascriptEnabled=true, platform=ANY}]
+Starting ChromeDriver 2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262) on port 24577
 Only local connections are allowed.
-09:13:42.313 INFO - Detected dialect: OSS
-09:13:42.348 INFO - Done: [new session: Capabilities [{acceptSslCerts=true, selenium={cli_args={webdriver.chrome.driver=/Users/andeladeveloper/Documents/andela/documentMGT/node_modules/chromedriver/lib/chromedriver/chromedriver}}, browserName=chrome, javascriptEnabled=true, platform=ANY}]]
-09:13:42.392 INFO - Executing: [maximise window])
-09:13:42.667 INFO - Done: [maximise window]
-09:13:42.672 INFO - Executing: [get: http://localhost:1142])
-09:13:44.267 INFO - Done: [get: http://localhost:1142]
-09:13:44.279 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function () {
+04:20:22.634 INFO - Detected dialect: OSS
+04:20:22.677 INFO - Done: [new session: Capabilities [{acceptSslCerts=true, selenium={cli_args={webdriver.chrome.driver=/Users/andeladeveloper/Documents/andela/documentMGT/node_modules/chromedriver/lib/chromedriver/chromedriver}}, browserName=chrome, javascriptEnabled=true, platform=ANY}]]
+04:20:22.743 INFO - Executing: [maximise window])
+04:20:23.050 INFO - Done: [maximise window]
+04:20:23.056 INFO - Executing: [get: http://localhost:1142])
+04:20:24.221 INFO - Done: [get: http://localhost:1142]
+04:20:24.231 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function () {
               return Object.assign({}, localStorage);
             }.apply(window, passedArgs);, []])
-09:13:44.287 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function () {
+04:20:24.274 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function () {
               return Object.assign({}, localStorage);
             }.apply(window, passedArgs);, []]
-09:13:44.298 INFO - Executing: [find elements: By.cssSelector: body])
-09:13:44.334 INFO - Done: [find elements: By.cssSelector: body]
-09:13:44.344 INFO - Executing: [is displayed: 0 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: body]])
-09:13:44.368 INFO - Done: [is displayed: 0 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: body]]
-09:13:44.386 INFO - Executing: [find element: By.cssSelector: #email])
-09:13:44.408 INFO - Done: [find element: By.cssSelector: #email]
-09:13:44.414 INFO - Executing: [clear: 1 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #email]])
-09:13:44.453 INFO - Done: [clear: 1 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #email]]
-09:13:44.462 INFO - Executing: [find element: By.cssSelector: #email])
-09:13:44.474 INFO - Done: [find element: By.cssSelector: #email]
-09:13:44.480 INFO - Executing: [send keys: 1 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #email], [t, e, s, t, @, b, o, t, ., c, o, m]])
-09:13:44.629 INFO - Done: [send keys: 1 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #email], [t, e, s, t, @, b, o, t, ., c, o, m]]
-09:13:44.632 INFO - Executing: [find element: By.cssSelector: #password])
-09:13:44.654 INFO - Done: [find element: By.cssSelector: #password]
-09:13:44.657 INFO - Executing: [clear: 2 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #password]])
-09:13:44.687 INFO - Done: [clear: 2 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #password]]
-09:13:44.695 INFO - Executing: [find element: By.cssSelector: #password])
-09:13:44.707 INFO - Done: [find element: By.cssSelector: #password]
-09:13:44.714 INFO - Executing: [send keys: 2 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #password], [s, m, i, l, e, s, h, 2, o, !]])
-09:13:44.821 INFO - Done: [send keys: 2 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #password], [s, m, i, l, e, s, h, 2, o, !]]
-09:13:45.828 INFO - Executing: [find element: By.cssSelector: #signinSubmit])
-09:13:45.849 INFO - Done: [find element: By.cssSelector: #signinSubmit]
-09:13:45.851 INFO - Executing: [click: 3 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #signinSubmit]])
-09:13:45.922 INFO - Done: [click: 3 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #signinSubmit]]
-09:13:45.938 INFO - Executing: [find elements: By.cssSelector: #dashboard])
-09:13:45.980 INFO - Done: [find elements: By.cssSelector: #dashboard]
-09:13:46.493 INFO - Executing: [find elements: By.cssSelector: #dashboard])
-09:13:46.509 INFO - Done: [find elements: By.cssSelector: #dashboard]
-09:13:46.513 INFO - Executing: [is displayed: 4 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #dashboard]])
-09:13:46.533 INFO - Done: [is displayed: 4 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #dashboard]]
-09:13:46.536 INFO - Executing: [find element: By.cssSelector: #dashboard])
-09:13:46.555 INFO - Done: [find element: By.cssSelector: #dashboard]
-09:13:46.559 INFO - Executing: [click: 4 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #dashboard]])
-09:13:46.629 INFO - Done: [click: 4 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #dashboard]]
-09:13:46.641 INFO - Executing: [find elements: By.cssSelector: #myDocument])
-09:13:46.665 INFO - Done: [find elements: By.cssSelector: #myDocument]
-09:13:46.669 INFO - Executing: [is displayed: 6 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #myDocument]])
-09:13:46.695 INFO - Done: [is displayed: 6 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #myDocument]]
-09:13:46.698 INFO - Executing: [find element: By.cssSelector: #myDocument])
-09:13:46.719 INFO - Done: [find element: By.cssSelector: #myDocument]
-09:13:46.721 INFO - Executing: [click: 6 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #myDocument]])
-09:13:46.797 INFO - Done: [click: 6 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #myDocument]]
-09:13:51.810 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
+04:20:24.283 INFO - Executing: [find elements: By.cssSelector: body])
+04:20:24.322 INFO - Done: [find elements: By.cssSelector: body]
+04:20:24.332 INFO - Executing: [is displayed: 0 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: body]])
+04:20:24.353 INFO - Done: [is displayed: 0 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: body]]
+04:20:24.366 INFO - Executing: [find element: By.cssSelector: #email])
+04:20:24.386 INFO - Done: [find element: By.cssSelector: #email]
+04:20:24.392 INFO - Executing: [clear: 1 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #email]])
+04:20:24.438 INFO - Done: [clear: 1 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #email]]
+04:20:24.441 INFO - Executing: [find element: By.cssSelector: #email])
+04:20:24.454 INFO - Done: [find element: By.cssSelector: #email]
+04:20:24.460 INFO - Executing: [send keys: 1 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #email], [t, e, s, t, @, b, o, t, ., c, o, m]])
+04:20:24.606 INFO - Done: [send keys: 1 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #email], [t, e, s, t, @, b, o, t, ., c, o, m]]
+04:20:24.610 INFO - Executing: [find element: By.cssSelector: #password])
+04:20:24.632 INFO - Done: [find element: By.cssSelector: #password]
+04:20:24.637 INFO - Executing: [clear: 2 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #password]])
+04:20:24.663 INFO - Done: [clear: 2 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #password]]
+04:20:24.666 INFO - Executing: [find element: By.cssSelector: #password])
+04:20:24.678 INFO - Done: [find element: By.cssSelector: #password]
+04:20:24.683 INFO - Executing: [send keys: 2 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #password], [s, m, i, l, e, s, h, 2, o, !]])
+04:20:24.807 INFO - Done: [send keys: 2 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #password], [s, m, i, l, e, s, h, 2, o, !]]
+04:20:25.816 INFO - Executing: [find element: By.cssSelector: #signinSubmit])
+04:20:25.838 INFO - Done: [find element: By.cssSelector: #signinSubmit]
+04:20:25.840 INFO - Executing: [click: 3 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #signinSubmit]])
+04:20:25.898 INFO - Done: [click: 3 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #signinSubmit]]
+04:20:25.917 INFO - Executing: [find elements: By.cssSelector: #dashboard])
+04:20:25.966 INFO - Done: [find elements: By.cssSelector: #dashboard]
+04:20:26.476 INFO - Executing: [find elements: By.cssSelector: #dashboard])
+04:20:26.489 INFO - Done: [find elements: By.cssSelector: #dashboard]
+04:20:26.494 INFO - Executing: [is displayed: 4 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #dashboard]])
+04:20:26.518 INFO - Done: [is displayed: 4 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #dashboard]]
+04:20:26.522 INFO - Executing: [find element: By.cssSelector: #dashboard])
+04:20:26.545 INFO - Done: [find element: By.cssSelector: #dashboard]
+04:20:26.550 INFO - Executing: [click: 4 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #dashboard]])
+04:20:26.645 INFO - Done: [click: 4 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #dashboard]]
+04:20:26.657 INFO - Executing: [find elements: By.cssSelector: #myDocument])
+04:20:26.678 INFO - Done: [find elements: By.cssSelector: #myDocument]
+04:20:26.685 INFO - Executing: [is displayed: 6 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #myDocument]])
+04:20:26.718 INFO - Done: [is displayed: 6 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #myDocument]]
+04:20:26.723 INFO - Executing: [find element: By.cssSelector: #myDocument])
+04:20:26.744 INFO - Done: [find element: By.cssSelector: #myDocument]
+04:20:26.748 INFO - Executing: [click: 6 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #myDocument]])
+04:20:26.821 INFO - Done: [click: 6 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #myDocument]]
+04:20:29.837 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc() {
   // assert for either no document found or document(s) was found
   var noDocFound = document.getElementById('noDoc');
   if (noDocFound) {
-    console.log('no doc found', noDocFound);
     return false;
   }
   // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
+  var documentTable = document.getElementById('tbDocuments');
   // get second row, skip first row for header
   var firstDoc = documentTable.rows[1];
   var firstDocAccessibility = firstDoc.cells[3].id;
   return '#' + firstDocAccessibility;
 }.apply(window, passedArgs);, []])
-09:13:51.818 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
+04:20:30.659 WARN - Exception thrown
+org.openqa.selenium.WebDriverException: unknown error: Cannot read property 'rows' of null
+  (Session info: chrome=59.0.3071.115)
+  (Driver info: chromedriver=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262),platform=Mac OS X 10.12.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 11 milliseconds
+Build info: version: '3.4.0', revision: 'unknown', time: 'unknown'
+System info: host: 'Andelas-MacBook-Pro-10.local', ip: '127.0.0.1', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.12.5', java.version: '1.8.0_131'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262), userDataDir=/var/folders/8c/2dtmkk1s6dv0m4hdf30406hc0000gn/T/.org.chromium.Chromium.Bh0Ns7}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=59.0.3071.115, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, unexpectedAlertBehaviour=}]
+Session ID: 201070ab159378caf696c182e7b8e107
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:215)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:167)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:671)
+	at org.openqa.selenium.remote.RemoteWebDriver.executeScript(RemoteWebDriver.java:573)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:104)
+	at com.sun.proxy.$Proxy4.executeScript(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.executeScript(EventFiringWebDriver.java:217)
+	at org.openqa.selenium.remote.server.handler.ExecuteScript.call(ExecuteScript.java:56)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at org.openqa.selenium.remote.server.DefaultSession$1.run(DefaultSession.java:176)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+04:20:30.664 WARN - Exception: unknown error: Cannot read property 'rows' of null
+  (Session info: chrome=59.0.3071.115)
+  (Driver info: chromedriver=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262),platform=Mac OS X 10.12.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 11 milliseconds
+Build info: version: '3.4.0', revision: 'unknown', time: 'unknown'
+System info: host: 'Andelas-MacBook-Pro-10.local', ip: '127.0.0.1', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.12.5', java.version: '1.8.0_131'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262), userDataDir=/var/folders/8c/2dtmkk1s6dv0m4hdf30406hc0000gn/T/.org.chromium.Chromium.Bh0Ns7}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=59.0.3071.115, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, unexpectedAlertBehaviour=}]
+Session ID: 201070ab159378caf696c182e7b8e107
+04:20:30.727 WARN - Exception thrown
+java.lang.ClassCastException: java.util.HashMap cannot be cast to java.lang.String
+	at org.openqa.selenium.remote.server.handler.BySelector.pickFromJsonParameters(BySelector.java:29)
+	at org.openqa.selenium.remote.server.handler.FindElement.setJsonParameters(FindElement.java:42)
+	at org.openqa.selenium.remote.server.rest.ResultConfig.handle(ResultConfig.java:99)
+	at org.openqa.selenium.remote.server.JsonHttpCommandHandler.handleRequest(JsonHttpCommandHandler.java:190)
+	at org.openqa.selenium.remote.server.DriverServlet.handleRequest(DriverServlet.java:222)
+	at org.openqa.selenium.remote.server.DriverServlet.doPost(DriverServlet.java:184)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:707)
+	at org.openqa.selenium.remote.server.DriverServlet.service(DriverServlet.java:150)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:790)
+	at org.seleniumhq.jetty9.servlet.ServletHolder.handle(ServletHolder.java:841)
+	at org.seleniumhq.jetty9.servlet.ServletHandler.doHandle(ServletHandler.java:543)
+	at org.seleniumhq.jetty9.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:188)
+	at org.seleniumhq.jetty9.server.handler.ContextHandler.doHandle(ContextHandler.java:1228)
+	at org.seleniumhq.jetty9.server.handler.ScopedHandler.nextScope(ScopedHandler.java:168)
+	at org.seleniumhq.jetty9.servlet.ServletHandler.doScope(ServletHandler.java:481)
+	at org.seleniumhq.jetty9.server.handler.ScopedHandler.nextScope(ScopedHandler.java:166)
+	at org.seleniumhq.jetty9.server.handler.ContextHandler.doScope(ContextHandler.java:1130)
+	at org.seleniumhq.jetty9.server.handler.ScopedHandler.handle(ScopedHandler.java:141)
+	at org.seleniumhq.jetty9.server.handler.HandlerWrapper.handle(HandlerWrapper.java:132)
+	at org.seleniumhq.jetty9.server.Server.handle(Server.java:564)
+	at org.seleniumhq.jetty9.server.HttpChannel.handle(HttpChannel.java:320)
+	at org.seleniumhq.jetty9.server.HttpConnection.onFillable(HttpConnection.java:251)
+	at org.seleniumhq.jetty9.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:279)
+	at org.seleniumhq.jetty9.io.FillInterest.fillable(FillInterest.java:112)
+	at org.seleniumhq.jetty9.io.ChannelEndPoint$2.run(ChannelEndPoint.java:124)
+	at org.seleniumhq.jetty9.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:672)
+	at org.seleniumhq.jetty9.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:590)
+	at java.lang.Thread.run(Thread.java:748)
+04:20:30.728 WARN - Exception: java.util.HashMap cannot be cast to java.lang.String
+04:20:33.777 INFO - Executing: [find elements: By.cssSelector: #dashboard])
+04:20:33.788 INFO - Done: [find elements: By.cssSelector: #dashboard]
+04:20:33.792 INFO - Executing: [is displayed: 4 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #dashboard]])
+04:20:33.803 INFO - Done: [is displayed: 4 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #dashboard]]
+04:20:33.809 INFO - Executing: [find element: By.cssSelector: #dashboard])
+04:20:33.828 INFO - Done: [find element: By.cssSelector: #dashboard]
+04:20:33.830 INFO - Executing: [click: 4 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #dashboard]])
+04:20:33.890 INFO - Done: [click: 4 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: #dashboard]]
+04:20:33.902 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc() {
   // assert for either no document found or document(s) was found
   var noDocFound = document.getElementById('noDoc');
   if (noDocFound) {
-    console.log('no doc found', noDocFound);
     return false;
   }
   // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []]
-09:13:51.824 INFO - Executing: [find element: By.cssSelector: #access145])
-09:13:51.845 INFO - Done: [find element: By.cssSelector: #access145]
-09:13:51.847 INFO - Executing: [is displayed: 7 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #access145]])
-09:13:51.868 INFO - Done: [is displayed: 7 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #access145]]
-09:13:52.883 INFO - Executing: [find elements: By.cssSelector: #public])
-09:13:52.904 INFO - Done: [find elements: By.cssSelector: #public]
-09:13:52.907 INFO - Executing: [is displayed: 8 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #public]])
-09:13:52.928 INFO - Done: [is displayed: 8 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #public]]
-09:13:52.931 INFO - Executing: [find element: By.cssSelector: #public])
-09:13:52.953 INFO - Done: [find element: By.cssSelector: #public]
-09:13:52.955 INFO - Executing: [click: 8 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #public]])
-09:13:53.029 INFO - Done: [click: 8 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #public]]
-09:13:58.044 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []])
-09:13:58.051 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []]
-09:13:58.057 INFO - Executing: [find element: By.cssSelector: #access4])
-09:13:58.076 INFO - Done: [find element: By.cssSelector: #access4]
-09:13:58.078 INFO - Executing: [is displayed: 9 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #access4]])
-09:13:58.099 INFO - Done: [is displayed: 9 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #access4]]
-09:13:59.112 INFO - Executing: [find elements: By.cssSelector: #private])
-09:13:59.134 INFO - Done: [find elements: By.cssSelector: #private]
-09:13:59.136 INFO - Executing: [is displayed: 10 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #private]])
-09:13:59.155 INFO - Done: [is displayed: 10 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #private]]
-09:13:59.161 INFO - Executing: [find element: By.cssSelector: #private])
-09:13:59.181 INFO - Done: [find element: By.cssSelector: #private]
-09:13:59.184 INFO - Executing: [click: 10 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #private]])
-09:13:59.254 INFO - Done: [click: 10 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #private]]
-09:14:04.270 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []])
-09:14:04.277 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []]
-09:14:04.281 INFO - Executing: [find element: By.cssSelector: #noDoc])
-09:14:04.301 INFO - Done: [find element: By.cssSelector: #noDoc]
-09:14:04.304 INFO - Executing: [get text: 11 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #noDoc]])
-09:14:04.331 INFO - Done: [get text: 11 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #noDoc]]
-09:14:05.346 INFO - Executing: [find elements: By.cssSelector: #role])
-09:14:05.365 INFO - Done: [find elements: By.cssSelector: #role]
-09:14:05.368 INFO - Executing: [is displayed: 12 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #role]])
-09:14:05.389 INFO - Done: [is displayed: 12 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #role]]
-09:14:05.393 INFO - Executing: [find element: By.cssSelector: #role])
-09:14:05.413 INFO - Done: [find element: By.cssSelector: #role]
-09:14:05.415 INFO - Executing: [click: 12 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #role]])
-09:14:05.487 INFO - Done: [click: 12 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #role]]
-09:14:10.496 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
+  var documentTable = document.getElementById('tbDocuments');
   // get second row, skip first row for header
   var firstDoc = documentTable.rows[1];
   var firstDocAccessibility = firstDoc.cells[3].id;
   return '#' + firstDocAccessibility;
 }.apply(window, passedArgs);, []])
-09:14:10.504 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
+04:20:33.916 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc() {
   // assert for either no document found or document(s) was found
   var noDocFound = document.getElementById('noDoc');
   if (noDocFound) {
-    console.log('no doc found', noDocFound);
     return false;
   }
   // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
+  var documentTable = document.getElementById('tbDocuments');
   // get second row, skip first row for header
   var firstDoc = documentTable.rows[1];
   var firstDocAccessibility = firstDoc.cells[3].id;
   return '#' + firstDocAccessibility;
 }.apply(window, passedArgs);, []]
-09:14:10.511 INFO - Executing: [find element: By.cssSelector: #access138])
-09:14:10.532 INFO - Done: [find element: By.cssSelector: #access138]
-09:14:10.535 INFO - Executing: [is displayed: 13 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #access138]])
-09:14:10.554 INFO - Done: [is displayed: 13 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #access138]]
-09:14:11.570 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []])
-09:14:11.577 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []]
-09:14:11.580 INFO - Executing: [find element: By.cssSelector: .next a:first-of-type])
-09:14:11.602 INFO - Done: [find element: By.cssSelector: .next a:first-of-type]
-09:14:11.605 INFO - Executing: [click: 14 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: .next a:first-of-type]])
-09:14:11.657 INFO - Done: [click: 14 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: .next a:first-of-type]]
-09:14:11.668 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []])
-09:14:11.680 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []]
-09:14:11.685 INFO - Executing: [find element: By.cssSelector: #tbDocuments])
-09:14:11.708 INFO - Done: [find element: By.cssSelector: #tbDocuments]
-09:14:11.712 INFO - Executing: [get text: 15 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #tbDocuments]])
-09:14:11.745 INFO - Done: [get text: 15 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #tbDocuments]]
-09:14:12.756 INFO - Executing: [find element: By.cssSelector: #searchHint])
-09:14:12.775 INFO - Done: [find element: By.cssSelector: #searchHint]
-09:14:12.779 INFO - Executing: [send keys: 16 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #searchHint], [e]])
-09:14:12.835 INFO - Done: [send keys: 16 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #searchHint], [e]]
-09:14:13.852 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []])
-09:14:13.861 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []]
-09:14:13.868 INFO - Executing: [find element: By.cssSelector: #tbDocuments])
-09:14:13.880 INFO - Done: [find element: By.cssSelector: #tbDocuments]
-09:14:13.885 INFO - Executing: [get text: 15 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #tbDocuments]])
-09:14:13.918 INFO - Done: [get text: 15 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #tbDocuments]]
-09:14:14.934 INFO - Executing: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []])
-09:14:14.940 INFO - Done: [execute script: var passedArgs = Array.prototype.slice.call(arguments,0); return function checkDoc(accessRight) {
-  // assert for either no document found or document(s) was found
-  var noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    console.log('no doc found', noDocFound);
-    return false;
-  }
-  // check if there rows
-  var documentTable = document.getElementById("tbDocuments");
-  console.log('has table', documentTable);
-  // get second row, skip first row for header
-  var firstDoc = documentTable.rows[1];
-  var firstDocAccessibility = firstDoc.cells[3].id;
-  return '#' + firstDocAccessibility;
-}.apply(window, passedArgs);, []]
-09:14:14.948 INFO - Executing: [find element: By.cssSelector: #documentDashboard  i:first-of-type])
-09:14:14.969 INFO - Done: [find element: By.cssSelector: #documentDashboard  i:first-of-type]
-09:14:14.974 INFO - Executing: [click: 17 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #documentDashboard  i:first-of-type]])
-09:14:15.042 INFO - Done: [click: 17 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #documentDashboard  i:first-of-type]]
-09:14:15.055 INFO - Executing: [find elements: By.cssSelector: #author])
-09:14:15.105 INFO - Done: [find elements: By.cssSelector: #author]
-09:14:15.612 INFO - Executing: [find elements: By.cssSelector: #author])
-09:14:15.628 INFO - Done: [find elements: By.cssSelector: #author]
-09:14:15.633 INFO - Executing: [is displayed: 18 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #author]])
-09:14:15.650 INFO - Done: [is displayed: 18 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #author]]
-09:14:15.655 INFO - Executing: [find element: By.cssSelector: #author])
-09:14:15.675 INFO - Done: [find element: By.cssSelector: #author]
-09:14:15.677 INFO - Executing: [get text: 18 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #author]])
-09:14:15.699 INFO - Done: [get text: 18 [[ChromeDriver: chrome on MAC (21f02131510a16734c2ecef10df84e25)] -> css selector: #author]]
-09:14:15.708 INFO - Executing: [close window])
-09:14:15.835 INFO - Done: [close window]
-09:14:15.847 INFO - Executing: [delete session: 60d473ed-6a2c-4b61-a1fa-f771e3aae4c3])
-09:14:15.928 INFO - Done: [delete session: 60d473ed-6a2c-4b61-a1fa-f771e3aae4c3]
+04:20:33.931 INFO - Executing: [find elements: By.cssSelector: .mainHeader])
+04:20:33.974 INFO - Done: [find elements: By.cssSelector: .mainHeader]
+04:20:33.977 INFO - Executing: [is displayed: 7 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: .mainHeader]])
+04:20:34.003 INFO - Done: [is displayed: 7 [[ChromeDriver: chrome on MAC (201070ab159378caf696c182e7b8e107)] -> css selector: .mainHeader]]
+04:20:34.027 INFO - Executing: [find element: By.cssSelector: #title])
+04:20:34.356 WARN - Exception thrown
+org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"css selector","selector":"#title"}
+  (Session info: chrome=59.0.3071.115)
+  (Driver info: chromedriver=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262),platform=Mac OS X 10.12.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 25 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.4.0', revision: 'unknown', time: 'unknown'
+System info: host: 'Andelas-MacBook-Pro-10.local', ip: '127.0.0.1', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.12.5', java.version: '1.8.0_131'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262), userDataDir=/var/folders/8c/2dtmkk1s6dv0m4hdf30406hc0000gn/T/.org.chromium.Chromium.Bh0Ns7}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=59.0.3071.115, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, unexpectedAlertBehaviour=}]
+Session ID: 201070ab159378caf696c182e7b8e107
+*** Element info: {Using=css selector, value=#title}
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:215)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:167)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:671)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:410)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByCssSelector(RemoteWebDriver.java:501)
+	at org.openqa.selenium.By$ByCssSelector.findElement(By.java:430)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:402)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:104)
+	at com.sun.proxy.$Proxy4.findElement(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.findElement(EventFiringWebDriver.java:188)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:48)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:33)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at org.openqa.selenium.remote.server.DefaultSession$1.run(DefaultSession.java:176)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+04:20:34.357 WARN - Exception: no such element: Unable to locate element: {"method":"css selector","selector":"#title"}
+  (Session info: chrome=59.0.3071.115)
+  (Driver info: chromedriver=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262),platform=Mac OS X 10.12.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 25 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.4.0', revision: 'unknown', time: 'unknown'
+System info: host: 'Andelas-MacBook-Pro-10.local', ip: '127.0.0.1', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.12.5', java.version: '1.8.0_131'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262), userDataDir=/var/folders/8c/2dtmkk1s6dv0m4hdf30406hc0000gn/T/.org.chromium.Chromium.Bh0Ns7}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=59.0.3071.115, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, unexpectedAlertBehaviour=}]
+Session ID: 201070ab159378caf696c182e7b8e107
+*** Element info: {Using=css selector, value=#title}
+04:20:34.397 INFO - Executing: [find element: By.cssSelector: #title])
+04:20:34.716 WARN - Exception thrown
+org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"css selector","selector":"#title"}
+  (Session info: chrome=59.0.3071.115)
+  (Driver info: chromedriver=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262),platform=Mac OS X 10.12.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 13 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.4.0', revision: 'unknown', time: 'unknown'
+System info: host: 'Andelas-MacBook-Pro-10.local', ip: '127.0.0.1', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.12.5', java.version: '1.8.0_131'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262), userDataDir=/var/folders/8c/2dtmkk1s6dv0m4hdf30406hc0000gn/T/.org.chromium.Chromium.Bh0Ns7}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=59.0.3071.115, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, unexpectedAlertBehaviour=}]
+Session ID: 201070ab159378caf696c182e7b8e107
+*** Element info: {Using=css selector, value=#title}
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)
+	at org.openqa.selenium.remote.ErrorHandler.createThrowable(ErrorHandler.java:215)
+	at org.openqa.selenium.remote.ErrorHandler.throwIfResponseFailed(ErrorHandler.java:167)
+	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:671)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:410)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElementByCssSelector(RemoteWebDriver.java:501)
+	at org.openqa.selenium.By$ByCssSelector.findElement(By.java:430)
+	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:402)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.openqa.selenium.support.events.EventFiringWebDriver$2.invoke(EventFiringWebDriver.java:104)
+	at com.sun.proxy.$Proxy4.findElement(Unknown Source)
+	at org.openqa.selenium.support.events.EventFiringWebDriver.findElement(EventFiringWebDriver.java:188)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:48)
+	at org.openqa.selenium.remote.server.handler.FindElement.call(FindElement.java:33)
+	at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+	at org.openqa.selenium.remote.server.DefaultSession$1.run(DefaultSession.java:176)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1142)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:617)
+	at java.lang.Thread.run(Thread.java:748)
+04:20:34.716 WARN - Exception: no such element: Unable to locate element: {"method":"css selector","selector":"#title"}
+  (Session info: chrome=59.0.3071.115)
+  (Driver info: chromedriver=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262),platform=Mac OS X 10.12.5 x86_64) (WARNING: The server did not provide any stacktrace information)
+Command duration or timeout: 13 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '3.4.0', revision: 'unknown', time: 'unknown'
+System info: host: 'Andelas-MacBook-Pro-10.local', ip: '127.0.0.1', os.name: 'Mac OS X', os.arch: 'x86_64', os.version: '10.12.5', java.version: '1.8.0_131'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Capabilities [{applicationCacheEnabled=false, rotatable=false, mobileEmulationEnabled=false, networkConnectionEnabled=false, chrome={chromedriverVersion=2.30.477690 (c53f4ad87510ee97b5c3425a14c0e79780cdf262), userDataDir=/var/folders/8c/2dtmkk1s6dv0m4hdf30406hc0000gn/T/.org.chromium.Chromium.Bh0Ns7}, takesHeapSnapshot=true, pageLoadStrategy=normal, databaseEnabled=false, handlesAlerts=true, hasTouchScreen=false, version=59.0.3071.115, platform=MAC, browserConnectionEnabled=false, nativeEvents=true, acceptSslCerts=true, locationContextEnabled=true, webStorageEnabled=true, browserName=chrome, takesScreenshot=true, javascriptEnabled=true, cssSelectorsEnabled=true, unexpectedAlertBehaviour=}]
+Session ID: 201070ab159378caf696c182e7b8e107
+*** Element info: {Using=css selector, value=#title}
+04:20:36.778 INFO - Executing: [send keys to active: []])
+04:20:36.797 INFO - Done: [send keys to active: []]
+04:20:36.803 INFO - Executing: [send keys to active: [t]])
+04:20:36.813 INFO - Done: [send keys to active: [t]]
+04:20:36.816 INFO - Executing: [send keys to active: [h]])
+04:20:36.824 INFO - Done: [send keys to active: [h]]
+04:20:36.829 INFO - Executing: [send keys to active: [i]])
+04:20:36.837 INFO - Done: [send keys to active: [i]]
+04:20:36.842 INFO - Executing: [send keys to active: [s]])
+04:20:36.850 INFO - Done: [send keys to active: [s]]
+04:20:36.855 INFO - Executing: [send keys to active: []])
+04:20:36.868 INFO - Done: [send keys to active: []]
+04:20:36.872 INFO - Executing: [send keys to active: [i]])
+04:20:36.881 INFO - Done: [send keys to active: [i]]
+04:20:36.885 INFO - Executing: [send keys to active: [s]])
+04:20:36.894 INFO - Done: [send keys to active: [s]]
+04:20:36.899 INFO - Executing: [send keys to active: []])
+04:20:36.908 INFO - Done: [send keys to active: []]
+04:20:39.917 INFO - Executing: [send keys to active: [T]])
+04:20:39.929 INFO - Done: [send keys to active: [T]]
+04:20:39.934 INFO - Executing: [send keys to active: [I]])
+04:20:39.951 INFO - Done: [send keys to active: [I]]
+04:20:39.956 INFO - Executing: [send keys to active: [A]])
+04:20:39.967 INFO - Done: [send keys to active: [A]]
+04:20:39.972 INFO - Executing: [send keys to active: [!]])
+04:20:39.983 INFO - Done: [send keys to active: [!]]
+04:20:42.007 INFO - Executing: [delete session: 3ebf9459-5e12-4956-871b-c5239f462d4c])
+04:20:42.082 INFO - Done: [delete session: 3ebf9459-5e12-4956-871b-c5239f462d4c]

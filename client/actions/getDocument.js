@@ -18,7 +18,7 @@ const getDocument = documentId =>
   )
   .catch((error) => {
     let message = 'An internal error occurred, please try again';
-    if (error.response.status !== 500) {
+    if (error.response && error.response.status !== 500) {
       message = error.response.data.message;
     }
     return sendMessage('getDocument', message);

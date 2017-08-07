@@ -12,6 +12,8 @@ import {
   validateRoleId
 } from '../helpers/validator';
 
+// create Object hasOwnProperty
+const has = Object.prototype.hasOwnProperty;
 
 /**
  * @class Signup
@@ -85,19 +87,18 @@ export class Signup extends React.Component {
     let ValidatonPrefix = 'Validator';
     const controlName = e.target.name;
     const controlValue = e.target.value;
-    const jquerySelector = `#${controlName}`;
     let validatorText = '';
-    let disableSignupSubmit =  true;
+    let disableSignupSubmit = true;
 
     if (controlName === 'fname' || controlName === 'lname') {
       validationStatus = validateName(controlValue);
     } else if (controlName === 'mname') {
       if (controlValue === '') {
-        validationStatus = true
+        validationStatus = true;
       } else {
         validationStatus = validateName(controlValue);
       }
-    }else if (controlName === 'email') {
+    } else if (controlName === 'email') {
       validationStatus = validateEmail(controlValue);
       ValidatonPrefix = `${ValidatonPrefix}signup`;
     } else if (controlName === 'password') {
@@ -112,13 +113,12 @@ export class Signup extends React.Component {
     // set state when input is valid
     if (validationStatus === true) {
       // check if control was valid
-      if (!validControls.hasOwnProperty(controlName)) {
-        validControls[e.target.name] =controlName;
+      if (!has.call(validControls, controlName)) {
+        validControls[e.target.name] = controlName;
       }
-
     } else {
       // remove control from list of validControls
-      if (!validControls.hasOwnProperty(controlName)) {
+      if (has.call(validControls, controlName)) {
         delete validControls[controlName];
       }
       // set validation message
@@ -139,7 +139,7 @@ export class Signup extends React.Component {
   }
 
   /**
-   *  @returns {null} -
+   * @returns {null} -
    * @param {*} event -
    */
   onSave(event) {
@@ -169,7 +169,7 @@ export class Signup extends React.Component {
     const comfirmpassword = this.comfirmpassword.value;
     // if password and comfirm password match, set label to matched
     let match;
-    let disableSignupSubmit = true
+    let disableSignupSubmit;
     let validatorText = '';
     if (comfirmpassword === this.state.password) {
       match = true;
@@ -289,7 +289,7 @@ export class Signup extends React.Component {
               <label htmlFor="email" >Email</label>
               <div className="validatorContainer">
                 <span id="emailValidatorsignup">
-                   {this.state.emailValidatorsignup}
+                  {this.state.emailValidatorsignup}
                 </span>
               </div>
             </div>

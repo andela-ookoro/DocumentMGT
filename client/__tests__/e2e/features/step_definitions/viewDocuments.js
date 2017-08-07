@@ -1,34 +1,15 @@
 import { client } from 'nightwatch-cucumber';
 import { defineSupportCode } from 'cucumber';
+import checkDoc from '../../helper';
 
-/**
- * @summary check if documents were found
- * @param accessRight - document accessRight to look up
- * @return {any} - false for no doc or accessRight
- */
-const checkDoc = (accessRight) => {
-   // assert for either no document found or document(s) was found
-  const noDocFound = document.getElementById('noDoc');
-  if (noDocFound) {
-    return false;
-  } 
-  // check if there rows
-  const documentTable =document.getElementById("tbDocuments");
-  // get second row, skip first row for header
-  const firstDoc = documentTable.rows[1];
-  const firstDocAccessibility = firstDoc.cells[3].id;
-  return `#${firstDocAccessibility}`;
-}
-
-
-defineSupportCode(({ Given, Then, When, defineStep }) => {
+defineSupportCode(({ Then, When, defineStep }) => {
   const And = defineStep;
 
   When(/^I click on the "([^"]*)" tab on the dashboard$/, async (tab) => {
     const tabSelector = `#${tab}`;
     await client.waitForElementVisible(tabSelector, 1000)
       .click(tabSelector)
-      .pause(5000);
+      .pause(3000);
   });
 
   Then(/^I should view "([^"]*)" documents$/, async (accessRight) => {
@@ -36,8 +17,8 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
       const selector = response.value;
       if (selector) {
          // my document, check if documents exist
-         client.assert.visible(selector)
-          .pause(1000);
+        client.assert.visible(selector)
+         .pause(3000);
       } else {
         client.assert.containsText('#noDoc', 'No document found')
           .pause(1000);
@@ -50,7 +31,7 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
       const selector = response.value;
       if (selector) {
          // my document, check if documents exist
-         client.click('.next a:first-of-type');
+        client.click('.next a:first-of-type');
       }
     });
   });
@@ -60,14 +41,14 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
       const selector = response.value;
       if (selector) {
          // my document, check if documents exist
-         client.assert.containsText('#tbDocuments','Title')
-          .pause(1000)
+        client.assert.containsText('#tbDocuments', 'Title')
+          .pause(1000);
       }
     });
   });
 
   When(/^I enter a text on the search box$/, async () => {
-    await client.setValue('#searchHint','e')
+    await client.setValue('#searchText', 'e')
       .pause(1000);
   });
 
@@ -76,24 +57,24 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
       const selector = response.value;
       if (selector) {
          // my document, check if documents exist
-         client.assert.containsText('#tbDocuments','Title')
-          .pause(1000)
+        client.assert.containsText('#tbDocuments','Title')
+          .pause(1000);
       }
     });
   });
 
-  When(/^I click the view document icon$/, async () => {
+  When(/^I click on the view document icon$/, async () => {
     await client.execute(checkDoc, [], (response) => {
       const selector = response.value;
       if (selector) {
-         client.click('#documentDashboard  i:first-of-type');
+        client.click('#documentDashboard  i:first-of-type');
       }
     });
   });
 
-  Then(/^I should be view the document on the document page$/, async () => {
+  Then(/^I should view the document on the document page$/, async () => {
     await client.waitForElementVisible('#author', 5000)
-      .assert.containsText('#author','Author');
+      .assert.containsText('#author', 'Author');
   });
 });
 

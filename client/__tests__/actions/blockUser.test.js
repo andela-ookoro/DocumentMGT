@@ -3,8 +3,6 @@ import { MESSAGE } from '../../actions/actionTypes';
 import blockUser from '../../actions/blockUser';
 import mockData from '../../../server/tests/mockData';
 
-const mockDocument = mockData.document;
-
 const resolveData = {
   data: {
     status: 'success',
@@ -12,13 +10,6 @@ const resolveData = {
   }
 };
 
-const expectedAction = {
-  type: MESSAGE,
-  message: {
-    from: 'blockUser',
-    info: 'User has been blocked successfully'
-  }
-};
 
 const error = {
   response: {
@@ -51,7 +42,7 @@ describe('blockUser action', () => {
   it('should return an action with type "MESSAGE"',
   () => {
     blockUser(1)
-    .then(respnse => {
+    .then((response) => {
       message = response.message.info;
       expect(message).toEqual('User has been blocked successfully');
     });
@@ -68,7 +59,4 @@ describe('blockUser action', () => {
     });
   });
 });
-
-
-
 

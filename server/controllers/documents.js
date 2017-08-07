@@ -1,5 +1,5 @@
 import model from '../models/index';
-import {sendMessage, sendData, authorizedDoc } from './helpers/utilities';
+import { sendMessage, sendData, authorizedDoc } from './helpers/utilities';
 
 const User = model.user;
 const Document = model.document;
@@ -38,17 +38,17 @@ module.exports = {
       order: [['title', 'ASC']],
       ...hint
     })
-    .then(documents => {
+    .then((documents) => {
       const count = documents.count;
       const rows = documents.rows;
       const documentsPayload = {
         count,
         rows,
-        curPage: parseInt(offset/limit, 10)+1,
-        pageCount: parseInt(count/limit, 10),
+        curPage: parseInt(offset / limit, 10) + 1,
+        pageCount: parseInt(count / limit, 10),
         pageSize: rows.length
       };
-      return  sendData(res, documentsPayload, 200, 'documents');
+      return sendData(res, documentsPayload, 200, 'documents');
     })
     .catch(error => sendMessage(res, error.message, 500));
   },
@@ -61,7 +61,7 @@ module.exports = {
   createDocument(req, res) {
     // create object from request
     const document = req.body;
-    // check for 
+    // check for
     if (document.owner !== req.user.id) {
       return sendMessage(res, 'Unauthorized operation', 403);
     }
@@ -75,14 +75,12 @@ module.exports = {
       .then((user) => {
         document.author = `${user.fname} ${user.mname} ${user.lname}`;
         Document.create(document)
-        .then((newdocument) => {
-         return sendData(res, newdocument, 201, 'document');
-        })
-        .catch((err) => sendMessage(res, err.message, 500));
+        .then((newdocument) => sendData(res, newdocument, 201, 'document'))
+        .catch(err => sendMessage(res, err.message, 500));
       })
       .catch(error => sendMessage(res, error.message, 500));
     } else {
-     return  sendMessage(res, 'Document\'s title and body are compulsory.',
+      return sendMessage(res, 'Document\'s title and body are compulsory.',
       400);
     }
   },
@@ -108,7 +106,7 @@ module.exports = {
     .then((document) => {
       if (!document) {
         return sendMessage(res, 'Document not found.', 200);
-      } 
+      }
       return sendData(res, document, 200, 'document');
     })
     .catch(error => sendMessage(res, error.message, 400));
@@ -275,11 +273,11 @@ module.exports = {
       const documentsPayload = {
         count,
         rows,
-        curPage: parseInt(offset/limit, 10)+1,
-        pageCount: parseInt(count/limit, 10),
+        curPage: parseInt(offset / limit, 10) + 1,
+        pageCount: parseInt(count / limit, 10),
         pageSize: rows.length
       };
-      return  sendData(res, documentsPayload, 200, 'documents');
+      return sendData(res, documentsPayload, 200, 'documents');
     })
     .catch(error => sendMessage(res, error.message, 500));
   },

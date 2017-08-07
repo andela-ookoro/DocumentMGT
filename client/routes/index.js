@@ -42,7 +42,7 @@ const routes = () => (
         </App>
         <Route component={pageNotFound} />
       </Switch>
-    </HashRouter >
+    </HashRouter>
   </Provider>
 );
 

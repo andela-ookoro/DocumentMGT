@@ -51,7 +51,7 @@ class NavigationBar extends React.Component {
             Create Document
           </Link>
         </li>
-        {(user.title === 'admin')
+        {(user.isAdmin)
           ?
             <li>
               <Link to="/manageUsers" id="manageUsers">
@@ -65,8 +65,14 @@ class NavigationBar extends React.Component {
           <Link to="/profile" className="username" id="profile">
             {username}
             <span id="spanRole">
-              <i className="material-icons">supervisor_account</i>
-              &nbsp; {role}
+              {(user.isAdmin)
+                ?
+                  <i className="material-icons">supervisor_account</i>
+                :
+                  ''
+              }
+              &nbsp;
+              <span className="role">{role} </span>
             </span>
           </Link>
         </li>

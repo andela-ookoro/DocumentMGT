@@ -17,6 +17,17 @@ Scenario: view Document
   Then I should view document on that page
   When I enter a text on the search box
   Then I should view documents with the hint that I entered
-  When I click the view document icon
-  Then I should be view the document on the document page
+  When I click on the view document icon
+  Then I should view the document on the document page
+
+Scenario: edit Document
+  When I click the "dashboard" navigation tab
+  And I click on the edit document icon
+  Then I should edit the document on the createdocument page
+  When I enter valid values for every field
+  And I click the submit button
+  Then I should recieve the text "Document has been updated successfully"
+
+
+
   Then I have gone through Document Hub "view document" process successfully

@@ -1,9 +1,8 @@
 import React from 'react';
 import Renderer from 'react-test-renderer';
-import { mount } from 'enzyme';
 import pageNotFound from '../../components/pageNotFound';
 
-describe('rendering', () => {
+describe('pageNotFound component', () => {
   it('should render content as describe in the component', () => {
     const component = Renderer.create(
       <pageNotFound />,

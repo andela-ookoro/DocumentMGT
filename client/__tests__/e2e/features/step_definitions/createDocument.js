@@ -17,7 +17,7 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
   Then(/^I should recieve an error message$/, async () => {
     await client.assert.containsText('#message', 'Please')
     .pause(3000);
-  })
+  });
 
   When(/^I enter valid values for every field$/, async () => {
     await client
@@ -38,17 +38,16 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
       .keys('I')
       .keys('A')
       .keys('!')
-    .pause(2000)
+    .pause(2000);
   });
 
   And(/^I click the submit button$/, async () => {
-     await client.click('#btnsubmit')
+    await client.click('#btnsubmit');
   });
 
   Then(/^I should recieve the text "([^"]*)"$/, async (text) => {
     await client.assert
     .containsText('#message', text)
     .pause(2000);
-  })
-
+  });
 });

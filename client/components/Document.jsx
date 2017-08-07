@@ -97,7 +97,7 @@ export class Document extends React.Component {
           <p id="message"> {this.state.message} </p>
           {(body === '')
               ?
-                <h5 id="docNotFound">
+                <h5 id="docNotFound" className="no-record">
                   No document found, please select a document
                   <a href="#/dashboard"> here! .</a>
                 </h5>
