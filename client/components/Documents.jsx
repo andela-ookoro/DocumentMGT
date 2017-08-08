@@ -82,14 +82,13 @@ export class Documents extends React.Component {
             return (document.id === parseInt(selectedDocumentID, 10));
           });
           pageCount -= 1;
-          message = '';
         }
       }
 
       // show message only when message exists
       if (message !== '' &&
-       (sender === 'getDocuments' || sender === 'deleteDocument' )) {
-        toaster.info(nextProps.message);
+       (sender === 'getDocuments' || sender === 'deleteDocument')) {
+        toaster.info(message);
       }
     }
     // set state to reflect the props dispatched
@@ -193,7 +192,9 @@ export class Documents extends React.Component {
                 <div className="col s12 m12 l5 ">
                   {(this.state.message !== '')
                     ?
-                      <h6 className="errorMessage">{this.state.message} </h6>
+                      <h6 className="errorMessage" id="message">
+                        {this.state.message}
+                      </h6>
                     :
                       <h6 className="searchCount">{this.state.noFound} </h6>
                   }
@@ -217,12 +218,6 @@ export class Documents extends React.Component {
                     >
                     search
                     </i>
-                    <span
-                      className="tooltiptext"
-                      style={{ left: '105%', top: '-5px' }}
-                    >
-                      Search for documents
-                   </span>
                   </botton>
                 </div>
               </form>

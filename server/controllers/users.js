@@ -16,6 +16,8 @@ if (DBconfig.use_env_variable) {
   );
 }
 
+// create Object hasOwnProperty
+const has = Object.prototype.hasOwnProperty;
 
 const User = model.user;
 const Document = model.document;
@@ -58,10 +60,9 @@ module.exports = {
           }
           return sendMessage(res, 'Wrong email or password.', 401);
         })
-        .catch(err => sendMessage(res, `${ err.message || err}`, 401));
-    } else {
-      return sendMessage(res, 'Email and password are compulsory.',401);
+        .catch(err => sendMessage(res, `${err.message || err}`, 401));
     }
+    return sendMessage(res, 'Email and password are compulsory.', 401);
   },
    /**
    * - logout user
@@ -89,14 +90,14 @@ module.exports = {
      * delete offset and limit from request query
      * loop through query parameter to build a dynamic where clause
      */
-     let whereClause = '';
-     let criteria= req.query;
-     delete criteria.limit;
-     delete criteria.offset;
-     delete criteria.token;
-     let criterion;
-     for (let key in criteria) {
-      if (criteria.hasOwnProperty(key)) {
+    let whereClause = '';
+    const criteria = req.query;
+    delete criteria.limit;
+    delete criteria.offset;
+    delete criteria.token;
+    let criterion;
+    Object.keys(criteria).forEach((key) => {
+      if (has.call(criteria, key)) {
         criterion = ` users.${key} iLike '%${criteria[key]}%'`;
         if (whereClause === '') {
           whereClause = `where  ${criterion}`;
@@ -104,7 +105,8 @@ module.exports = {
           whereClause = `${whereClause} and ${criterion}`;
         }
       }
-     }
+    });
+
 
     const fetchRangeQuery = `
      select CONCAT(fname, ' ', mname, ' ', lname) AS name,
@@ -133,7 +135,7 @@ module.exports = {
       ;`;
 
     return sequelize.query(fetchRangeQuery)
-    .then(result => {
+    .then((result) => {
       const users = result[0];
       if (users.length > 0) {
         // create object to store users fetch and total number of users
@@ -143,10 +145,13 @@ module.exports = {
         };
         // get total number of users in category
         return sequelize.query(getUsersCount)
-        .then(countResult => {
+        .then((countResult) => {
           const count = countResult[0][0].count;
-          usersPayload.pageCount = parseInt(count/limit, 10);
-          usersPayload.curPage = parseInt(offset/limit, 10) + 1;
+          let pageCount = parseInt(count / limit, 10);
+          pageCount = (pageCount < (count / limit))
+          ? (pageCount + 1) : pageCount;
+          usersPayload.pageCount = pageCount;
+          usersPayload.curPage = parseInt(offset / limit, 10) + 1;
           usersPayload.count = parseInt(count, 10);
           return sendData(res, usersPayload, 200, 'users');
         })
@@ -166,40 +171,39 @@ module.exports = {
     // create object from request
     const user = req.body;
     // check for required fields
-    if (user.fname && user.lname && user.email && user.password && user.roleId) {
+    if (user.fname && user.lname
+      && user.email && user.password && user.roleId) {
       // check if  user already exist
-     return  User.find({
-          where: {
-            email: user.email
-          },
-        })
-        .then((foundUser) => {
-          // if user exist exist return error
-          if (foundUser) {
-            // when account has been blocked
-            switch (foundUser.status) {
-              case disabled:
-                sendMessage(res,
-                  'This account is blocked, Please account admin',
-                  401);
-                break;
-              default:
-                sendMessage(res, 'Email already exist', 409);
-            }
+      return User.find({
+        where: {
+          email: user.email
+        },
+      })
+      .then((foundUser) => {
+        // if user exist exist return error
+        if (foundUser) {
+          // when account has been blocked
+          switch (foundUser.status) {
+            case disabled:
+              sendMessage(res,
+                'This account is blocked, Please account admin',
+                401);
+              break;
+            default:
+              sendMessage(res, 'Email already exist', 409);
           }
-          return User.create(user)
-            .then(newuser => returnJWt(res, newuser.dataValues, 201))
-            .catch(err => sendMessage(res, err.message, 500));
-        })
-        .catch(err =>
-          (sendMessage(res, err.message, 500))
-        );
-    } else {
-      sendMessage(res,
-       'First name, last name, email, role  and password are compulsory.',
-       400)
-      ;
+        }
+        return User.create(user)
+          .then(newuser => returnJWt(res, newuser.dataValues, 201))
+          .catch(err => sendMessage(res, err.message, 500));
+      })
+      .catch(err =>
+        (sendMessage(res, err.message, 500))
+      );
     }
+    sendMessage(res,
+      'First name, last name, email, role  and password are compulsory.',
+      400);
   },
   /**
    * get a user by id
@@ -212,7 +216,7 @@ module.exports = {
     if (isNaN(userId)) {
       return sendMessage(res, 'Invalid user ID', 400);
     }
-    // disallow regular users from view other user profile 
+    // disallow regular users from view other user profile
     if (!req.user.isAdmin && userId !== req.user.id) {
       return sendMessage(res,
         'Unathorized operation, please check user id passed', 500);
@@ -223,12 +227,12 @@ module.exports = {
      inner join roles
      on "users"."roleId" = "roles".id
      where "users"."id"= ${userId}`;
-     sequelize.query(fetchUserQuery)
-    .then(result => {
-      if (result[0] === []) {
+    sequelize.query(fetchUserQuery)
+    .then((result) => {
+      const user = result[0][0];
+      if (!user) {
         return sendMessage(res, 'User was not found.', 404);
       }
-      const user = result[0][0];
       return sendData(res, user, 200, 'user');
     })
     .catch(error => sendMessage(res, error.message, 500));
@@ -248,8 +252,8 @@ module.exports = {
 
     // get user with this id
     return User.findOne({
-        where: { id: userId }
-      })
+      where: { id: userId }
+    })
       .then((user) => {
         if (!user) {
           sendMessage(res, 'User was not found.', 200);
@@ -264,7 +268,7 @@ module.exports = {
           status: 'inactive',
           email: `delete${user.email}`
         })
-        .then(() => sendData(res, 'Your account has been deleted', 200, 'message'))
+        .then(() => sendData(res,
         .catch(error => sendMessage(res, error.message, 400));
       })
       .catch(error => sendMessage(res, error.message, 400));
@@ -284,8 +288,8 @@ module.exports = {
 
     // get user with this id
     return User.findOne({
-        where: { id: userId }
-      })
+      where: { id: userId }
+    })
       .then((user) => {
         if (!user) {
           sendMessage(res, 'User was not found.', 200);
@@ -293,7 +297,8 @@ module.exports = {
 
         return user
         .update({ status: 'disabled' })
-        .then(() => sendData(res, 'User has been blocked successfully', 200, 'message'))
+        .then(() => sendData(res,
+        'User has been blocked successfully', 200, 'message'))
         .catch(error => sendMessage(res, error.message, 400));
       })
       .catch(error => sendMessage(res, error.message, 400));
@@ -313,8 +318,8 @@ module.exports = {
 
     // get user with this id
     return User.findOne({
-        where: { id: userId }
-      })
+      where: { id: userId }
+    })
       .then((user) => {
         if (!user) {
           sendMessage(res, 'User was not found.', 200);
@@ -322,7 +327,8 @@ module.exports = {
 
         return user
         .update({ status: 'active' })
-        .then(() => sendData(res, 'User has been restored successfully', 200, 'messsage'))
+        .then(() => sendData(res,
+        'User has been restored successfully', 200, 'messsage'))
         .catch(error => sendMessage(res, error.message, 400));
       })
       .catch(error => sendMessage(res, error.message, 400));
@@ -342,7 +348,7 @@ module.exports = {
     if (req.body.role && req.user.title !== 'admin') {
       return sendMessage(res, 'Invalid operation', 403);
     } // only an admin update another user's profile
-    else if (req.user.title !== 'admin' && userId !== req.user.id ) {
+    else if (req.user.title !== 'admin' && userId !== req.user.id) {
       return sendMessage(res, 'Invalid operation', 403);
     }
     // get update from request body
@@ -351,36 +357,34 @@ module.exports = {
     const curPassword = req.body.curPassword;
     // find user
     return User.findOne({
-        where: { id: userId }
-      })
-      .then((foundUser) => {
-        if (!foundUser) {
-          return sendMessage(res, 'User was not found', 200);
-        }
+      where: { id: userId }
+    })
+    .then((foundUser) => {
+      if (!foundUser) {
+        return sendMessage(res, 'User was not found', 200);
+      }
 
-        // check if user old password, check if password was updated
-        if (update.password) {
-          const pass = bcrypt.compareSync(curPassword, foundUser.password);
-          if (!pass) {
-            return sendMessage(res,
-            'Unauthorized operation, check the credential provided',
-            403);
-          }
+      // check if user old password, check if password was updated
+      if (update.password) {
+        const pass = bcrypt.compareSync(curPassword, foundUser.password);
+        if (!pass) {
+          return sendMessage(res,
+          'Unauthorized operation, check the credential provided',
+          403);
         }
-        return foundUser
-          .update({ ...update })
-          .then(updateUser => returnJWt(res, updateUser.dataValues, 200))
-          .catch(error => {
-             const message = error.message || error.toString();
-            return sendMessage(res, message, 500)
-          });
-      })
-      .catch(error => {
-        const message = error.message || error.toString();
-        return sendMessage(res, message, 500)
-      });
-    return sendMessage(res,
-    'Unauthorized operation, check the credential provided2', 403);
+      }
+      return foundUser
+        .update({ ...update })
+        .then(updateUser => returnJWt(res, updateUser.dataValues, 200))
+        .catch((error) => {
+          const message = error.message || error.toString();
+          return sendMessage(res, message, 500);
+        });
+    })
+    .catch((error) => {
+      const message = error.message || error.toString();
+      return sendMessage(res, message, 500);
+    });
   },
    /**
    * - search for users with a list of attributes
@@ -393,15 +397,14 @@ module.exports = {
     const query = req.query;
     // get user with this id
     return User.findAndCountAll({
-        where: { ...query },
-        attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
-      })
+      where: { ...query },
+      attributes: ['id', 'fname', 'lname', 'mname', 'email', 'roleId']
+    })
       .then((users) => {
-        
         if (users) {
           sendMessage(res, 'No user was found.', 200);
         }
-         sendData(res, users, 200, 'user');
+        sendData(res, users, 200, 'user');
       })
       .catch(error => sendMessage(res, error.message, 400));
   },
@@ -424,14 +427,14 @@ module.exports = {
       return sendMessage(res, 'User was not found.', 200);
     }
     return User.findOne({
-        where: { id: userId }
-      })
+      where: { id: userId }
+    })
       .then((user) => {
         if (!user) {
           return sendMessage(res, 'User was not found.', 200);
         }
         // return user's documents
-       return  Document.findAndCountAll({
+        return Document.findAndCountAll({
           where: { owner: userId },
           attributes: docAttributes,
           offset,
@@ -439,18 +442,18 @@ module.exports = {
         })
         .then((documents) => {
           if (!documents) {
-           return sendMessage(res, 'Document was not found.', 200);
+            return sendMessage(res, 'Document was not found.', 200);
           }
           const count = documents.count;
           const rows = documents.rows;
           const documentsPayload = {
             count,
             rows,
-            curPage: parseInt(offset/limit, 10) + 1,
-            pageCount: parseInt(count/limit, 10),
+            curPage: parseInt(offset / limit, 10) + 1,
+            pageCount: parseInt(count / limit, 10),
             pageSize: rows.length
           };
-          return  sendData(res, documentsPayload, 200, 'documents');
+          return sendData(res, documentsPayload, 200, 'documents');
         })
         .catch(error => sendMessage(res, error.message, 500));
       })

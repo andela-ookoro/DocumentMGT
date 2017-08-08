@@ -10,7 +10,6 @@ module.exports = (app) => {
   app.post('/users/login', usersController.login);
   app.post('/users/logout', usersController.logout);
   app.post('/users', usersController.createUser);
-  
   app.get('/roles', rolesController.getRoles);
 
   // check for user session
@@ -24,7 +23,7 @@ module.exports = (app) => {
 
   app.route('/users/:id')
   .get(usersController.getUser)
-  .delete(usersController.blockUser)
+  .delete(adminOnly, usersController.blockUser)
   .put(usersController.updateUser);
 
   app.post('/users/restore/:id', adminOnly, usersController.restoreUser);

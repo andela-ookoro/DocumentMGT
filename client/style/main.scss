@@ -21,8 +21,9 @@ button, i {
   cursor: pointer
 }
 label {
-  z-index: 9999 !important;
+  z-index: 9999 !important;;
 }
+
 td  a {
   color: #ED7810;
   font-family: 'Josefin Sans', sans-serif;
@@ -40,12 +41,16 @@ td  button {
   font-family: 'Oswald', sans-serif;
   font-family: 'Fresca', sans-serif;
 }
+
+td {
+  padding-bottom: 0px !important;
+}
 .heading {
   background-color: #ffffff;
   border: none;
 }
 .header a {
-  color: #212121;
+  color: #253245;
   border: none;
 }
 
@@ -195,7 +200,7 @@ input[type=text].invalid {
 }
 .no-record {
   color: #a1887f !important;
-  padding: 10%;
+  padding: 10% !important;
 }
 #documentDashboard {
   display: block !important;
@@ -411,9 +416,10 @@ button#btnDownload {
 }
 
 #noDoc {
- padding: 10px !important;;
+ padding: 10px !important;
 }
 
 .role {
   margin-top: -5px;
 }
+

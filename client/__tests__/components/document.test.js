@@ -38,33 +38,34 @@ describe('Document components', () => {
       document: mockDocument,
       status: 'success'
     });
+
+    it('should display a message from \'getDocument\' actions', () => {
+      Wrapper.setProps({
+        messageFrom: 'getDocument',
+        message: 'unknown request',
+      });
+      const messageState = Wrapper.state('message');
+      const isSubString = messageState.includes('unknown request');
+      expect(isSubString).toEqual(true);
+    });
+
     const renderedDoc = Wrapper.props().children.props.children[2].props;
-    describe('renders the document header', () => {
+    describe('document header', () => {
       const docHeader = renderedDoc.children[0].props;
-      describe('renders the author of the document ', () => {
+      it('should render the author of the document', () => {
         const author = docHeader.children[0];
-        it('should render a h5 element', () => {
-          expect(author.type).toEqual('h5');
-        });
-        it('should display the author of the document as "Author <name>"',
-        () => {
-          const authorDom = author.props.children;
-          expect(authorDom[0]).toEqual('Author ');
-          expect(authorDom[1].type).toEqual('br');
-          expect(authorDom[2]).toEqual(mockDocument.author);
-        });
+        expect(author.type).toEqual('h5');
+        const authorDom = author.props.children;
+        expect(authorDom[0]).toEqual('Author ');
+        expect(authorDom[1].type).toEqual('br');
+        expect(authorDom[2]).toEqual(mockDocument.author);
       });
 
-      describe('renders the title of the document ', () => {
+      it('should renders the title of the document ', () => {
         const title = docHeader.children[1];
-        it('should render a h6 element', () => {
-          expect(title.type).toEqual('h6');
-        });
-        it('should display the title of the document as "Author <name>"',
-        () => {
-          const titleDom = title.props.children;
-          expect(titleDom).toEqual(mockDocument.title);
-        });
+        expect(title.type).toEqual('h6');
+        const titleDom = title.props.children;
+        expect(titleDom).toEqual(mockDocument.title);
       });
 
       it('should render a hr element after the header', () => {
@@ -99,16 +100,6 @@ describe('Document components', () => {
       const docDashboardlink = docNotFound.children[1];
       expect(docDashboardlink.props.href).toEqual('#/dashboard');
     });
-  });
-
-  it('should display a message from \'getDocument\' actions', () => {
-    Wrapper.setProps({
-      messageFrom: 'getDocument',
-      message: 'unknown request',
-    });
-    const messageState = Wrapper.state('message');
-    const isSubString = messageState.includes('unknown request');
-    expect(isSubString).toEqual(true);
   });
 });
 

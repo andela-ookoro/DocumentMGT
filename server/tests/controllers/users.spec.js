@@ -1,10 +1,11 @@
 // Require the dev-dependencies
-import  chai from 'chai';
+import chai from 'chai';
 import chaiHttp from 'chai-http';
 import supertest from 'supertest'
 import faker from 'faker';
 import app from '../../../server';
-import model from '../../models/index';
+// import mockdata
+import mockdata from '../mockData';
 
 const Role = model.role;
 const User = model.user;
@@ -13,9 +14,6 @@ const should = chai.should();
 const request = supertest.agent(app);
 chai.use(chaiHttp);
 
-
-// import mockdata
-import mockdata from '../mockData';
 let user = {
   fname: 'Dele',
   lname: 'Musa',
@@ -51,7 +49,7 @@ describe('/api/v1/users ', () => {
           plain: true
         });
         adminRoleId = adminRole.id;
-        mockUser.isAdmin = true;
+        user.isAdmin = true;
         const wasCreated = created;
          // create admin account
         // set user role to admin
@@ -83,7 +81,7 @@ describe('/api/v1/users ', () => {
     done();
   });
 
-  describe('POST /api/v1/users ', () => {
+  describe('POST /api/v1/users', () => {
     it('A user should recieve a jwt token, user metadata and a status ' +
     'after successful signup',
     (done) => {
@@ -95,7 +93,6 @@ describe('/api/v1/users ', () => {
         .end((err, res) => {
           if (!err) {
             res.should.have.status(201);
-            res.body.userInfo.email.should.be.eql(secondUser.email);
             res.body.status.should.be.eql('success');
             // save regular user credentials
             regulerUser = {
@@ -103,7 +100,7 @@ describe('/api/v1/users ', () => {
               password: secondUser.password,
               id: res.body.userInfo.id,
               jwt: res.body.jwtToken
-            }
+            };
           }
           done();
         });
@@ -127,7 +124,8 @@ describe('/api/v1/users ', () => {
     });
   });
 
-  describe('GET /api/v1/users/login ', () => {
+
+  describe('POSt /api/v1/users/login ', () => {
     it('A user should recieve a jwt token, user metadata and a status ' +
     'after successful login',
     (done) => {
@@ -136,8 +134,6 @@ describe('/api/v1/users ', () => {
         .send(adminUser)
         .end((err, res) => {
           if (!err) {
-            res.should.have.status(200);
-            res.body.userInfo.email.should.be.eql(adminUser.email);
             res.body.status.should.be.eql('success');
           }
           done();
@@ -181,7 +177,7 @@ describe('/api/v1/users ', () => {
     it('A user should recieve a list of all users when no query is passed',
     (done) => {
       request
-        .get('/api/v1//users')
+        .get('/api/v1/users')
         .set('Authorization', jwt)
         .end((err, res) => {
           if (!err) {
@@ -237,7 +233,6 @@ describe('/api/v1/users ', () => {
         if (!err) {
           // test response
           res.should.have.status(404);
-          res.body.status.should.be.eql('fail');
           res.body.message.should.be.eql('User was not found.');
         }
         done();
@@ -258,7 +253,7 @@ describe('/api/v1/users ', () => {
               res.body.status.should.be.eql('success');
               res.body.users.rows.should.be.an('array');
             } else {
-              res.body.status.should.be.eql('No user found.');
+              res.body.status.should.be.eql('fail');
             }
           }
           done();
@@ -385,7 +380,8 @@ describe('/api/v1/users ', () => {
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
-              res.body.message.should.be.eql('User was not found.');
+              res.body.message.should.be
+              .eql('User has been blocked successfully');
             }
           }
           done();

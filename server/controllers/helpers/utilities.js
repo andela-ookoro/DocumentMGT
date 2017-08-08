@@ -13,16 +13,16 @@ module.exports = {
    * @returns {object} -
    */
   sendMessage(res, message, statusCode) {
-   res.status(statusCode).send({
+    res.status(statusCode).send({
       status: 'fail',
       message
     });
   },
   /**
-   *
    * @param {*} res - server response object
    * @param {*} data - data to be sent
    * @param {*} statusCode - status Code
+   * @param {string} dataType - name of the data
    * @returns {object} -
    */
   sendData(res, data, statusCode, dataType) {
@@ -67,11 +67,10 @@ module.exports = {
         })
         .then((foundUser) => {
           if (foundUser) {
-
              // react to user status
-             const accountStatus = foundUser.status;
-             switch (accountStatus) {
-               case 'disabled':
+            const accountStatus = foundUser.status;
+            switch (accountStatus) {
+              case 'disabled':
                 res.status(401).send({
                   message: 'This account is blocked, Please contact the admin'
                 });
@@ -90,15 +89,14 @@ module.exports = {
                 res.status(401).send({
                   message: 'Invalid operation, check your credentials'
                 });
-             }
+            }
             return;
-          } else {
-            res.status(401).send({
-              message: 'Wrong authentication credentials, ' +
-              'please signin/signup again'
-            });
-           return;
           }
+          res.status(401).send({
+            message: 'Wrong authentication credentials, ' +
+            'please signin/signup again'
+          });
+          return;
         })
         .catch(err => res.status(500).send({
           message: `Error occurred, please try again: ${err.message}`
@@ -172,27 +170,26 @@ module.exports = {
 
   /**
    * encrypt any string
-   * @param {string} value 
+   * @param {string} value
    * @returns {object} - brcpty hash function
    */
   encryptString(value) {
-   return  bcrypt.hash(value, null, null, (err, hash) => {
+    return bcrypt.hash(value, null, null, (err, hash) => {
       if (hash) {
         return hash;
-      } else {
-        throw err;
       }
+      throw err;
     });
   },
 
   /**
    * @summary function to get the authorized list of document
-   * @param {any} user 
+   * @param {any} user - the user object to authorize
    * @returns {array} - an array of criteria
    */
   authorizedDoc(user) {
     // for a regulat user
-    let citeria = [
+    const citeria = [
       {
         accessRight: 'role',
         role: user.role

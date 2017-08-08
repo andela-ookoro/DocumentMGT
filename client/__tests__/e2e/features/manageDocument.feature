@@ -1,9 +1,18 @@
 # features/viewDocument.feature
  
 Feature: Manage Document
-Scenario: view Document
+
+Scenario: create Document
   Given I open Document Hub home page
   And I login
+  And I click the "createDocument" navigation tab
+  When I fill the create Document form with incomplete values
+  Then I should recieve an error message
+  When I enter valid values for every field
+  And I click the submit button
+  Then I should recieve the text "Document has been created successfully"
+
+Scenario: view Document
   When I click the "dashboard" navigation tab
   When I click on the "myDocument" tab on the dashboard
   Then I should view "my" documents
@@ -22,12 +31,15 @@ Scenario: view Document
 
 Scenario: edit Document
   When I click the "dashboard" navigation tab
+  When I click on the "myDocument" tab on the dashboard
   And I click on the edit document icon
   Then I should edit the document on the createdocument page
   When I enter valid values for every field
   And I click the submit button
   Then I should recieve the text "Document has been updated successfully"
 
-
-
-  Then I have gone through Document Hub "view document" process successfully
+Scenario: delete Document
+  When I click the "dashboard" navigation tab
+  When I click on the "myDocument" tab on the dashboard
+  And I double click on the delete document icon
+  Then I should recieve the text "Document has been deleted successfully"

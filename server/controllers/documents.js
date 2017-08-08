@@ -61,9 +61,12 @@ module.exports = {
   createDocument(req, res) {
     // create object from request
     const document = req.body;
-    // check for
-    if (document.owner !== req.user.id) {
-      return sendMessage(res, 'Unauthorized operation', 403);
+    // check if document has owner attribute
+    if (document.owner) {
+      // ensure that a user does not created a document with another user id
+      if (document.owner !== req.user.id) {
+        return sendMessage(res, 'Unauthorized operation', 403);
+      }
     }
     // check for required fields
     if (document.title && document.body) {
@@ -73,9 +76,13 @@ module.exports = {
         attributes: ['fname', 'lname', 'mname']
       })
       .then((user) => {
-        document.author = `${user.fname} ${user.mname} ${user.lname}`;
+        // create middle name initial
+        const middleNameInitial = (user.mname) ?
+        `${user.mname.charAt(0)}.` : '';
+        document.author = `${user.fname} ${middleNameInitial} ${user.lname}`;
+        document.owner = req.user.id;
         Document.create(document)
-        .then((newdocument) => sendData(res, newdocument, 201, 'document'))
+        .then(newdocument => sendData(res, newdocument, 201, 'document'))
         .catch(err => sendMessage(res, err.message, 500));
       })
       .catch(error => sendMessage(res, error.message, 500));
@@ -150,7 +157,8 @@ module.exports = {
     const changes = req.body;
     // disallow user form changing ownership
     if (changes.owner || changes.author) {
-      return sendMessage(res, 'Invalid operation, you can not change author', 400);
+      return sendMessage(res,
+      'Invalid operation, you can not change author', 400);
     }
     const docID = parseInt(req.params.id, 10);
     if (isNaN(docID)) {

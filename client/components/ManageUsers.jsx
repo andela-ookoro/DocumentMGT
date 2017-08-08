@@ -227,12 +227,6 @@ export class ManageUsers extends React.Component {
                     >
                     search
                     </i>
-                    <span
-                      className="tooltiptext"
-                      style={{ left: '105%', top: '-5px' }}
-                    >
-                      Search for users
-                   </span>
                   </botton>
                 </div>
               </form>

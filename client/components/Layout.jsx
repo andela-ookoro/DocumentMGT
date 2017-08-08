@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import $ from 'jquery';
 import addJWT from '../actions/addJWT';
 // import component
-import pageNotFound from './pageNotFound';
+import PageNotFound from './PageNotFound';
 import NavigationBar from './NavigationBar';
 import Footer from './Footer';
 

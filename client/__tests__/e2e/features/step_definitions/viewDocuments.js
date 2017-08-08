@@ -56,9 +56,9 @@ defineSupportCode(({ Then, When, defineStep }) => {
     await client.execute(checkDoc, [], (response) => {
       const selector = response.value;
       if (selector) {
-         // my document, check if documents exist
-        client.assert.containsText('#tbDocuments','Title')
-          .pause(1000);
+         // check if documents exist
+        client.assert.containsText('#tbDocuments', 'Title')
+         .pause(1000);
       }
     });
   });

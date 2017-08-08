@@ -4,3 +4,9 @@ coverage/
 public/
 .vscode/
 bin/
+.nyc_output/
+lcov-report/
+reports/
+server/tests
+client/__tests__
+server/migrations

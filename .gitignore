@@ -6,7 +6,8 @@ coverage/
 learn
 lcov.info
 bower_components/
-reports
+reports/
 .nyc_output/
 .vscode/
+selenium-debug.log
 lib/

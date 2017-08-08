@@ -41,7 +41,7 @@ module.exports = {
   entry: [
     'babel-polyfill',
     'webpack-hot-middleware/client',
-    path.join(__dirname, 'client/index.jsx'),
+    path.join(__dirname, 'client/Index.jsx'),
     path.join(__dirname, 'client/style/main.scss')
   ],
   output: {

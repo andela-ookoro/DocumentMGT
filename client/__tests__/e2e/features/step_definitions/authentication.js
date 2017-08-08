@@ -33,14 +33,14 @@ Role.find({
   }
 });
 
-// delete user account if it exist 
+// delete user account if it exist
 User.findOne({
   where: {
     email: user.email
   }
 })
-.then(founduser => {
-  if(founduser) {
+.then((founduser) => {
+  if (founduser) {
     founduser.destroy();
   }
 });
@@ -58,14 +58,14 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
   });
 
   And(/^I click on the "([^"]*)" tab$/, async (form) => {
-    await client.waitForElementVisible(`#${form}tab`, 3000)
+    await client.waitForElementVisible(`#${form}tab`, 5000)
     .click(`#${form}tab`);
   });
 
- When(/^I click on the "([^"]*)" tab$/, async (form) => {
-    await client.waitForElementVisible(`#${form}tab`, 3000)
-    .click(`#${form}tab`);
-  });
+  // When(/^I click on the "([^"]*)" tab$/, async (form) => {
+  //   await client.waitForElementVisible(`#${form}tab`, 3000)
+  //   .click(`#${form}tab`);
+  // });
 
   When(/^I fill the signup form with invalid values$/, async () => {
     await client.setValue('#fname', 'n')
@@ -170,7 +170,7 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
   });
 
   When(/^I click the "([^"]*)" button$/, async (form) => {
-    let buttonid = `#${id}`;
+    let buttonid = `#${form}`;
     if (form === 'signin' || form === 'signup') {
       buttonid = `${buttonid}Submit`;
     }

@@ -5,7 +5,6 @@ import SignupMessage from './signup';
 import roles from './role';
 import createDocStatus from './createDoc';
 import Documents from './getDocuments';
-import deleteDocument from './deleteDocument';
 import document from './getDocument';
 import Users from './getUsers';
 import user from './getUser';
@@ -18,7 +17,6 @@ export default combineReducers({
   roles,
   createDocStatus,
   Documents,
-  deleteDocument,
   document,
   Users,
   user

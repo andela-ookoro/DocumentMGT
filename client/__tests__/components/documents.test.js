@@ -54,50 +54,41 @@ const setup = () => {
 describe('Documents components', () => {
   localStorage.setItem('userInfo', JSON.stringify(mockUser));
   const { Wrapper } = setup();
-  describe('renders a search form', () => {
-    describe('renders a textbox to recieve user\'s search hint', () => {
-      const txtsearchHint = Wrapper.find('#searchText').props();
-      it('ID should be "searchText"', () => {
-        expect(txtsearchHint.id).toEqual('searchText');
-      });
 
-      it('should call the action "getDocuments" with the value of the ' +
-          'searchHint textbox', () => {
-        txtsearchHint.onChange();
-        expect(props.getDocuments.mock.calls.length).toBe(2);
-      });
+  it('should display a message from \'getDocument\' actions', () => {
+    Wrapper.setProps({
+      messageFrom: 'getDocuments',
+      message: 'unknown request',
     });
+    const messageState = Wrapper.state('message');
+    const isSubString = messageState.includes('unknown request');
+    expect(isSubString).toEqual(true);
   });
 
-  describe('renders a tab for each access right', () => {
-    it('should render a tab for "myDocuments" documents', () => {
-      const myDocumentsTab = Wrapper.find('#myDocument').props();
-      expect(myDocumentsTab.value).toEqual('myDocument');
-    });
-
-    it('should render a tab for "private" documents', () => {
-      const myDocumentsTab = Wrapper.find('#private').props();
-      expect(myDocumentsTab.value).toEqual('private');
-    });
-
-    it('should render a tab for "public" documents', () => {
-      const myDocumentsTab = Wrapper.find('#public').props();
-      expect(myDocumentsTab.value).toEqual('public');
-    });
-
-    it('should render a tab for "role" documents', () => {
-      const myDocumentsTab = Wrapper.find('#role').props();
-      expect(myDocumentsTab.value).toEqual('role');
-    });
-
-    it('each tab should call a function "getDocuments" on click', () => {
-      const myDocumentsTab = Wrapper.find('#role').props();
-      myDocumentsTab.onClick(mockTab);
-      expect(props.getDocuments.mock.calls.length).toBe(3);
-    });
+  it('should render a texbox to search for documents', () => {
+    const txtsearchHint = Wrapper.find('#searchText').props();
+    expect(txtsearchHint.id).toEqual('searchText');
+    txtsearchHint.onChange();
+    expect(props.getDocuments.mock.calls.length).toBe(2);
   });
 
-  describe('renders a table of document', () => {
+  it('renders a tab for each document access-right category', () => {
+    const myDocumentsTab = Wrapper.find('#myDocument').props();
+    expect(myDocumentsTab.value).toEqual('myDocument');
+
+    const privateDocumentTab = Wrapper.find('#private').props();
+    expect(privateDocumentTab.value).toEqual('private');
+
+    const publicDocumentsTab = Wrapper.find('#public').props();
+    expect(publicDocumentsTab.value).toEqual('public');
+
+    const roleDocumentsTab = Wrapper.find('#role').props();
+    expect(roleDocumentsTab.value).toEqual('role');
+    myDocumentsTab.onClick(mockTab);
+    expect(props.getDocuments.mock.calls.length).toBe(3);
+  });
+
+  describe('table of document', () => {
     // set login user in local storage
     mockUser.id = 1;
     Wrapper.setProps({
@@ -140,38 +131,21 @@ describe('Documents components', () => {
       expect(editButton.href).toEqual(editUrl);
     });
 
-    describe('renders a colomn "delete" for author only', () => {
+    it('renders a button to delete document, for author only', () => {
       const deleteButton = Wrapper.find(`#${mockDocument.id}`).props();
-      it('button id should be the same as document id', () => {
-        expect(deleteButton.id).toEqual(mockDocument.id);
-      });
+      expect(deleteButton.id).toEqual(mockDocument.id);
 
-      it('should invoke the "deleteDocument" on double click', () => {
-        deleteButton.onDoubleClick(mockDeleteButton);
-        expect(props.deleteDocument.mock.calls.length).toBe(1);
-      });
+      deleteButton.onDoubleClick(mockDeleteButton);
+      expect(props.deleteDocument.mock.calls.length).toBe(1);
 
-      it('should be remove the document from state on successfull delete',
-      () => {
-        const documentsBeforeDelete = Wrapper.state('documents');
-        expect(documentsBeforeDelete).toEqual([{ ...mockDocument }]);
-        Wrapper.setProps({
-          messageFrom: 'deleteDocument',
-          message: 'success'
-        });
-        const documentsAfterDelete = Wrapper.state('documents');
-        expect(documentsAfterDelete).toEqual([]);
+      const documentsBeforeDelete = Wrapper.state('documents');
+      expect(documentsBeforeDelete).toEqual([{ ...mockDocument }]);
+      Wrapper.setProps({
+        messageFrom: 'deleteDocument',
+        message: 'success'
       });
+      const documentsAfterDelete = Wrapper.state('documents');
+      expect(documentsAfterDelete).toEqual([]);
     });
-  });
-
-  it('should display a message from \'getDocument\' actions', () => {
-    Wrapper.setProps({
-      messageFrom: 'getDocuments',
-      message: 'unknown request',
-    });
-    const messageState = Wrapper.state('message');
-    const isSubString = messageState.includes('unknown request');
-    expect(isSubString).toEqual(true);
   });
 });

@@ -11,7 +11,7 @@
     "type": "public"
   },
   "scripts": {
-    "start": "node lib/server.js",
+    "start": "node lib/serverProduction.js",
     "local:build": "webpack --config webpack.config.js",
     "dev": "nodemon --watch server --exec babel-node  -- server.js",
     "start:dev": "nodemon ./bin/www",
@@ -22,14 +22,14 @@
     "copy:publicfiles": "cp -a public/{index.html,logo.png,favicon.ico} lib/public/ && cp -a public/lib lib/public",
     "build:server": "babel server -d lib/server --copy-files --ignore tests/ && npm run build-app",
     "build-server-test": "babel server/tests -d lib/server/tests --copy-files",
-    "build-app": "babel server.js -d lib --copy-files",
-    "client-test": "jest  --config jest.config.js -u  && npm run client-coverage",
+    "build-app": "babel serverProduction.js -d lib",
+    "client-test": "jest  --config jest.config.js -u  && npm run server-coverage",
     "client-coverage": "codecov --token=1ae99ab6-3079-408d-98c6-0176d944efbb",
     "e2e-test": "nightwatch",
     "acceptanceTest": "run-p -r start  test-e2e",
     "server-pretest": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test sequelize db:migrate ",
-    "server-test": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test PORT=3000 nyc   mocha  --timeout 900000 lib/server/tests/**/*.spec.js && npm run server-coverage",
-    "server-coverage": "cat ./coverage/lcov.info | coveralls &&    CODECLIMATE_REPO_TOKEN=33f7f674f8634b68e03ec8d38f95097fa7e30e4b68340b1daa2344678849b0c8 codeclimate-test-reporter < lcov.info"
+    "server-test": "DATABASE_URL=postgres://sdneoiwa:CGgqmi-vCzC2IFd3dJWpcxwhj3mrAjMe@pellefant.db.elephantsql.com:5432/sdneoiwa NODE_ENV=test PORT=3000 nyc   mocha  --timeout 90000 --compilers js:babel-register -- server/tests/**/*.spec.js && npm run server-coverage",
+    "server-coverage": "cat lcov.info | coveralls &&  CODECLIMATE_REPO_TOKEN=fd32639893b348a06b5540f5eba7e9f42dc5534ea6680f31c39b56073bd7010f codeclimate-test-reporter < lcov.info"
   },
   "dependencies": {
     "axios": "^0.16.2",
@@ -50,6 +50,7 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.17.2",
     "chromedriver": "^2.30.1",
+    "codeclimate-test-reporter": "^0.5.0",
     "compression": "^1.7.0",
     "compression-webpack-plugin": "^0.4.0",
     "css-loader": "^0.28.4",
@@ -95,6 +96,7 @@
     "thunk": "0.0.1",
     "tinymce": "^4.6.4",
     "toastr": "^2.1.2",
+    "touch": "^3.1.0",
     "webpack": "^2.6.1",
     "webpack-dev-middleware": "^1.10.2",
     "webpack-hot-middleware": "^2.18.0"

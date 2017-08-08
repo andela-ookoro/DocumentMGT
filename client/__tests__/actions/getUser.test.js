@@ -13,19 +13,6 @@ const resolveData = {
   }
 };
 
-const expectedMessageAction = {
-  type: MESSAGE,
-  message: {
-    from: 'mockUser',
-    info: mockData.errorMessage
-  }
-};
-
-const expectedAction = {
-  type: GET_USER,
-  status: 'success',
-  user: mockUser
-};
 
 const error = {
   response: {
@@ -48,7 +35,8 @@ const mockError = new Promise((resolve, reject) => {
 axios.get = jest.fn(url => mockResponse);
 
 describe('getUser action', () => {
-  it('should make a get request to a route "/api/v1/users/<documentId>"', () => {
+  it('should make a get request to a route "/api/v1/users/<documentId>"',
+  () => {
     getUser(1);
     expect(axios.get).toBeCalledWith('/api/v1/users/1');
   });

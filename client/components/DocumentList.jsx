@@ -55,7 +55,7 @@ const DocumentList = (props) => {
                 Edit document
               </span>
             </a>
-            <botton className="tooltip">
+            <botton className="tooltip" id={`delete${id}`}>
               <i
                 className="material-icons"
                 id={id}

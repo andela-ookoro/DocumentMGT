@@ -2,7 +2,7 @@ import { client } from 'nightwatch-cucumber';
 import { defineSupportCode } from 'cucumber';
 
 
-defineSupportCode(({ Given, Then, When, defineStep }) => {
+defineSupportCode(({ Then, When, defineStep }) => {
   const And = defineStep;
 
   When(/^I fill the create Document form with incomplete values$/, async () => {
@@ -10,8 +10,11 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
       .setValue('#title', 'lo')
       .click('#publicLabel')
       .pause(1000)
+      .keys(client.Keys.TAB)
+      .click('#btnsubmit')
+      .pause(1000)
       .click('#submitLabel')
-      .pause(3000);
+      .pause(1000);
   });
 
   Then(/^I should recieve an error message$/, async () => {
@@ -42,12 +45,15 @@ defineSupportCode(({ Given, Then, When, defineStep }) => {
   });
 
   And(/^I click the submit button$/, async () => {
-    await client.click('#btnsubmit');
+    await client.keys(client.Keys.TAB)
+    .keys(client.Keys.TAB)
+    .click('#btnsubmit')
+    .pause(3000);
   });
 
   Then(/^I should recieve the text "([^"]*)"$/, async (text) => {
     await client.assert
     .containsText('#message', text)
-    .pause(2000);
+    .pause(5000);
   });
 });

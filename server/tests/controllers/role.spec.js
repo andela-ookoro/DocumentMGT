@@ -218,7 +218,7 @@ describe('/api/v1/role ', () => {
             if (!res.body.message) {
               res.body.status.should.be.eql('success');
             } else {
-              res.body.message.should.be.eql('Role not found.');
+              res.body.message.should.be.eql('Role was been deleted');
             }
           }
           done();

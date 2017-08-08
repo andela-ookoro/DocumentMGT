@@ -41,45 +41,30 @@ const setup = () => {
 
 describe('ManageUsers component', () => {
   const { Wrapper } = setup();
-  describe('renders a search form', () => {
-    describe('should render a textbox to recieve user\'s search hint', () => {
-      const txtsearchHint = Wrapper.find('#searchHint').props();
-      it('ID should be "txtsearchHint"', () => {
-        expect(txtsearchHint.id).toEqual('searchHint');
-      });
 
-      it('should call the action "getUsers" with the value of the' +
-        'searchHint textbox', () => {
-        txtsearchHint.onChange();
-        expect(props.getUsers.mock.calls.length).toBe(2);
-      });
-    });
+  it('should render a texbox to search for users', () => {
+    const txtsearchHint = Wrapper.find('#searchHint').props();
+    expect(txtsearchHint.id).toEqual('searchHint');
+
+    txtsearchHint.onChange();
+    expect(props.getUsers.mock.calls.length).toBe(2);
   });
 
-  describe('renders a tab for each user category', () => {
-    it('should render tab for "active" users', () => {
-      const activeUsersTab = Wrapper.find('#active').props();
-      expect(activeUsersTab.value).toEqual('active');
-    });
+  it('should render a tab for each user category', () => {
+    const activeUsersTab = Wrapper.find('#active').props();
+    expect(activeUsersTab.value).toEqual('active');
 
-    it('should render tab for "disabled" users', () => {
-      const disabledUsersTab = Wrapper.find('#disabled').props();
-      expect(disabledUsersTab.value).toEqual('disabled');
-    });
+    const disabledUsersTab = Wrapper.find('#disabled').props();
+    expect(disabledUsersTab.value).toEqual('disabled');
 
-    it('should render tab for "inactive" users', () => {
-      const inactiveUsersTab = Wrapper.find('#inactive').props();
-      expect(inactiveUsersTab.value).toEqual('inactive');
-    });
+    const inactiveUsersTab = Wrapper.find('#inactive').props();
+    expect(inactiveUsersTab.value).toEqual('inactive');
 
-    it('each tab should call a function "getUsers" on click', () => {
-      const disabledUsersTab = Wrapper.find('#disabled').props();
-      disabledUsersTab.onClick(mockTab);
-      expect(props.getUsers.mock.calls.length).toBe(3);
-    });
+    disabledUsersTab.onClick(mockTab);
+    expect(props.getUsers.mock.calls.length).toBe(3);
   });
 
-  describe('should render a table of users', () => {
+  describe('table of users', () => {
     // set props, which triggers component will recieve props event
     Wrapper.setProps({
       status: 'success',
@@ -112,77 +97,62 @@ describe('ManageUsers component', () => {
       expect(status.children).toEqual(regularUser.status);
     });
 
-    describe('renders a button "block" for only "active" owner', () => {
+    it('should renders a button to block only active users', () => {
       const blockButton = Wrapper.find(`#${regularUser.id}`).props();
-      it('button id should be the same as selected user id', () => {
-        expect(blockButton.id).toEqual(regularUser.id);
-      });
+      expect(blockButton.id).toEqual(regularUser.id);
 
-      it('should invoke the "blockUser" on double click', () => {
-        blockButton.onDoubleClick(mockActionButton);
-        expect(props.blockUser.mock.calls.length).toBe(1);
+      blockButton.onDoubleClick(mockActionButton);
+      expect(props.blockUser.mock.calls.length).toBe(1);
+      const usersBeforeBlock = Wrapper.state('users');
+      expect(usersBeforeBlock).toEqual([{ ...regularUser }]);
+      Wrapper.setProps({
+        messageFrom: 'blockUser',
+        message: 'success'
       });
-
-      it('on success, the user should be remove from state', () => {
-        const usersBeforeBlock = Wrapper.state('users');
-        expect(usersBeforeBlock).toEqual([{ ...regularUser }]);
-        Wrapper.setProps({
-          messageFrom: 'blockUser',
-          message: 'success'
-        });
-        const usersAfterBlock = Wrapper.state('users');
-        expect(usersAfterBlock).toEqual([]);
-      });
+      const usersAfterBlock = Wrapper.state('users');
+      expect(usersAfterBlock).toEqual([]);
     });
 
-    describe('render a button "restore" for only "blocked" owner',
-      () => {
-        /**
-         * set props, which triggers component will recieve props event
-         * set user's status to disabled
-         */
-        regularUser.status = 'disabled';
-        Wrapper.setProps({
-          status: 'success',
-          users: [regularUser]
-        });
-        const restoreButton = Wrapper.find(`#${regularUser.id}`).props();
-        it('button id should be the same as selected user id', () => {
-          expect(restoreButton.id).toEqual(regularUser.id);
-        });
-
-        it('should invoke the "restoreUser" on double click', () => {
-          restoreButton.onDoubleClick(mockActionButton);
-          expect(props.restoreUser.mock.calls.length).toBe(1);
-        });
-
-        it('on success, the user should be remove from state', () => {
-          Wrapper.setProps({
-            messageFrom: 'restoreUser',
-            message: 'success'
-          });
-          const usersAfterRestore = Wrapper.state('users');
-          expect(usersAfterRestore).toEqual([]);
-        });
+    it('should render a button to restore only "blocked" owner', () => {
+      /**
+       * set props, which triggers component will recieve props event
+       * set user's status to disabled
+       */
+      regularUser.status = 'disabled';
+      Wrapper.setProps({
+        status: 'success',
+        users: [regularUser]
       });
-  });
+      const restoreButton = Wrapper.find(`#${regularUser.id}`).props();
+      expect(restoreButton.id).toEqual(regularUser.id);
 
-  it('should render message from \'restoreUser or blockUser\' actions ',
-  () => {
-    Wrapper.setProps({
-      messageFrom: 'restoreUser',
-      message: 'welcome'
+      restoreButton.onDoubleClick(mockActionButton);
+      expect(props.restoreUser.mock.calls.length).toBe(1);
+      Wrapper.setProps({
+        messageFrom: 'restoreUser',
+        message: 'success'
+      });
+      const usersAfterRestore = Wrapper.state('users');
+      expect(usersAfterRestore).toEqual([]);
     });
-    let messageState = Wrapper.state('message');
-    let isSubString = messageState.includes('welcome');
-    expect(isSubString).toEqual(true);
 
-    Wrapper.setProps({
-      messageFrom: 'blockUser',
-      message: 'done'
+    it('should render message from \'restoreUser or blockUser\' actions ',
+    () => {
+      Wrapper.setProps({
+        messageFrom: 'restoreUser',
+        message: 'welcome'
+      });
+      let messageState = Wrapper.state('message');
+      let isSubString = messageState.includes('welcome');
+      expect(isSubString).toEqual(true);
+
+      Wrapper.setProps({
+        messageFrom: 'blockUser',
+        message: 'done'
+      });
+      messageState = Wrapper.state('message');
+      isSubString = messageState.includes('done');
+      expect(isSubString).toEqual(true);
     });
-    messageState = Wrapper.state('message');
-    isSubString = messageState.includes('done');
-    expect(isSubString).toEqual(true);
   });
 });

@@ -97,7 +97,8 @@ export class CreateDocument extends React.Component {
         body: curDocument.body.toString(),
         curDocument,
         docId: curDocument.id,
-        isloading: false
+        isloading: false,
+        accessRight: curDocument.accessRight
       });
       // find the selected access right
       const accessRights = document.getElementsByName('accessRight');
@@ -195,8 +196,7 @@ export class CreateDocument extends React.Component {
         title,
         body,
         accessRight,
-        role: userInfo.role,
-        owner: userInfo.id
+        role: userInfo.role
       };
       // call upsertDocument action
       this.props.upsertDocument(document, this.state.docId);

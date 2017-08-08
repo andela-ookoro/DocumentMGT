@@ -9,7 +9,7 @@ import sendMessage from './message';
 const successMessage = 'User has been blocked successfully';
 const blockUser = userId =>
   axios.delete(`/api/v1/users/${userId}`)
-  .then(response => sendMessage('blockUser', successMessage))
+  .then(() => sendMessage('blockUser', successMessage))
   .catch((error) => {
     let message = 'An internal error occurred, please try again';
     if (error.response.status !== 500) {
@@ -19,6 +19,3 @@ const blockUser = userId =>
   });
 
 export default blockUser;
-
-
-

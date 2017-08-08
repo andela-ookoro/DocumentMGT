@@ -6,10 +6,10 @@ import sendMessage from './message';
  * @param {int} documentId -  the id of the document
  * @return {null} - sendReponse
  */
-const successMessage = 'document has been deleted successfully';
+const successMessage = 'Document has been deleted successfully';
 const deleteDocument = documentId =>
   axios.delete(`/api/v1/documents/${documentId}`)
-  .then(response => sendMessage('deleteDocument', successMessage))
+  .then(() => sendMessage('deleteDocument', successMessage))
   .catch((error) => {
     let message = 'An internal error occurred, please try again';
     if (error.response.status !== 500) {
@@ -19,8 +19,3 @@ const deleteDocument = documentId =>
   });
 
 export default deleteDocument;
-
-
-
-
-

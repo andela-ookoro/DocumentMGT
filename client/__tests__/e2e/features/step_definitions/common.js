@@ -18,7 +18,7 @@ defineSupportCode(({ Then, defineStep }) => {
       lookupElement = '.mainHeader';
     }
     await client.waitForElementVisible(lookupElement, 5000)
-    .assert.urlEquals(`http://localhost:1142/#/${page}`);
+      .assert.urlEquals(`http://localhost:1142/#/${page}`);
   });
 
   And(/^I login$/, async () => {

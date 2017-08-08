@@ -10,4 +10,4 @@ export const DELETE_DOCUMENT = 'DELETE_DOCUMENT';
 export const GET_DOCUMENT = 'GET_DOCUMENT';
 export const MESSAGE = 'MESSAGE';
 export const GET_USERS = 'GET_USERS';
-export const GET_USER  = 'GET_USER';
+export const GET_USER = 'GET_USER';

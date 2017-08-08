@@ -12,7 +12,7 @@ module.exports = {
    * @return {null} -
    */
   getRoles(req, res) {
-    let hint = {}
+    let hint = {};
     const offset = parseInt(req.query.offset, 10) || 0;
     const limit = parseInt(req.query.limit, 6);
     if (req.query.offset || req.query.limit) {
@@ -44,9 +44,7 @@ module.exports = {
     // check for required fields
     if (role.title) {
       Role.create(role)
-      .then(newRole => {
-        return sendData(res, newRole, 201, 'role')}
-      )
+      .then(newRole => sendData(res, newRole, 201, 'role'))
       .catch(err => sendMessage(res, err.message, 500));
     } else {
       sendMessage(res, 'Role title is compulsory.', 500);
@@ -123,8 +121,8 @@ module.exports = {
       }
 
       return role
-      .update( { status: 'disabled'})
-      .then(() => sendData(res, 'role was been delete', 200, 'message'))
+      .update({ status: 'disabled' })
+      .then(() => sendData(res, 'Role was been deleted', 200, 'message'))
       .catch(error => sendMessage(res, error.message, 400));
     })
     .catch(error => sendMessage(res, error.message, 400));

@@ -1,7 +1,6 @@
 {
-  "reporter": [
-    "text",
-    "lcov"
+  "require": [
+    "babel-register"
   ],
   "include": [
     "lib/server/**/*.js"
@@ -10,5 +9,14 @@
     "**/tests/",
     "**/seeders/",
     "**/migrations/"
-  ]
+  ],
+  "all": true,
+  "reporter": [
+    "html",
+    "text",
+    "lcov"
+  ],
+  "sourceMap": false,
+  "instrument": true,
+  "check-coverage": true
 }

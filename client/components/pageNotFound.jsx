@@ -1,6 +1,6 @@
 import React from 'react';
 
-const pageNotFound = () => (
+const PageNotFound = () => (
   <div className="container" >
     <div className="welcomeDiv">
       <img src="/logo.png" id="logoImg" alt="logo" />
@@ -20,4 +20,4 @@ const pageNotFound = () => (
   </div>
 );
 
-export default pageNotFound;
+export default PageNotFound;

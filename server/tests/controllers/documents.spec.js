@@ -99,7 +99,7 @@ describe('/api/v1/document', () => {
         });
     });
 
-    it('A user must provide the  document title and body', (done) => {
+    it('A user must provide the document title and body', (done) => {
       document.title = '';
       request
         .post('/api/v1/documents')
@@ -107,7 +107,7 @@ describe('/api/v1/document', () => {
         .send(document)
         .end((err, res) => {
           if (res) {
-            res.should.have.status(500);
+            res.should.have.status(400);
             res.body.status.should.be.eql('fail');
             res.body.message.should.be.eql('Document\'s title and body ' +
             'are compulsory.');

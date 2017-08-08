@@ -6,7 +6,7 @@ const sendMessage = (from, info) => (
     message: {
       from,
       info,
-      dateSent : new Date().valueOf()
+      dateSent: new Date().valueOf()
     }
   }
 );

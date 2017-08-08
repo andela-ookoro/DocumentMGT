@@ -75,7 +75,7 @@ import webpackMiddleware from 'webpack-dev-middleware';
 
 // for webpack hot reload
 import webpackHotMiddleware from 'webpack-hot-middleware';
-// import the webpack config ftile
+// import the webpack config file
 import webpackConfig from './webpack.config';
 
 import routes from './server/routes';
@@ -86,12 +86,13 @@ dotenv.config();
 // create new express app
 const app = express();
 const router = express.Router();
-// create webpack compiler
-const webpackCompiler = webpack(webpackConfig);
 
 // use hemlet to disable settings that would leak security
 app.use(helmet());
 app.use(compression());
+
+// create webpack compiler
+const webpackCompiler = webpack(webpackConfig);
 // use the webpack middleware in the server
 app.use(webpackMiddleware(webpackCompiler, {
   hot: true,
@@ -99,7 +100,6 @@ app.use(webpackMiddleware(webpackCompiler, {
   noInfo: true
 }));
 app.use(webpackHotMiddleware(webpackCompiler));
-
 
 // Log requests to the console.
 app.use(logger('dev'));

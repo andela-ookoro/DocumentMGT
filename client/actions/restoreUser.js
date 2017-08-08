@@ -8,7 +8,7 @@ import sendMessage from './message';
  */
 const successMessage = 'User has been restored successfully';
 const restoreUser = userId =>
-  axios.post(`/api/v1/users/restore/${userId}`, {status: 'active'})
+  axios.post(`/api/v1/users/restore/${userId}`, { status: 'active' })
   .then(() => sendMessage('restoreUser', successMessage))
   .catch((error) => {
     let message = 'An internal error occurred, please try again';
