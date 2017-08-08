@@ -1,0 +1,28 @@
+engines:
+  duplication:
+    enabled: false
+    config:
+      languages:
+      - javascript
+  eslint:
+    enabled: true
+    checks:
+      import/extensions:
+        enabled: false
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - "**.js"
+exclude_paths:
+- "client/__tests__/"
+- "server/tests/"
+- "lib/"
+- "node_modules/"
+- "coverage/"
+- "public/"
+- ".vscode/"
+- "bin/"
+- ".nyc_output/"
+- "lcov-report/"
+- "reports/"
