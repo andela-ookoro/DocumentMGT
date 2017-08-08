@@ -10,3 +10,4 @@ reports/
 .nyc_output/
 .vscode/
 selenium-debug.log
+lib/
